@@ -1,0 +1,64 @@
+============================= test session starts =============================
+platform win32 -- Python 2.7.10, pytest-3.0.5, py-1.4.31, pluggy-0.4.0
+rootdir: C:\Users\Vanderlei\Desktop, inifile: 
+collected 254 items
+
+. ..................................F...........................................................................................................................................................................................................................
+
+================================== FAILURES ===================================
+_______________________________ test_check_hash _______________________________
+
+    def test_check_hash():
+        "Make sure check_hash works for the Surfer test data"
+        fname = os.path.join(TEST_DATA_DIR, 'simple_surfer.grd')
+        # Hashes gotten from openssl
+        sha256 = "9cbdae1c020797231ff45a18594f80c68c3147d0b976103767a0c2c333b07ff6"
+>       check_hash(fname, sha256, hash_type='sha256')
+
+..\Documents\fatiando\fatiando\datasets\tests\test_utils.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+fname = 'C:\\Users\\Vanderlei\\Documents\\fatiando\\fatiando\\datasets\\tests\\data\\simple_surfer.grd'
+known_hash = '9cbdae1c020797231ff45a18594f80c68c3147d0b976103767a0c2c333b07ff6'
+hash_type = 'sha256'
+
+    def check_hash(fname, known_hash, hash_type='sha256'):
+        """
+        Assert that the hash of a file is equal to a known hash.
+    
+        Useful for checking if a file has changed or been corrupted.
+    
+        Parameters:
+    
+        * fname : string
+            The name of the file.
+        * known_hash : string
+            The known (recorded) hash of the file.
+        * hash_type : string
+            What kind of hash is it. Can be anything defined in Python's hashlib.
+    
+        Raises:
+    
+        * ``AssertionError`` if the hash is different from the known hash.
+    
+        """
+        # Calculate the hash in chunks to avoid overloading the memory
+        chunksize = 65536
+        hasher = getattr(hashlib, hash_type)()
+        with open(fname, 'rb') as f:
+            buf = f.read(chunksize)
+            while len(buf) > 0:
+                hasher.update(buf)
+                buf = f.read(chunksize)
+        file_hash = hasher.hexdigest()
+        msg = '\n'.join([
+            'Possibly corrupted file {}.'.format(fname),
+            '  - Calculated {} hash: {}'.format(hash_type, file_hash),
+            '  - Known (recorded) hash: {}'.format(known_hash)])
+>       assert file_hash == known_hash, msg
+E       AssertionError: Possibly corrupted file C:\Users\Vanderlei\Documents\fatiando\fatiando\datasets\tests\data\simple_surfer.grd.
+E         - Calculated sha256 hash: 75dc8dcbbb54ac83fa9e7893a43a85e2787f53088d720cc18d93dc6291940145
+E         - Known (recorded) hash: 9cbdae1c020797231ff45a18594f80c68c3147d0b976103767a0c2c333b07ff6
+
+..\Documents\fatiando\fatiando\datasets\utils.py:40: AssertionError
+=================== 1 failed, 253 passed in 122.73 seconds ====================

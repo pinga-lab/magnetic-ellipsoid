@@ -330,12 +330,15 @@ and
 \end{equation}
 where $-90^{\circ} \leq \gamma \leq 90^{\circ}$ and
 $0 \leq \delta \leq 90^{\circ}$.
-Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$ (Fig. \ref{fig:orientation-angles}a and Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
-\ref{eq:delta}), we define the unit vectors
+Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$ 
+(Fig. \ref{fig:orientation-angles}a), we define the auxiliary angles 
+$\alpha$, $\gamma$ and $\delta$ (Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
+\ref{eq:delta}) and, finally, the unit vectors
 $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
 (Fig. \ref{fig:orientation-angles}b) according to the ellipsoid type.
 For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
-(i.e., $a > b = c$), these unit vectors may be given by \citep{clark1986}:
+(i.e., $a > b = c$), we opted for defining these unit vectors 
+by following \citet{clark1986}:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \cos\delta \\
@@ -360,12 +363,12 @@ For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
                   \end{array} \right] \: .
 \label{eq:v3_triaxial_prolate}
 \end{equation}
-\citet{emerson1985} also calculate the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
-and $\mathbf{v}_{3}$ by using Eqs. \ref{eq:v1_triaxial_prolate},
+\citet{emerson1985} calculated the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
+and $\mathbf{v}_{3}$ similarly by using Eqs. \ref{eq:v1_triaxial_prolate},
 \ref{eq:v2_triaxial_prolate}, and \ref{eq:v3_triaxial_prolate}, but
 with $\gamma = 0^{\circ}$.
-Finally, the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-for oblate ellipsoids (i.e., $a < b = c$) may be calculated as follows:
+Finally, we define the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
+and $\mathbf{v}_{3}$ for oblate ellipsoids (i.e., $a < b = c$) as follows:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \sin\gamma \; \sin\delta + \sin\alpha \; \cos\gamma \\               
@@ -390,6 +393,7 @@ for oblate ellipsoids (i.e., $a < b = c$) may be calculated as follows:
                   \end{array} \right] \: .
 \label{eq:v3_oblate}
 \end{equation}
+This approach is very similar to that presented by \citet{emerson1985}.
 
 The magnetic modelling of an ellipsoidal body is commonly performed
 in a particular Cartesian coordinate system that is aligned 
@@ -444,8 +448,8 @@ Earth's magnetic field, which is usually assumed to be generated
 by the Earth's liquid core.
 In the absence of conduction currents, 
 the total magnetic field $\mathbf{H}(\mathbf{r})$
-at the position $\mathbf{r}$ (Eqs. \ref{eq:A} and 
-\ref{eq:coord_transformation}) of a point referred to the main 
+at the position $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}) 
+of a point referred to the main 
 coordinate system is defined as follows \citep{sharma1966, 
 eskola1980, reitz1992, sttraton2007}:
 \begin{equation}
@@ -468,7 +472,7 @@ is the position vector of a point located within the volume $\vartheta$,
 the integral is conducted over the variables 
 $x^{\prime}$, $y^{\prime}$ and, $z^{\prime}$ and 
 $\mathbf{M}(\mathbf{r}^{\prime})$ is the magnetization vector
-(in $\unit{Am^{-1}}$).
+(in \unit{Am^{-1}}).
 Eq. \ref{eq:V-potential} is valid anywhere, 
 independently if the position vector $\mathbf{r}$ represents
 a point located inside or outside the magnetized body
@@ -486,7 +490,8 @@ constant and symmetrical 2nd-order tensor representing the
 magnetic susceptibility of the body. 
 This is a good approximation for bodies at room temperature,
 subjected to an inducing field $\mathbf{H}_{0}$ with 
-strength $\leq 1$ \unit{mT} \citep{rochette1992}.
+strength $\leq 10^{-3} \mu_{0}^{-1}$ \unit{A \, m^{-1}} \citep{rochette1992},
+where $\mu_{0}$ represents the magnetic constant (in \unit{H \, m^{-1}}).
 In this case, the susceptibility tensor $\mathbf{K}$ is commonly
 represented, in the main coordinate system (Fig. \ref{fig:orientation-angles}a),
 as follows:

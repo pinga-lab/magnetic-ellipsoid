@@ -334,8 +334,8 @@ Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$ (Fig. \ref
 \ref{eq:delta}), we define the unit vectors
 $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
 (Fig. \ref{fig:orientation-angles}b) according to the ellipsoid type.
-For triaxial ellipsoids (i.e., $a > b > c$), these unit vectors are 
-given by \citep{clark1986}:
+For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
+(i.e., $a > b = c$), these unit vectors may be given by \citep{clark1986}:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \cos\delta \\
@@ -360,13 +360,12 @@ given by \citep{clark1986}:
                   \end{array} \right] \: .
 \label{eq:v3_triaxial_prolate}
 \end{equation}
-Similarly, the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-for prolate ellipsoids (i.e., $a > b = c$) are calculated
-by using Eqs. \ref{eq:v1_triaxial_prolate}, \ref{eq:v2_triaxial_prolate}, and
-\ref{eq:v3_triaxial_prolate}, but with $\gamma = 0^{\circ}$
-\citep{emerson1985}.
+\citet{emerson1985} also calculate the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
+and $\mathbf{v}_{3}$ by using Eqs. \ref{eq:v1_triaxial_prolate},
+\ref{eq:v2_triaxial_prolate}, and \ref{eq:v3_triaxial_prolate}, but
+with $\gamma = 0^{\circ}$.
 Finally, the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-for oblate ellipsoids (i.e., $a < b = c$) are calculated as follows:
+for oblate ellipsoids (i.e., $a < b = c$) may be calculated as follows:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \sin\gamma \; \sin\delta + \sin\alpha \; \cos\gamma \\               
@@ -391,7 +390,6 @@ for oblate ellipsoids (i.e., $a < b = c$) are calculated as follows:
                   \end{array} \right] \: .
 \label{eq:v3_oblate}
 \end{equation}
-These formulas are similar to those presented by \citep{emerson1985}.
 
 The magnetic modelling of an ellipsoidal body is commonly performed
 in a particular Cartesian coordinate system that is aligned 

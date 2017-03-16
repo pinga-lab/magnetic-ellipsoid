@@ -1,0 +1,3 @@
+flake8 --show-source --ignore=W503,E226,E241,E731 > report-flake8.txt
+
+python -m pytest test_FILENAME.py

@@ -1,237 +1,287 @@
+from __future__ import division, absolute_import
 import numpy as np
-from numpy.random import rand
+from copy import deepcopy
 
-from ... import utils, gridder
-from ...mesher import OblateEllipsoid
-from .. import oblate_ellipsoid
+from fatiando import utils, gridder
+from fatiando.mesher import OblateEllipsoid
+from fatiando.gravmag import oblate_ellipsoid
+from numpy.testing import assert_almost_equal
+from pytest import raises
 
-F = 20000 + 40000*rand()
-inc = -90 + 180*rand()
-dec = 180*rand()
-sinc = -90 + 180*rand()
-sdec = 180*rand()
+# Local-geomagnetic field
+F = 30000
+inc = 2
+dec = -27
 
-gm = 1e4*rand()  # geometrical factor
+gm = 1000  # geometrical factor
 area = [-5.*gm, 5.*gm, -5.*gm, 5.*gm]
 x, y, z = gridder.scatter(area, 300, z=0.)
-axis_ref = gm*rand()  # reference semi-axis
+axis_ref = gm  # reference semi-axis
 
-model = [OblateEllipsoid(-3*gm, -3*gm, 3*axis_ref,
-                         0.6*axis_ref, axis_ref,
-                         180*rand(), 90*rand(), 90*rand(),
-                         {'k': [0.7, 0.7, 0.7, 90., 47., 13.]}),
-         OblateEllipsoid(0, 0, 2*axis_ref,
-                         0.5*axis_ref, axis_ref,
-                         180*rand(), 90*rand(), 90*rand(),
-                         {'remanence': [4., 25., 40.],
-                          'k': [0.562, 0.485, 0.25, 90., 0., 0.]}),
-         OblateEllipsoid(3*gm, 3*gm, 3*axis_ref,
-                         0.3*axis_ref, axis_ref,
-                         180*rand(), 90*rand(), 90*rand(),
-                         {'remanence': [8., 25., 40.]})]
+# Prolate ellipsoids used for testing
+model = [OblateEllipsoid(x=-3*gm, y=-3*gm, z=3*axis_ref,
+                           small_axis=0.6*axis_ref,
+                           large_axis=axis_ref,
+                           strike=78, dip=92, rake=135,
+                           props={'susceptibility tensor': [0.7, 0.7, 0.7,
+                                                            90., 47., 13.]}),
+         OblateEllipsoid(x=-gm, y=-gm, z=2.4*axis_ref,
+                           small_axis=0.3*axis_ref,
+                           large_axis=1.1*axis_ref,
+                           strike=4, dip=10, rake=5,
+                           props={'susceptibility tensor': [0.2, 0.15, 0.05,
+                                                            180, 19, -8.],
+                                  'remanent magnetization': [3, -6, 35]}),
+         OblateEllipsoid(x=3*gm, y=3*gm, z=4*axis_ref,
+                           small_axis=0.6*axis_ref,
+                           large_axis=1.5*axis_ref,
+                           strike=-58, dip=87, rake=49,
+                           props={'remanent magnetization': [4.7, 39, 0]})]
 
 
 def test_oblate_ellipsoid_force_prop():
-    "Test the oblate_ellipsoid code with forcing a physical property value"
-    pmag = utils.ang2vec(-1, sinc, sdec)
+    "Test the oblate_ellipsoid code with an imposed physical property"
+
+    # forced physical property
+    pmag = utils.ang2vec(5, 43, -8)
+
+    # magnetic field produced by the ellipsoids
+    # with the forced physical property
     bx = oblate_ellipsoid.bx(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
-    f = 1 + 4*rand()
+                               F, inc, dec, pmag=pmag)
+
+    # constant factor
+    f = 3.71768
+
+    # magnetic field produced by the ellipsoids
+    # with the forced physical property multiplied by the constant factor
     bx2 = oblate_ellipsoid.bx(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, pmag=f*pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, pmag=f*pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, pmag=f*pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
-    assert np.allclose(bx2, f*bx)
-    assert np.allclose(by2, f*by)
-    assert np.allclose(bz2, f*bz)
-    assert np.allclose(tf2, f*tf)
+                                F, inc, dec, pmag=f*pmag)
+
+    # the fields must be proportional
+    assert_almost_equal(bx2, f*bx, decimal=12)
+    assert_almost_equal(by2, f*by, decimal=12)
+    assert_almost_equal(bz2, f*bz, decimal=12)
+    assert_almost_equal(tf2, f*tf, decimal=12)
 
 
 def test_oblate_ellipsoid_ignore_none():
     "Oblate ellipsoid ignores model elements that are None"
-    pmag = utils.ang2vec(1 + 10*rand(), sinc, sdec)
-    model_none = model[:]
+
+    # forced physical property
+    pmag = utils.ang2vec(7, -52, 13)
+
+    # copy of the original model
+    model_none = deepcopy(model)
+
+    # force an element of the copy to be None
     model_none[1] = None
+
+    # magnetic field produced by the original model
+    # without the removed element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
+
+    # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
-    assert np.allclose(bx2, bx)
-    assert np.allclose(by2, by)
-    assert np.allclose(bz2, bz)
-    assert np.allclose(tf2, tf)
+                                F, inc, dec, pmag=pmag)
+
+    assert_almost_equal(bx2, bx, decimal=15)
+    assert_almost_equal(by2, by, decimal=15)
+    assert_almost_equal(bz2, bz, decimal=15)
+    assert_almost_equal(tf2, tf, decimal=15)
 
 
 def test_oblate_ellipsoid_ignore_missing_prop():
-    "Oblate ellipsoid ignores model elements that don't have \
-    the needed property"
-    pmag = utils.ang2vec(1 + 10*rand(), sinc, sdec)
-    model_none = model[:]
-    del model_none[1].props['k']
-    del model_none[1].props['remanence']
+    "Oblate ellipsoid ignores model without the needed properties"
+
+    # forced physical property
+    pmag = utils.ang2vec(2, -4, 17)
+
+    # copy of the original model
+    model_none = deepcopy(model)
+
+    # remove the required properties of an element of the copy
+    del model_none[1].props['susceptibility tensor']
+    del model_none[1].props['remanent magnetization']
+
+    # magnetic field produced by the original model
+    # without an element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                               F, inc, dec, pmag=pmag)
+
+    # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                                F, inc, dec, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
-    assert np.allclose(bx2, bx)
-    assert np.allclose(by2, by)
-    assert np.allclose(bz2, bz)
-    assert np.allclose(tf2, tf)
+                                F, inc, dec, pmag=pmag)
+
+    assert_almost_equal(bx2, bx, decimal=15)
+    assert_almost_equal(by2, by, decimal=15)
+    assert_almost_equal(bz2, bz, decimal=15)
+    assert_almost_equal(tf2, tf, decimal=15)
 
 
-def test_oblate_ellipsoid_demagnetizing_factors():
+def test_oblate_ellipsoid_demag_factors_sum():
     "The summation of the demagnetizing factors must be equal to one"
-    a = model[2].a
-    b = model[2].b
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = oblate_ellipsoid.structural_angles(strike, dip,
-                                                             rake)
-    matrix = oblate_ellipsoid.V(alpha, gamma, delta)
-    x1, x2, x3 = oblate_ellipsoid.x1x2x3(x, y, z, model[2].x, model[2].y,
-                                         model[2].z, matrix)
-    lamb = oblate_ellipsoid._lamb(x1, x2, x3, a, b)
-    denominator = oblate_ellipsoid._dlamb_aux(x1, x2, x3, a, b, lamb)
-    dlamb_dx = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='x')
-    dlamb_dy = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='y')
-    dlamb_dz = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='z')
-    n11, n22 = oblate_ellipsoid.demag_factors(a, b)
-    assert np.allclose(n11+n22+n22, 1.)
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[0])
+    assert_almost_equal(n11+n22+n22, 1., decimal=15)
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[1])
+    assert_almost_equal(n11+n22+n22, 1., decimal=15)
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[2])
+    assert_almost_equal(n11+n22+n22, 1., decimal=15)
+
+
+def test_oblate_ellipsoid_demag_factors_signal_order():
+    "Demagnetizing factors must be all positive and ordered"
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[0])
+    assert (n11 > 0) and (n22 > 0)
+    assert n11 > n22
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[1])
+    assert (n11 > 0) and (n22 > 0)
+    assert n11 > n22
+
+    n11, n22 = oblate_ellipsoid.demag_factors(model[2])
+    assert (n11 > 0) and (n22 > 0)
+    assert n11 > n22
+
+
+def test_oblate_ellipsoid_self_demagnetization():
+    "Self-demagnetization decreases the magnetization intensity"
+
+    mag_with_demag = oblate_ellipsoid.magnetization(model[1],
+                                                      F, inc, dec,
+                                                      demag=True)
+
+    mag_without_demag = oblate_ellipsoid.magnetization(model[1],
+                                                         F, inc, dec,
+                                                         demag=False)
+
+    mag_with_demag_norm = np.linalg.norm(mag_with_demag, ord=2)
+    mag_without_demag_norm = np.linalg.norm(mag_without_demag, ord=2)
+
+    assert mag_with_demag_norm < mag_without_demag_norm
+
+
+def test_oblate_ellipsoid_neglecting_self_demagnetization():
+    "The error in magnetization by negleting self-demagnetization is bounded"
+
+    # susceptibility tensor
+    k1, k2, k3, strike, dip, rake = model[0].props['susceptibility tensor']
+
+    # demagnetizing factors
+    n11, n22 = oblate_ellipsoid.demag_factors(model[0])
+
+    # maximum relative error in the resulting magnetization
+    max_error = k3*n11
+
+    # magnetizations calculated with and without self-demagnetization
+    mag_with_demag = oblate_ellipsoid.magnetization(model[0],
+                                                      F, inc, dec,
+                                                      demag=True)
+    mag_without_demag = oblate_ellipsoid.magnetization(model[0],
+                                                         F, inc, dec,
+                                                         demag=False)
+
+    # difference in magnetization
+    mag_diff = mag_with_demag - mag_without_demag
+
+    # computed norms
+    mag_with_demag_norm = np.linalg.norm(mag_with_demag, ord=2)
+    mag_diff_norm = np.linalg.norm(mag_diff, ord=2)
+
+    # computed error
+    computed_error = mag_diff_norm/mag_with_demag_norm
+
+    assert computed_error <= max_error
 
 
 def test_oblate_ellipsoid_depolarization_tensor():
     "The depolarization tensor must be symmetric"
-    a = model[0].a
-    b = model[0].b
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = oblate_ellipsoid.structural_angles(strike, dip,
-                                                             rake)
-    matrix = oblate_ellipsoid.V(alpha, gamma, delta)
-    x1, x2, x3 = oblate_ellipsoid.x1x2x3(x, y, z, model[2].x, model[2].y,
-                                         model[2].z, matrix)
-    lamb = oblate_ellipsoid._lamb(x1, x2, x3, a, b)
-    denominator = oblate_ellipsoid._dlamb_aux(x1, x2, x3, a, b, lamb)
-    dlamb_dx = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='x')
-    dlamb_dy = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='y')
-    dlamb_dz = oblate_ellipsoid._dlamb(x1, x2, x3, a, b, lamb,
-                                       denominator, deriv='z')
-    hx = oblate_ellipsoid._hv(a, b, lamb, v='x')
-    hy = oblate_ellipsoid._hv(a, b, lamb, v='y')
-    hz = oblate_ellipsoid._hv(a, b, lamb, v='z')
-    gx = oblate_ellipsoid._gv(a, b, lamb, v='x')
-    gy = oblate_ellipsoid._gv(a, b, lamb, v='y')
-    gz = oblate_ellipsoid._gv(a, b, lamb, v='z')
+
+    ellipsoid = model[1]
+    x1, x2, x3 = oblate_ellipsoid.x1x2x3(x, y, z, ellipsoid)
+    lamb = oblate_ellipsoid._lamb(x1, x2, x3, ellipsoid)
+    denominator = oblate_ellipsoid._dlamb_aux(x1, x2, x3, ellipsoid, lamb)
+    dlamb_dx = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
+                                         denominator, deriv='x')
+    dlamb_dy = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
+                                         denominator, deriv='y')
+    dlamb_dz = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
+                                         denominator, deriv='z')
+    h1 = oblate_ellipsoid._hv(ellipsoid, lamb, v='x')
+    h2 = oblate_ellipsoid._hv(ellipsoid, lamb, v='y')
+    h3 = oblate_ellipsoid._hv(ellipsoid, lamb, v='z')
+    g1 = oblate_ellipsoid._gv(ellipsoid, lamb, v='x')
+    g2 = oblate_ellipsoid._gv(ellipsoid, lamb, v='y')
+    g3 = oblate_ellipsoid._gv(ellipsoid, lamb, v='z')
+    a = ellipsoid.large_axis
+    b = ellipsoid.small_axis
+    cte = -0.5*a*b*b
+
     # elements of the depolarization tensor without the ellipsoid
-    nxx = -0.5*a*b*b*(dlamb_dx*hx*x1 + gx)
-    nyy = -0.5*a*b*b*(dlamb_dy*hy*x2 + gy)
-    nzz = -0.5*a*b*b*(dlamb_dz*hz*x3 + gz)
-    nxy = -0.5*a*b*b*(dlamb_dx*hy*x2)
-    nyx = -0.5*a*b*b*(dlamb_dy*hx*x1)
-    nxz = -0.5*a*b*b*(dlamb_dx*hz*x3)
-    nzx = -0.5*a*b*b*(dlamb_dz*hx*x1)
-    nyz = -0.5*a*b*b*(dlamb_dy*hz*x3)
-    nzy = -0.5*a*b*b*(dlamb_dz*hy*x2)
+    nxx = cte*(dlamb_dx*h1*x1 + g1)
+    nyy = cte*(dlamb_dy*h2*x2 + g2)
+    nzz = cte*(dlamb_dz*h3*x3 + g3)
+    nxy = cte*(dlamb_dx*h2*x2)
+    nyx = cte*(dlamb_dy*h1*x1)
+    nxz = cte*(dlamb_dx*h3*x3)
+    nzx = cte*(dlamb_dz*h1*x1)
+    nyz = cte*(dlamb_dy*h3*x3)
+    nzy = cte*(dlamb_dz*h2*x2)
     trace = nxx+nyy+nzz
-    # the atol value was found empirically
-    assert np.allclose(trace, np.zeros_like(nxx), atol=0.05)
-    # symmetry tests
-    assert np.allclose(nxy, nyx, atol=0.05)
-    assert np.allclose(nxz, nzx, atol=0.05)
-    assert np.allclose(nyz, nzy, atol=0.05)
+
+    # the trace must zero
+    assert_almost_equal(trace, np.zeros_like(nxx), decimal=3)
+
+    # the depolarization is symmetric
+    assert_almost_equal(nxy, nyx, decimal=3)
+    assert_almost_equal(nxz, nzx, decimal=3)
+    assert_almost_equal(nyz, nzy, decimal=3)
 
 
 def test_oblate_ellipsoid_isotropic_susceptibility():
     "Isostropic susceptibility must be proportional to identity"
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = oblate_ellipsoid.structural_angles(strike, dip,
-                                                             rake)
-    matrix = oblate_ellipsoid.V(alpha, gamma, delta)
-    k1, k2, k3, alphas, gammas, deltas = model[0].props['k']
-    suscep = oblate_ellipsoid.K(k1, k2, k3, alphas, gammas, deltas)
+
+    k1, k2, k3, strike, dip, rake = model[0].props['susceptibility tensor']
+    suscep = model[0].susceptibility_tensor()
     assert np.allclose(suscep, k1*np.identity(3))
-
-
-def test_oblate_ellipsoid_mag_isostropic_suscep():
-    "Magnetization must be parallel to inducing field F"
-    a = model[0].a
-    b = model[0].b
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = oblate_ellipsoid.structural_angles(strike, dip,
-                                                             rake)
-    matrix = oblate_ellipsoid.V(alpha, gamma, delta)
-    k1, k2, k3, alphas, gammas, deltas = model[0].props['k']
-    suscep = oblate_ellipsoid.K(k1, k2, k3, alphas, gammas, deltas)
-    n11, n22 = oblate_ellipsoid.demag_factors(a, b)
-
-    M = oblate_ellipsoid.magnetization(n11, n22, suscep, F,
-                                       inc, dec, 0, 0, 0, matrix)
-    H0_tilde = np.dot(matrix.T, utils.ang2vec(F/(4*np.pi*100), inc, dec))
-    M_expected = np.dot(np.diag([k1/(1 - k1*n11),
-                                 k2/(1 - k2*n22),
-                                 k3/(1 - k3*n22)]), H0_tilde)
-
-    assert np.allclose(M, M_expected)
-
-
-def test_oblate_ellipsoid_V_orthogonal():
-    pi = np.pi
-    matrix = oblate_ellipsoid.V(pi*rand(), 0.5*pi*rand(), 0.5*pi*rand())
-    assert np.allclose(np.dot(matrix.T, matrix), np.identity(3))
-    assert np.allclose(np.dot(matrix, matrix.T), np.identity(3))
-
-
-def test_oblate_ellipsoid_V_specific():
-    pi = np.pi
-    strike = 180.
-    dip = 180.
-    rake = 0.
-    alpha, gamma, delta = oblate_ellipsoid.structural_angles(strike, dip,
-                                                             rake)
-    matrix = oblate_ellipsoid.V(alpha, gamma, delta)
-    assert np.allclose(matrix, np.identity(3)[[1, 2, 0]])

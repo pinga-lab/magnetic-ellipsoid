@@ -1,22 +1,16 @@
 r"""
 The potential fields of a homogeneous triaxial ellipsoid.
 """
-from __future__ import division
+from __future__ import division, absolute_import
 
 import numpy as np
 from scipy.special import ellipeinc, ellipkinc
 
-from ..constants import SI2MGAL, G, CM, T2NT, SI2EOTVOS, PERM_FREE_SPACE
-from .. import utils
-from .._our_duecredit import due, Doi
+from fatiando.constants import SI2MGAL, G, CM, T2NT, SI2EOTVOS, PERM_FREE_SPACE
+from fatiando import utils
 
 
-due.cite(Doi("XXXXXXXXXXXXXXXXX"),
-         description='Forward modeling formula for triaxial ellipsoids.',
-         path='fatiando.gravmag.triaxial_ellipsoid')
-
-
-def tf(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
+def tf(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     r"""
     The total-field anomaly produced by triaxial ellipsoids.
 
@@ -55,7 +49,7 @@ def tf(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -74,14 +68,14 @@ def tf(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
 
     """
     fx, fy, fz = utils.dircos(inc, dec)
-    Bx = bx(xp, yp, zp, ellipsoids, F, inc, dec, dmag, pmag)
-    By = by(xp, yp, zp, ellipsoids, F, inc, dec, dmag, pmag)
-    Bz = bz(xp, yp, zp, ellipsoids, F, inc, dec, dmag, pmag)
+    Bx = bx(xp, yp, zp, ellipsoids, F, inc, dec, demag, pmag)
+    By = by(xp, yp, zp, ellipsoids, F, inc, dec, demag, pmag)
+    Bz = bz(xp, yp, zp, ellipsoids, F, inc, dec, demag, pmag)
 
     return fx*Bx + fy*By + fz*Bz
 
 
-def bx(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
+def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     r"""
     The x component of the magnetic induction produced by triaxial
     ellipsoids.
@@ -105,7 +99,7 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -131,9 +125,9 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
         if 'susceptibility tensor' not in ellipsoid.props and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
-        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
+        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         res += ellipsoid.transf_matrix[0, 0]*b1 \
             + ellipsoid.transf_matrix[0, 1]*b2 \
             + ellipsoid.transf_matrix[0, 2]*b3
@@ -141,7 +135,7 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     return res
 
 
-def by(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
+def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     r"""
     The y component of the magnetic induction produced by triaxial
     ellipsoids.
@@ -165,7 +159,7 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -191,9 +185,9 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
         if 'susceptibility tensor' not in ellipsoid.props and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
-        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
+        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         res += ellipsoid.transf_matrix[1, 0]*b1 \
             + ellipsoid.transf_matrix[1, 1]*b2 \
             + ellipsoid.transf_matrix[1, 2]*b3
@@ -201,7 +195,7 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     return res
 
 
-def bz(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
+def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     r"""
     The z component of the magnetic induction produced by triaxial
     ellipsoids.
@@ -225,7 +219,7 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -251,9 +245,9 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
         if 'susceptibility tensor' not in ellipsoid.props and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
-        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
-        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag, pmag)
+        b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
+        b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         res += ellipsoid.transf_matrix[2, 0]*b1 \
             + ellipsoid.transf_matrix[2, 1]*b2 \
             + ellipsoid.transf_matrix[2, 2]*b3
@@ -261,7 +255,7 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, dmag=True, pmag=None):
     return res
 
 
-def _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
+def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     r"""
     The x component of the magnetic induction produced by triaxial
     ellipsoids in the ellipsoid system.
@@ -286,7 +280,7 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -306,7 +300,7 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     """
 
     if pmag is None:
-        mx, my, mz = magnetization(ellipsoid, F, inc, dec, dmag)
+        mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
         mx, my, mz = pmag
 
@@ -327,7 +321,7 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     return res
 
 
-def _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
+def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     r"""
     The y component of the magnetic induction produced by triaxial
     ellipsoids in the ellipsoid system.
@@ -352,7 +346,7 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -372,7 +366,7 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     """
 
     if pmag is None:
-        mx, my, mz = magnetization(ellipsoid, F, inc, dec, dmag)
+        mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
         mx, my, mz = pmag
 
@@ -393,7 +387,7 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     return res
 
 
-def _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
+def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     r"""
     The z component of the magnetic induction produced by triaxial
     ellipsoids in the ellipsoid system.
@@ -418,7 +412,7 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
     * pmag : [mx, my, mz] or None
         A magnetization vector. If not None, will use this value instead
@@ -438,7 +432,7 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, dmag=True, pmag=None):
     """
 
     if pmag is None:
-        mx, my, mz = magnetization(ellipsoid, F, inc, dec, dmag)
+        mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
         mx, my, mz = pmag
 
@@ -496,7 +490,7 @@ def x1x2x3(xp, yp, zp, ellipsoid):
 
 def _lamb(x1, x2, x3, ellipsoid):
     '''
-    Calculates the parameter lambda for a triaxial ellispoid.
+    Calculates the parameter lambda for a triaxial ellipsoid.
 
     The parameter lambda is defined as the largest root of
     the cubic equation defining the surface of the triaxial
@@ -686,7 +680,7 @@ def demag_factors(ellipsoid):
     return n11, n22, n33
 
 
-def magnetization(ellipsoid, F, inc, dec, dmag):
+def magnetization(ellipsoid, F, inc, dec, demag):
     '''
     Calculates the resultant magnetization corrected from
     demagnetizing in the main system.
@@ -697,7 +691,7 @@ def magnetization(ellipsoid, F, inc, dec, dmag):
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
-    * dmag : boolean
+    * demag : boolean
         If True, will include the self-demagnetization.
 
     Returns:
@@ -706,9 +700,11 @@ def magnetization(ellipsoid, F, inc, dec, dmag):
         Resultant magnetization (in A/m) in the main system.
     '''
 
-    if dmag is True:
+    suscep = ellipsoid.susceptibility_tensor()
+    geomag_field = utils.ang2vec(F/(4*np.pi*100), inc, dec)
+
+    if demag is True:
         n11, n22, n33 = demag_factors(ellipsoid)
-        suscep = ellipsoid.susceptibility_tensor()
         coord_transf_matrix = ellipsoid.transf_matrix
         suscep_tilde = np.dot(np.dot(coord_transf_matrix.T, suscep),
                               coord_transf_matrix)
@@ -719,8 +715,6 @@ def magnetization(ellipsoid, F, inc, dec, dmag):
 
     else:
         Lambda = np.identity(3)
-
-    geomag_field = utils.ang2vec(F/(4*np.pi*100), inc, dec)
 
     if 'remanent magnetization' in ellipsoid.props:
         intensity = ellipsoid.props['remanent magnetization'][0]
@@ -847,8 +841,6 @@ def _gv(ellipsoid, kappa, phi, v='x'):
     Parameters:
 
     * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`.
-    * lamb: numpy array 1D
-        Parameter lambda for each point in the ellipsoid system.
     * kappa: numpy array 1D
         Modulus of the elliptic integral.
     * phi: numpy array 1D
@@ -958,57 +950,3 @@ def _gv_tejedor(ellipsoid, kappa, phi, lamb, v='x'):
         gv = aux1*E + aux2
 
     return gv
-
-
-def _nuv(xp, yp, zp, ellipsoid, u='x', v='x'):
-    r"""
-    The uv element of the depolarization tensor evaluated
-    outside the triaxial ellipsoid.
-
-    The coordinate system of the input parameters is x -> semi-axis a,
-    y -> semi-axis b and z -> semi-axis c.
-
-    Input units should be SI. Output is in nT.
-
-    Parameters:
-
-    * xp, yp, zp : arrays
-        The x, y, and z coordinates where the element will be calculated.
-    * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`.
-    * u, v : strings
-        Define the element to be calculated.
-
-    Returns:
-
-    * nuv : numpy array 1D
-        The uv component of the depolarization tensor evaluated outside
-        the triaxial ellipsoid, in the ellipsoid system.
-    """
-
-    assert xp.size == yp.size == zp.size, \
-        'xp, yp and zp must have the same size'
-
-    assert u in ['x', 'y', 'z'], 'u must be x, y or z'
-    assert v in ['x', 'y', 'z'], 'v must be x, y or z'
-
-    x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
-    lamb = _lamb(x1, x2, x3, ellipsoid)
-    denominator = _dlamb_aux(x1, x2, x3, ellipsoid, lamb)
-    dlamb = _dlamb(x1, x2, x3, ellipsoid, lamb, denominator, deriv=u)
-    h = _hv(ellipsoid, lamb, v=v)
-    a = ellipsoid.large_axis
-    b = ellipsoid.intermediate_axis
-    c = ellipsoid.small_axis
-    aux = -0.5*a*b*c
-    if v == 'x':
-        res = 8*np.pi*dlamb*h*x1
-    if v == 'y':
-        res = 8*np.pi*dlamb*h*x2
-    if v == 'z':
-        res = 8*np.pi*dlamb*h*x3
-    if v == u:
-        kappa, phi = _E_F_field_args(ellipsoid, lamb)
-        g = _gv_tejedor(ellipsoid, kappa, phi, lamb, v=v)
-        res += 4*np.pi*g
-
-    return aux*res

@@ -13,4 +13,4 @@ style:
 	flake8
 
 test:
-	python -m pytest --doctest-modules
+	python -m pytest --doctest-modules --cov=code --cov-report term-missing

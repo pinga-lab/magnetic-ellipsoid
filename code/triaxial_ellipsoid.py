@@ -6,7 +6,7 @@ from __future__ import division, absolute_import
 import numpy as np
 from scipy.special import ellipeinc, ellipkinc
 
-from fatiando.constants import SI2MGAL, G, CM, T2NT, SI2EOTVOS, PERM_FREE_SPACE
+from fatiando.constants import CM, T2NT
 from fatiando import utils
 
 
@@ -490,7 +490,7 @@ def x1x2x3(xp, yp, zp, ellipsoid):
 
 def _lamb(x1, x2, x3, ellipsoid):
     '''
-    Calculates the parameter lambda for a triaxial ellipsoid.
+    Calculates the parameter lambda for a triaxial ellispoid.
 
     The parameter lambda is defined as the largest root of
     the cubic equation defining the surface of the triaxial
@@ -841,6 +841,8 @@ def _gv(ellipsoid, kappa, phi, v='x'):
     Parameters:
 
     * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`.
+    * lamb: numpy array 1D
+        Parameter lambda for each point in the ellipsoid system.
     * kappa: numpy array 1D
         Modulus of the elliptic integral.
     * phi: numpy array 1D

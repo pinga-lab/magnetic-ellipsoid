@@ -3,10 +3,9 @@ import numpy as np
 from copy import deepcopy
 
 from fatiando import utils, gridder
-from fatiando.mesher import TriaxialEllipsoid
-from fatiando.gravmag import triaxial_ellipsoid
+from mesher import TriaxialEllipsoid
+import triaxial_ellipsoid
 from numpy.testing import assert_almost_equal
-from pytest import raises
 
 # Local-geomagnetic field
 F = 30000

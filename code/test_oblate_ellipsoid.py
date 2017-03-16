@@ -3,10 +3,9 @@ import numpy as np
 from copy import deepcopy
 
 from fatiando import utils, gridder
-from fatiando.mesher import OblateEllipsoid
-from fatiando.gravmag import oblate_ellipsoid
+from mesher import OblateEllipsoid
+import oblate_ellipsoid
 from numpy.testing import assert_almost_equal
-from pytest import raises
 
 # Local-geomagnetic field
 F = 30000
@@ -20,23 +19,23 @@ axis_ref = gm  # reference semi-axis
 
 # Prolate ellipsoids used for testing
 model = [OblateEllipsoid(x=-3*gm, y=-3*gm, z=3*axis_ref,
-                           small_axis=0.6*axis_ref,
-                           large_axis=axis_ref,
-                           strike=78, dip=92, rake=135,
-                           props={'susceptibility tensor': [0.7, 0.7, 0.7,
-                                                            90., 47., 13.]}),
+                         small_axis=0.6*axis_ref,
+                         large_axis=axis_ref,
+                         strike=78, dip=92, rake=135,
+                         props={'susceptibility tensor': [0.7, 0.7, 0.7,
+                                                          90., 47., 13.]}),
          OblateEllipsoid(x=-gm, y=-gm, z=2.4*axis_ref,
-                           small_axis=0.3*axis_ref,
-                           large_axis=1.1*axis_ref,
-                           strike=4, dip=10, rake=5,
-                           props={'susceptibility tensor': [0.2, 0.15, 0.05,
-                                                            180, 19, -8.],
-                                  'remanent magnetization': [3, -6, 35]}),
+                         small_axis=0.3*axis_ref,
+                         large_axis=1.1*axis_ref,
+                         strike=4, dip=10, rake=5,
+                         props={'susceptibility tensor': [0.2, 0.15, 0.05,
+                                                          180, 19, -8.],
+                                'remanent magnetization': [3, -6, 35]}),
          OblateEllipsoid(x=3*gm, y=3*gm, z=4*axis_ref,
-                           small_axis=0.6*axis_ref,
-                           large_axis=1.5*axis_ref,
-                           strike=-58, dip=87, rake=49,
-                           props={'remanent magnetization': [4.7, 39, 0]})]
+                         small_axis=0.6*axis_ref,
+                         large_axis=1.5*axis_ref,
+                         strike=-58, dip=87, rake=49,
+                         props={'remanent magnetization': [4.7, 39, 0]})]
 
 
 def test_oblate_ellipsoid_force_prop():
@@ -48,13 +47,13 @@ def test_oblate_ellipsoid_force_prop():
     # magnetic field produced by the ellipsoids
     # with the forced physical property
     bx = oblate_ellipsoid.bx(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
 
     # constant factor
     f = 3.71768
@@ -62,13 +61,13 @@ def test_oblate_ellipsoid_force_prop():
     # magnetic field produced by the ellipsoids
     # with the forced physical property multiplied by the constant factor
     bx2 = oblate_ellipsoid.bx(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, pmag=f*pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, pmag=f*pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, pmag=f*pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, pmag=f*pmag)
 
     # the fields must be proportional
     assert_almost_equal(bx2, f*bx, decimal=12)
@@ -92,23 +91,23 @@ def test_oblate_ellipsoid_ignore_none():
     # magnetic field produced by the original model
     # without the removed element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
 
     # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
 
     assert_almost_equal(bx2, bx, decimal=15)
     assert_almost_equal(by2, by, decimal=15)
@@ -132,23 +131,23 @@ def test_oblate_ellipsoid_ignore_missing_prop():
     # magnetic field produced by the original model
     # without an element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                             F, inc, dec, pmag=pmag)
 
     # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                              F, inc, dec, pmag=pmag)
 
     assert_almost_equal(bx2, bx, decimal=15)
     assert_almost_equal(by2, by, decimal=15)
@@ -189,12 +188,12 @@ def test_oblate_ellipsoid_self_demagnetization():
     "Self-demagnetization decreases the magnetization intensity"
 
     mag_with_demag = oblate_ellipsoid.magnetization(model[1],
-                                                      F, inc, dec,
-                                                      demag=True)
+                                                    F, inc, dec,
+                                                    demag=True)
 
     mag_without_demag = oblate_ellipsoid.magnetization(model[1],
-                                                         F, inc, dec,
-                                                         demag=False)
+                                                       F, inc, dec,
+                                                       demag=False)
 
     mag_with_demag_norm = np.linalg.norm(mag_with_demag, ord=2)
     mag_without_demag_norm = np.linalg.norm(mag_without_demag, ord=2)
@@ -216,11 +215,11 @@ def test_oblate_ellipsoid_neglecting_self_demagnetization():
 
     # magnetizations calculated with and without self-demagnetization
     mag_with_demag = oblate_ellipsoid.magnetization(model[0],
-                                                      F, inc, dec,
-                                                      demag=True)
+                                                    F, inc, dec,
+                                                    demag=True)
     mag_without_demag = oblate_ellipsoid.magnetization(model[0],
-                                                         F, inc, dec,
-                                                         demag=False)
+                                                       F, inc, dec,
+                                                       demag=False)
 
     # difference in magnetization
     mag_diff = mag_with_demag - mag_without_demag
@@ -243,11 +242,11 @@ def test_oblate_ellipsoid_depolarization_tensor():
     lamb = oblate_ellipsoid._lamb(x1, x2, x3, ellipsoid)
     denominator = oblate_ellipsoid._dlamb_aux(x1, x2, x3, ellipsoid, lamb)
     dlamb_dx = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
-                                         denominator, deriv='x')
+                                       denominator, deriv='x')
     dlamb_dy = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
-                                         denominator, deriv='y')
+                                       denominator, deriv='y')
     dlamb_dz = oblate_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
-                                         denominator, deriv='z')
+                                       denominator, deriv='z')
     h1 = oblate_ellipsoid._hv(ellipsoid, lamb, v='x')
     h2 = oblate_ellipsoid._hv(ellipsoid, lamb, v='y')
     h3 = oblate_ellipsoid._hv(ellipsoid, lamb, v='z')

@@ -1,7 +1,10 @@
 from __future__ import division, absolute_import
-from ...mesher import TriaxialEllipsoid, ProlateEllipsoid, OblateEllipsoid
-from ...mesher import coord_transf_matrix_triaxial, coord_transf_matrix_oblate
-from ...mesher import auxiliary_angles
+from mesher import TriaxialEllipsoid
+from mesher import ProlateEllipsoid
+from mesher import OblateEllipsoid
+from mesher import coord_transf_matrix_triaxial
+from mesher import coord_transf_matrix_oblate
+from mesher import auxiliary_angles
 import numpy as np
 from numpy.testing import assert_almost_equal
 from pytest import raises

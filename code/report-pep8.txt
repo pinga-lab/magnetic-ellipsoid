@@ -1,1 +1,0 @@
-pep8 --show-source --ignore=W503,E226,E241,E731 --exclude=_version.py fatiando cookbook gallery setup.py

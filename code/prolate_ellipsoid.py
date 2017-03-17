@@ -40,7 +40,7 @@ def tf(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated.
-    * ellipsoids : list of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. Ellipsoids that do not have
@@ -91,7 +91,7 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoids : list of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. Ellipsoids that do not have
@@ -149,7 +149,7 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoids : list of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. Ellipsoids that do not have
@@ -207,7 +207,7 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoids : list of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. Ellipsoids that do not have
@@ -265,7 +265,7 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
         The ellipsoid. The ellipsoid must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. If it does not have
@@ -331,7 +331,7 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`
         The ellipsoid. The ellipsoid must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. If it does not have
@@ -397,7 +397,7 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`
         The ellipsoid. The ellipsoid must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
         and/or ``'remanent magnetization'``. If it does not have
@@ -457,7 +457,7 @@ def x1x2x3(xp, yp, zp, ellipsoid):
     * xp, yp, zp: numpy arrays 1D
         x, y and z coordinates of points referred to the main
         system (in meters).
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
 
     Returns:
 
@@ -495,7 +495,7 @@ def _lamb(x1, x2, x3, ellipsoid):
     * x1, x2, x3: numpy arrays 1D
         x, y and z coordinates of points referred to the ellipsoid
         system (in meters).
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
 
     Returns:
 
@@ -527,7 +527,7 @@ def _dlamb(x1, x2, x3, ellipsoid, lamb, denominator, deriv='x'):
     * x1, x2, x3: numpy arrays 1D
         x, y and z coordinates of points referred to the ellipsoid
         system (in meters).
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * denominator: numpy array 1D
@@ -576,7 +576,7 @@ def _dlamb_aux(x1, x2, x3, ellipsoid, lamb):
     * x1, x2, x3: numpy arrays 1D
         x, y and z coordinates of points referred to the ellipsoid
         system (in meters).
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
 
@@ -604,7 +604,7 @@ def demag_factors(ellipsoid):
 
     Parameters:
 
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
 
     Returns:
 
@@ -634,7 +634,7 @@ def magnetization(ellipsoid, F, inc, dec, demag):
 
     Parameters:
 
-    * ellipsoid: element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid: element of :class:`mesher.ProlateEllipsoid`.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -702,7 +702,7 @@ def _hv(ellipsoid, lamb, v='x'):
 
     Parameters:
 
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * v: string
@@ -739,7 +739,7 @@ def _gv(ellipsoid, lamb, v='x'):
 
     Parameters:
 
-    * ellipsoid : element of :class:`fatiando.mesher.ProlateEllipsoid`.
+    * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * v: string

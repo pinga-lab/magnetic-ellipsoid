@@ -42,10 +42,10 @@ def tf(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated.
     * ellipsoids : list of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoids. Ellipsoids must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        Ellipsoids that are ``None`` or without ``'susceptibility tensor'``
-        and without ``'remanent magnetization'`` will be ignored.
+        The ellipsoids. Ellipsoids must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. Ellipsoids that do not have
+        these physical properties or are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -92,10 +92,10 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoids : list of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoids. Ellipsoids must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        Ellipsoids that are ``None`` or without ``'susceptibility tensor'``
-        and without ``'remanent magnetization'`` will be ignored.
+        The ellipsoids. Ellipsoids must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. Ellipsoids that do not have
+        these physical properties or are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -122,7 +122,8 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
             continue
-        if 'susceptibility tensor' not in ellipsoid.props and \
+        if ('principal susceptibilities' not in ellipsoid.props or \
+                'susceptibility angles' not in ellipsoid.props) and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -152,10 +153,10 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoids : list of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoids. Ellipsoids must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        Ellipsoids that are ``None`` or without ``'susceptibility tensor'``
-        and without ``'remanent magnetization'`` will be ignored.
+        The ellipsoids. Ellipsoids must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. Ellipsoids that do not have
+        these physical properties or are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -182,7 +183,8 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
             continue
-        if 'susceptibility tensor' not in ellipsoid.props and \
+        if ('principal susceptibilities' not in ellipsoid.props or \
+                'susceptibility angles' not in ellipsoid.props) and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -212,10 +214,10 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoids : list of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoids. Ellipsoids must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        Ellipsoids that are ``None`` or without ``'susceptibility tensor'``
-        and without ``'remanent magnetization'`` will be ignored.
+        The ellipsoids. Ellipsoids must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. Ellipsoids that do not have
+        these physical properties or are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -242,7 +244,8 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
             continue
-        if 'susceptibility tensor' not in ellipsoid.props and \
+        if ('principal susceptibilities' not in ellipsoid.props or \
+                'susceptibility angles' not in ellipsoid.props) and \
                 'remanent magnetization' not in ellipsoid.props:
             continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -272,11 +275,10 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`.
-        The ellipsoid. Ellipsoid must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        If the ellipsoid is ``None`` or does not have neither
-        ``'susceptibility tensor'`` nor ``'remanent magnetization'``,
-        it will be ignored.
+        The ellipsoid. The ellipsoid must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. If it does not have
+        these physical properties or is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -338,11 +340,10 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoid. Ellipsoid must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        If the ellipsoid is ``None`` or does not have neither
-        ``'susceptibility tensor'`` nor ``'remanent magnetization'``,
-        it will be ignored.
+        The ellipsoid. The ellipsoid must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. If it does not have
+        these physical properties or is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -404,11 +405,10 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`fatiando.mesher.TriaxialEllipsoid`
-        The ellipsoid. Ellipsoid must have the physical property
-        ``'susceptibility tensor'`` and/or ``'remanent magnetization'``.
-        If the ellipsoid is ``None`` or does not have neither
-        ``'susceptibility tensor'`` nor ``'remanent magnetization'``,
-        it will be ignored.
+        The ellipsoid. The ellipsoid must have the physical properties
+        ``'principal susceptibilities'`` and ``'susceptibility angles'``
+        and/or ``'remanent magnetization'``. If it does not have
+        these physical properties or is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -700,10 +700,10 @@ def magnetization(ellipsoid, F, inc, dec, demag):
         Resultant magnetization (in A/m) in the main system.
     '''
 
-    suscep = ellipsoid.susceptibility_tensor()
-    geomag_field = utils.ang2vec(F/(4*np.pi*100), inc, dec)
+    suscep = ellipsoid.susceptibility_tensor
 
-    if demag is True:
+    if suscep is not None and demag is True:
+        geomag_field = utils.ang2vec(F/(4*np.pi*100), inc, dec)
         n11, n22, n33 = demag_factors(ellipsoid)
         coord_transf_matrix = ellipsoid.transf_matrix
         suscep_tilde = np.dot(np.dot(coord_transf_matrix.T, suscep),
@@ -714,6 +714,7 @@ def magnetization(ellipsoid, F, inc, dec, demag):
                         coord_transf_matrix.T)
 
     else:
+        geomag_field = np.zeros(3)
         Lambda = np.identity(3)
 
     if 'remanent magnetization' in ellipsoid.props:
@@ -721,13 +722,12 @@ def magnetization(ellipsoid, F, inc, dec, demag):
         inclination = ellipsoid.props['remanent magnetization'][1]
         declination = ellipsoid.props['remanent magnetization'][2]
         remanent_mag = utils.ang2vec(intensity, inclination, declination)
-
-        # resultant magnetization in the main system
-        resultant_mag = np.dot(Lambda,
-                               np.dot(suscep, geomag_field) + remanent_mag)
     else:
-        # resultant magnetization in the main system
-        resultant_mag = np.dot(Lambda, np.dot(suscep, geomag_field))
+        remanent_mag = np.zeros(3)
+
+    # resultant magnetization in the main system
+    resultant_mag = np.dot(Lambda,
+                           np.dot(suscep, geomag_field) + remanent_mag)
 
     return resultant_mag
 

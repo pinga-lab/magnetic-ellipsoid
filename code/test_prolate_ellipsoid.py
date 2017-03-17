@@ -22,14 +22,16 @@ model = [ProlateEllipsoid(x=-3*gm, y=-3*gm, z=3*axis_ref,
                           large_axis=axis_ref,
                           small_axis=0.6*axis_ref,
                           strike=78, dip=92, rake=135,
-                          props={'susceptibility tensor': [0.7, 0.7, 0.7,
-                                                           90., 47., 13.]}),
+                          props={'principal susceptibilities': [0.7, 0.7,
+                                                                0.7],
+                                 'susceptibility angles': [90., 47., 13.]}),
          ProlateEllipsoid(x=-gm, y=-gm, z=2.4*axis_ref,
                           large_axis=1.1*axis_ref,
                           small_axis=0.3*axis_ref,
                           strike=4, dip=10, rake=5,
-                          props={'susceptibility tensor': [0.2, 0.15, 0.05,
-                                                           180, 19, -8.],
+                          props={'principal susceptibilities': [0.2, 0.15,
+                                                                0.05],
+                                 'susceptibility angles': [180, 19, -8.],
                                  'remanent magnetization': [3, -6, 35]}),
          ProlateEllipsoid(x=3*gm, y=3*gm, z=4*axis_ref,
                           large_axis=1.5*axis_ref,
@@ -125,7 +127,7 @@ def test_prolate_ellipsoid_ignore_missing_prop():
     model_none = deepcopy(model)
 
     # remove the required properties of an element of the copy
-    del model_none[1].props['susceptibility tensor']
+    del model_none[1].props['principal susceptibilities']
     del model_none[1].props['remanent magnetization']
 
     # magnetic field produced by the original model
@@ -205,7 +207,8 @@ def test_prolate_ellipsoid_neglecting_self_demagnetization():
     "The error in magnetization by negleting self-demagnetization is bounded"
 
     # susceptibility tensor
-    k1, k2, k3, strike, dip, rake = model[0].props['susceptibility tensor']
+    k1, k2, k3 = model[0].props['principal susceptibilities']
+    strike, dip, rake = model[0].props['susceptibility angles']
 
     # demagnetizing factors
     n11, n22 = prolate_ellipsoid.demag_factors(model[0])
@@ -281,6 +284,7 @@ def test_prolate_ellipsoid_depolarization_tensor():
 def test_prolate_ellipsoid_isotropic_susceptibility():
     "Isostropic susceptibility must be proportional to identity"
 
-    k1, k2, k3, strike, dip, rake = model[0].props['susceptibility tensor']
-    suscep = model[0].susceptibility_tensor()
+    k1, k2, k3 = model[0].props['principal susceptibilities']
+    strike, dip, rake = model[0].props['susceptibility angles']
+    suscep = model[0].susceptibility_tensor
     assert np.allclose(suscep, k1*np.identity(3))

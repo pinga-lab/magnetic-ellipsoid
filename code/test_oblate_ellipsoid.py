@@ -49,13 +49,13 @@ def test_oblate_ellipsoid_force_prop():
     # magnetic field produced by the ellipsoids
     # with the forced physical property
     bx = oblate_ellipsoid.bx(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, model,
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
 
     # constant factor
     f = 3.71768
@@ -63,13 +63,13 @@ def test_oblate_ellipsoid_force_prop():
     # magnetic field produced by the ellipsoids
     # with the forced physical property multiplied by the constant factor
     bx2 = oblate_ellipsoid.bx(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, demag=False, pmag=f*pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, demag=False, pmag=f*pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, demag=False, pmag=f*pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model,
-                              F, inc, dec, pmag=f*pmag)
+                              F, inc, dec, demag=False, pmag=f*pmag)
 
     # the fields must be proportional
     assert_almost_equal(bx2, f*bx, decimal=12)
@@ -93,23 +93,23 @@ def test_oblate_ellipsoid_ignore_none():
     # magnetic field produced by the original model
     # without the removed element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
 
     # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
 
     assert_almost_equal(bx2, bx, decimal=15)
     assert_almost_equal(by2, by, decimal=15)
@@ -128,28 +128,29 @@ def test_oblate_ellipsoid_ignore_missing_prop():
 
     # remove the required properties of an element of the copy
     del model_none[1].props['principal susceptibilities']
+    del model_none[1].props['susceptibility angles']
     del model_none[1].props['remanent magnetization']
 
     # magnetic field produced by the original model
     # without an element
     bx = oblate_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     by = oblate_ellipsoid.by(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     bz = oblate_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
     tf = oblate_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                             F, inc, dec, pmag=pmag)
+                             F, inc, dec, demag=False, pmag=pmag)
 
     # magnetic field produced by the copy
     bx2 = oblate_ellipsoid.bx(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     by2 = oblate_ellipsoid.by(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     bz2 = oblate_ellipsoid.bz(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
     tf2 = oblate_ellipsoid.tf(x, y, z, model_none,
-                              F, inc, dec, pmag=pmag)
+                              F, inc, dec, demag=False, pmag=pmag)
 
     assert_almost_equal(bx2, bx, decimal=15)
     assert_almost_equal(by2, by, decimal=15)

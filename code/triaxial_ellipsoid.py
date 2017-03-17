@@ -122,10 +122,6 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
             continue
-        if ('principal susceptibilities' not in ellipsoid.props or \
-                'susceptibility angles' not in ellipsoid.props) and \
-                'remanent magnetization' not in ellipsoid.props:
-            continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -182,10 +178,6 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     res = 0
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
-            continue
-        if ('principal susceptibilities' not in ellipsoid.props or \
-                'susceptibility angles' not in ellipsoid.props) and \
-                'remanent magnetization' not in ellipsoid.props:
             continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -244,10 +236,6 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     for ellipsoid in ellipsoids:
         if ellipsoid is None:
             continue
-        if ('principal susceptibilities' not in ellipsoid.props or \
-                'susceptibility angles' not in ellipsoid.props) and \
-                'remanent magnetization' not in ellipsoid.props:
-            continue
         b1 = _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         b2 = _by(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
         b3 = _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag, pmag)
@@ -304,6 +292,8 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     if pmag is None:
         mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
+        assert demag is not True, 'the use of a forced magnetization \
+impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
@@ -369,6 +359,8 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     if pmag is None:
         mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
+        assert demag is not True, 'the use of a forced magnetization \
+impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
@@ -434,6 +426,8 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     if pmag is None:
         mx, my, mz = magnetization(ellipsoid, F, inc, dec, demag)
     else:
+        assert demag is not True, 'the use of a forced magnetization \
+impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
@@ -700,10 +694,30 @@ def magnetization(ellipsoid, F, inc, dec, demag):
         Resultant magnetization (in A/m) in the main system.
     '''
 
+    # Remanent magnetization
+    if 'remanent magnetization' in ellipsoid.props:
+        intensity = ellipsoid.props['remanent magnetization'][0]
+        inclination = ellipsoid.props['remanent magnetization'][1]
+        declination = ellipsoid.props['remanent magnetization'][2]
+        remanent_mag = utils.ang2vec(intensity, inclination, declination)
+    else:
+        remanent_mag = np.zeros(3)
+
     suscep = ellipsoid.susceptibility_tensor
 
-    if suscep is not None and demag is True:
+    # Induced magnetization
+    if suscep is not None:
         geomag_field = utils.ang2vec(F/(4*np.pi*100), inc, dec)
+        induced_mag = np.dot(suscep, geomag_field)
+    else:
+        induced_mag = np.zeros(3)
+
+    # Self-demagnetization
+    if demag is True:
+
+        assert suscep is not None, 'self-demagnetization requires a \
+susceptibility tensor'
+
         n11, n22, n33 = demag_factors(ellipsoid)
         coord_transf_matrix = ellipsoid.transf_matrix
         suscep_tilde = np.dot(np.dot(coord_transf_matrix.T, suscep),
@@ -713,21 +727,17 @@ def magnetization(ellipsoid, F, inc, dec, demag):
         Lambda = np.dot(np.dot(coord_transf_matrix, aux),
                         coord_transf_matrix.T)
 
-    else:
-        geomag_field = np.zeros(3)
-        Lambda = np.identity(3)
+        # resultant magnetization in the main system
+        resultant_mag = np.dot(Lambda, induced_mag + remanent_mag)
 
-    if 'remanent magnetization' in ellipsoid.props:
-        intensity = ellipsoid.props['remanent magnetization'][0]
-        inclination = ellipsoid.props['remanent magnetization'][1]
-        declination = ellipsoid.props['remanent magnetization'][2]
-        remanent_mag = utils.ang2vec(intensity, inclination, declination)
     else:
-        remanent_mag = np.zeros(3)
 
-    # resultant magnetization in the main system
-    resultant_mag = np.dot(Lambda,
-                           np.dot(suscep, geomag_field) + remanent_mag)
+        assert (suscep is not None) or ('remanent magnetization' \
+            in ellipsoid.props), 'neglecting self-demagnetization requires a \
+susceptibility tensor or a remanent magnetization'
+
+        # resultant magnetization in the main system
+        resultant_mag = induced_mag + remanent_mag
 
     return resultant_mag
 

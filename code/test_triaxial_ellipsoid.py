@@ -1,279 +1,295 @@
+from __future__ import division, absolute_import
 import numpy as np
-from numpy.random import rand
+from copy import deepcopy
 
-from ... import utils, gridder
-from ...mesher import TriaxialEllipsoid
-from .. import triaxial_ellipsoid
+from fatiando import utils, gridder
+from mesher import TriaxialEllipsoid
+import triaxial_ellipsoid
+from numpy.testing import assert_almost_equal
 
-F = 20000 + 40000*rand()
-inc = -90 + 180*rand()
-dec = 180*rand()
-sinc = -90 + 180*rand()
-sdec = 180*rand()
+# Local-geomagnetic field
+F = 30000
+inc = -3
+dec = 57
 
-gm = 1e4*rand()  # geometrical factor
+gm = 1000  # geometrical factor
 area = [-5.*gm, 5.*gm, -5.*gm, 5.*gm]
 x, y, z = gridder.scatter(area, 300, z=0.)
-axis_ref = gm*rand()  # reference semi-axis
+axis_ref = gm  # reference semi-axis
 
-model = [TriaxialEllipsoid(-3*gm, -3*gm, 3*axis_ref,
-                           axis_ref, 0.8*axis_ref, 0.6*axis_ref,
-                           180*rand(), 90*rand(), 90*rand(),
-                           {'k': [0.7, 0.7, 0.7, 90., 47., 13.]}),
-         TriaxialEllipsoid(0, 0, 2*axis_ref,
-                           axis_ref, 0.8*axis_ref, 0.6*axis_ref,
-                           180*rand(), 90*rand(), 90*rand(),
-                           {'remanence': [4., 25., 40.],
-                            'k': [0.562, 0.485, 0.25, 90., 0., 0.]}),
-         TriaxialEllipsoid(3*gm, 3*gm, 3*axis_ref,
-                           axis_ref, 0.8*axis_ref, 0.6*axis_ref,
-                           180*rand(), 90*rand(), 90*rand(),
-                           {'remanence': [8., 25., 40.]})]
+# Triaxial ellipsoids used for testing
+model = [TriaxialEllipsoid(x=-3*gm, y=-3*gm, z=3*axis_ref,
+                           large_axis=axis_ref,
+                           intermediate_axis=0.8*axis_ref,
+                           small_axis=0.6*axis_ref,
+                           strike=78, dip=92, rake=135,
+                           props={'principal susceptibilities': [0.7, 0.7,
+                                                                 0.7],
+                                  'susceptibility angles': [90., 47., 13.]}),
+         TriaxialEllipsoid(x=-gm, y=-gm, z=2.4*axis_ref,
+                           large_axis=1.1*axis_ref,
+                           intermediate_axis=0.7*axis_ref,
+                           small_axis=0.3*axis_ref,
+                           strike=4, dip=10, rake=5,
+                           props={'principal susceptibilities': [0.2, 0.15,
+                                                                 0.05],
+                                  'susceptibility angles': [180, 19, -8.],
+                                  'remanent magnetization': [3, -6, 35]}),
+         TriaxialEllipsoid(x=3*gm, y=3*gm, z=4*axis_ref,
+                           large_axis=1.5*axis_ref,
+                           intermediate_axis=0.9*axis_ref,
+                           small_axis=0.6*axis_ref,
+                           strike=-58, dip=87, rake=49,
+                           props={'remanent magnetization': [4.7, 39, 0]})]
 
 
 def test_triaxial_ellipsoid_force_prop():
-    "Test the triaxial_ellipsoid code with forcing a physical property value"
-    pmag = utils.ang2vec(-1, sinc, sdec)
+    "Test the triaxial_ellipsoid code with an imposed physical property"
+
+    # forced physical property
+    pmag = utils.ang2vec(5, 43, -8)
+
+    # magnetic field produced by the ellipsoids
+    # with the forced physical property
     bx = triaxial_ellipsoid.bx(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     by = triaxial_ellipsoid.by(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     bz = triaxial_ellipsoid.bz(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     tf = triaxial_ellipsoid.tf(x, y, z, model,
-                               F, inc, dec, pmag=pmag)
-    f = 1 + 4*rand()
+                               F, inc, dec, demag=False, pmag=pmag)
+
+    # constant factor
+    f = 3.71768
+
+    # magnetic field produced by the ellipsoids
+    # with the forced physical property multiplied by the constant factor
     bx2 = triaxial_ellipsoid.bx(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, demag=False, pmag=f*pmag)
     by2 = triaxial_ellipsoid.by(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, demag=False, pmag=f*pmag)
     bz2 = triaxial_ellipsoid.bz(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
+                                F, inc, dec, demag=False, pmag=f*pmag)
     tf2 = triaxial_ellipsoid.tf(x, y, z, model,
-                                F, inc, dec, pmag=f*pmag)
-    assert np.allclose(bx2, f*bx)
-    assert np.allclose(by2, f*by)
-    assert np.allclose(bz2, f*bz)
-    assert np.allclose(tf2, f*tf)
+                                F, inc, dec, demag=False, pmag=f*pmag)
+
+    # the fields must be proportional
+    assert_almost_equal(bx2, f*bx, decimal=12)
+    assert_almost_equal(by2, f*by, decimal=12)
+    assert_almost_equal(bz2, f*bz, decimal=12)
+    assert_almost_equal(tf2, f*tf, decimal=12)
 
 
 def test_triaxial_ellipsoid_ignore_none():
     "Triaxial ellipsoid ignores model elements that are None"
-    pmag = utils.ang2vec(1 + 10*rand(), sinc, sdec)
-    model_none = model[:]
+
+    # forced physical property
+    pmag = utils.ang2vec(7, -52, 13)
+
+    # copy of the original model
+    model_none = deepcopy(model)
+
+    # force an element of the copy to be None
     model_none[1] = None
+
+    # magnetic field produced by the original model
+    # without the removed element
     bx = triaxial_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     by = triaxial_ellipsoid.by(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     bz = triaxial_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     tf = triaxial_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
+
+    # magnetic field produced by the copy
     bx2 = triaxial_ellipsoid.bx(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     by2 = triaxial_ellipsoid.by(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     bz2 = triaxial_ellipsoid.bz(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     tf2 = triaxial_ellipsoid.tf(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
-    assert np.allclose(bx2, bx)
-    assert np.allclose(by2, by)
-    assert np.allclose(bz2, bz)
-    assert np.allclose(tf2, tf)
+                                F, inc, dec, demag=False, pmag=pmag)
+
+    assert_almost_equal(bx2, bx, decimal=15)
+    assert_almost_equal(by2, by, decimal=15)
+    assert_almost_equal(bz2, bz, decimal=15)
+    assert_almost_equal(tf2, tf, decimal=15)
 
 
 def test_triaxial_ellipsoid_ignore_missing_prop():
-    "Triaxial ellipsoid ignores model elements that don't have \
-    the needed property"
-    pmag = utils.ang2vec(1 + 10*rand(), sinc, sdec)
-    model_none = model[:]
-    del model_none[1].props['k']
-    del model_none[1].props['remanence']
+    "Triaxial ellipsoid ignores model without the needed properties"
+
+    # forced physical property
+    pmag = utils.ang2vec(2, -4, 17)
+
+    # copy of the original model
+    model_none = deepcopy(model)
+
+    # remove the required properties of an element of the copy
+    del model_none[1].props['principal susceptibilities']
+    del model_none[1].props['remanent magnetization']
+
+    # magnetic field produced by the original model
+    # without an element
     bx = triaxial_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     by = triaxial_ellipsoid.by(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     bz = triaxial_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
     tf = triaxial_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                               F, inc, dec, pmag=pmag)
+                               F, inc, dec, demag=False, pmag=pmag)
+
+    # magnetic field produced by the copy
     bx2 = triaxial_ellipsoid.bx(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     by2 = triaxial_ellipsoid.by(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     bz2 = triaxial_ellipsoid.bz(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
+                                F, inc, dec, demag=False, pmag=pmag)
     tf2 = triaxial_ellipsoid.tf(x, y, z, model_none,
-                                F, inc, dec, pmag=pmag)
-    assert np.allclose(bx2, bx)
-    assert np.allclose(by2, by)
-    assert np.allclose(bz2, bz)
-    assert np.allclose(tf2, tf)
+                                F, inc, dec, demag=False, pmag=pmag)
+
+    assert_almost_equal(bx2, bx, decimal=15)
+    assert_almost_equal(by2, by, decimal=15)
+    assert_almost_equal(bz2, bz, decimal=15)
+    assert_almost_equal(tf2, tf, decimal=15)
 
 
-def test_triaxial_ellipsoid_demagnetizing_factors():
+def test_triaxial_ellipsoid_demag_factors_sum():
     "The summation of the demagnetizing factors must be equal to one"
-    a = model[2].a
-    b = model[2].b
-    c = model[2].c
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    x1, x2, x3 = triaxial_ellipsoid.x1x2x3(x, y, z, model[2].x, model[2].y,
-                                           model[2].z, matrix)
-    lamb = triaxial_ellipsoid._lamb(x1, x2, x3, a, b, c)
-    denominator = triaxial_ellipsoid._dlamb_aux(x1, x2, x3, a, b, c, lamb)
-    dlamb_dx = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
-                                         denominator, deriv='x')
-    dlamb_dy = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
-                                         denominator, deriv='y')
-    dlamb_dz = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
-                                         denominator, deriv='z')
-    n11, n22, n33 = triaxial_ellipsoid.demag_factors(a, b, c)
-    assert np.allclose(n11+n22+n33, 1.)
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[0])
+    assert_almost_equal(n11+n22+n33, 1., decimal=15)
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[1])
+    assert_almost_equal(n11+n22+n33, 1., decimal=15)
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[2])
+    assert_almost_equal(n11+n22+n33, 1., decimal=15)
 
 
-def test_triaxial_self_demagnetization():
+def test_triaxial_ellipsoid_demag_factors_signal_order():
+    "Demagnetizing factors must be all positive and ordered"
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[0])
+    assert (n11 > 0) and (n22 > 0) and (n33 > 0)
+    assert n33 > n22 > n11
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[1])
+    assert (n11 > 0) and (n22 > 0) and (n33 > 0)
+    assert n33 > n22 > n11
+
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[2])
+    assert (n11 > 0) and (n22 > 0) and (n33 > 0)
+    assert n33 > n22 > n11
+
+
+def test_triaxial_ellipsoid_self_demagnetization():
     "Self-demagnetization decreases the magnetization intensity"
-    a = model[0].a
-    b = model[0].b
-    c = model[0].c
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    k1, k2, k3, alphas, gammas, deltas = model[0].props['k']
-    suscep = triaxial_ellipsoid.K(k1, k2, k3, alphas, gammas, deltas)
-    n11, n22, n33 = triaxial_ellipsoid.demag_factors(a, b, c)
 
-    # magnetization with self-demagnetization
-    axes = [a, b, c]
-    M = triaxial_ellipsoid.magnetization(suscep, F, inc, dec, 0, 0, 0,
-                                         matrix, axes)
+    mag_with_demag = triaxial_ellipsoid.magnetization(model[1],
+                                                      F, inc, dec,
+                                                      demag=True)
 
-    # magnetization without self-demagnetization
-    M_approx = triaxial_ellipsoid.magnetization(suscep, F, inc, dec, 0, 0, 0,
-                                                matrix, axes=None)
+    mag_without_demag = triaxial_ellipsoid.magnetization(model[1],
+                                                         F, inc, dec,
+                                                         demag=False)
 
-    M_norm = np.linalg.norm(M, ord=2)
-    M_approx_norm = np.linalg.norm(M_approx, ord=2)
-    assert M_norm < M_approx_norm
+    mag_with_demag_norm = np.linalg.norm(mag_with_demag, ord=2)
+    mag_without_demag_norm = np.linalg.norm(mag_without_demag, ord=2)
+
+    assert mag_with_demag_norm < mag_without_demag_norm
+
+
+def test_triaxial_ellipsoid_neglecting_self_demagnetization():
+    "The error in magnetization by negleting self-demagnetization is bounded"
+
+    # susceptibility tensor
+    k1, k2, k3 = model[0].props['principal susceptibilities']
+    strike, dip, rake = model[0].props['susceptibility angles']
+
+    # demagnetizing factors
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(model[0])
+
+    # maximum relative error in the resulting magnetization
+    max_error = k3*n33
+
+    # magnetizations calculated with and without self-demagnetization
+    mag_with_demag = triaxial_ellipsoid.magnetization(model[0],
+                                                      F, inc, dec,
+                                                      demag=True)
+    mag_without_demag = triaxial_ellipsoid.magnetization(model[0],
+                                                         F, inc, dec,
+                                                         demag=False)
+
+    # difference in magnetization
+    mag_diff = mag_with_demag - mag_without_demag
+
+    # computed norms
+    mag_with_demag_norm = np.linalg.norm(mag_with_demag, ord=2)
+    mag_diff_norm = np.linalg.norm(mag_diff, ord=2)
+
+    # computed error
+    computed_error = mag_diff_norm/mag_with_demag_norm
+
+    assert computed_error <= max_error
 
 
 def test_triaxial_ellipsoid_depolarization_tensor():
     "The depolarization tensor must be symmetric"
-    a = model[0].a
-    b = model[0].b
-    c = model[0].c
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    x1, x2, x3 = triaxial_ellipsoid.x1x2x3(x, y, z, model[2].x, model[2].y,
-                                           model[2].z, matrix)
-    lamb = triaxial_ellipsoid._lamb(x1, x2, x3, a, b, c)
-    denominator = triaxial_ellipsoid._dlamb_aux(x1, x2, x3, a, b, c, lamb)
-    dlamb_dx = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
+
+    ellipsoid = model[1]
+    x1, x2, x3 = triaxial_ellipsoid.x1x2x3(x, y, z, ellipsoid)
+    lamb = triaxial_ellipsoid._lamb(x1, x2, x3, ellipsoid)
+    denominator = triaxial_ellipsoid._dlamb_aux(x1, x2, x3, ellipsoid, lamb)
+    dlamb_dx = triaxial_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
                                          denominator, deriv='x')
-    dlamb_dy = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
+    dlamb_dy = triaxial_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
                                          denominator, deriv='y')
-    dlamb_dz = triaxial_ellipsoid._dlamb(x1, x2, x3, a, b, c, lamb,
+    dlamb_dz = triaxial_ellipsoid._dlamb(x1, x2, x3, ellipsoid, lamb,
                                          denominator, deriv='z')
-    hx = triaxial_ellipsoid._hv(a, b, c, lamb, v='x')
-    hy = triaxial_ellipsoid._hv(a, b, c, lamb, v='y')
-    hz = triaxial_ellipsoid._hv(a, b, c, lamb, v='z')
-    kappa, phi = triaxial_ellipsoid._E_F_field_args(a, b, c, lamb)
-    gx = triaxial_ellipsoid._gv(a, b, c, kappa, phi, v='x')
-    gy = triaxial_ellipsoid._gv(a, b, c, kappa, phi, v='y')
-    gz = triaxial_ellipsoid._gv(a, b, c, kappa, phi, v='z')
+    h1 = triaxial_ellipsoid._hv(ellipsoid, lamb, v='x')
+    h2 = triaxial_ellipsoid._hv(ellipsoid, lamb, v='y')
+    h3 = triaxial_ellipsoid._hv(ellipsoid, lamb, v='z')
+    kappa, phi = triaxial_ellipsoid._E_F_field_args(ellipsoid, lamb)
+    g1 = triaxial_ellipsoid._gv_tejedor(ellipsoid, kappa, phi, lamb, v='x')
+    g2 = triaxial_ellipsoid._gv_tejedor(ellipsoid, kappa, phi, lamb, v='y')
+    g3 = triaxial_ellipsoid._gv_tejedor(ellipsoid, kappa, phi, lamb, v='z')
+    a = ellipsoid.large_axis
+    b = ellipsoid.intermediate_axis
+    c = ellipsoid.small_axis
+    cte = -0.5*a*b*c
+
     # elements of the depolarization tensor without the ellipsoid
-    nxx = -0.5*a*b*c*(dlamb_dx*hx*x1 + gx)
-    nyy = -0.5*a*b*c*(dlamb_dy*hy*x2 + gy)
-    nzz = -0.5*a*b*c*(dlamb_dz*hz*x3 + gz)
-    nxy = -0.5*a*b*c*(dlamb_dx*hy*x2)
-    nyx = -0.5*a*b*c*(dlamb_dy*hx*x1)
-    nxz = -0.5*a*b*c*(dlamb_dx*hz*x3)
-    nzx = -0.5*a*b*c*(dlamb_dz*hx*x1)
-    nyz = -0.5*a*b*c*(dlamb_dy*hz*x3)
-    nzy = -0.5*a*b*c*(dlamb_dz*hy*x2)
+    nxx = cte*(dlamb_dx*h1*x1 + g1)
+    nyy = cte*(dlamb_dy*h2*x2 + g2)
+    nzz = cte*(dlamb_dz*h3*x3 + g3)
+    nxy = cte*(dlamb_dx*h2*x2)
+    nyx = cte*(dlamb_dy*h1*x1)
+    nxz = cte*(dlamb_dx*h3*x3)
+    nzx = cte*(dlamb_dz*h1*x1)
+    nyz = cte*(dlamb_dy*h3*x3)
+    nzy = cte*(dlamb_dz*h2*x2)
     trace = nxx+nyy+nzz
-    # the atol value was found empirically
-    assert np.allclose(trace, np.zeros_like(nxx), atol=0.05)
-    # symmetry tests
-    assert np.allclose(nxy, nyx)
-    assert np.allclose(nxz, nzx)
-    assert np.allclose(nyz, nzy)
+
+    # the trace must zero
+    assert_almost_equal(trace, np.zeros_like(nxx), decimal=15)
+
+    # the depolarization is symmetric
+    assert_almost_equal(nxy, nyx, decimal=15)
+    assert_almost_equal(nxz, nzx, decimal=15)
+    assert_almost_equal(nyz, nzy, decimal=15)
 
 
 def test_triaxial_ellipsoid_isotropic_susceptibility():
     "Isostropic susceptibility must be proportional to identity"
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    k1, k2, k3, alphas, gammas, deltas = model[0].props['k']
-    suscep = triaxial_ellipsoid.K(k1, k2, k3, alphas, gammas, deltas)
+
+    k1, k2, k3 = model[0].props['principal susceptibilities']
+    strike, dip, rake = model[0].props['susceptibility angles']
+    suscep = model[0].susceptibility_tensor
     assert np.allclose(suscep, k1*np.identity(3))
-
-
-def test_triaxial_ellipsoid_mag_isostropic_suscep():
-    "Magnetization assumes a simple form"
-    a = model[0].a
-    b = model[0].b
-    c = model[0].c
-    strike = model[0].strike
-    dip = model[0].dip
-    rake = model[0].rake
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    k1, k2, k3, alphas, gammas, deltas = model[0].props['k']
-    suscep = triaxial_ellipsoid.K(k1, k2, k3, alphas, gammas, deltas)
-    n11, n22, n33 = triaxial_ellipsoid.demag_factors(a, b, c)
-
-    axes = [a, b, c]
-    M = triaxial_ellipsoid.magnetization(suscep, F, inc, dec, 0, 0, 0, matrix,
-                                         axes)
-    H0 = utils.ang2vec(F/(4*np.pi*100), inc, dec)
-    suscep_tilde = np.dot(np.dot(matrix.T, suscep), matrix)
-    aux = np.linalg.inv(np.identity(3) + np.dot(suscep_tilde,
-                                                np.diag([n11, n22, n33])))
-    Lambda = np.dot(np.dot(matrix, aux), matrix.T)
-    M_expected = np.dot(Lambda, np.dot(suscep, H0))
-
-    assert np.allclose(M, M_expected)
-
-
-def test_triaxial_ellipsoid_V_orthogonal():
-    a = 1000.*rand()
-    b = 0.8*a
-    c = 0.6*a
-    pi = np.pi
-    matrix = triaxial_ellipsoid.V(pi*rand(), 0.5*pi*rand(), 0.5*pi*rand())
-    assert np.allclose(np.dot(matrix.T, matrix), np.identity(3))
-    assert np.allclose(np.dot(matrix, matrix.T), np.identity(3))
-
-
-def test_triaxial_ellipsoid_V_identity():
-    a = 1000.*rand()
-    b = 0.8*a
-    c = 0.6*a
-    pi = np.pi
-    strike = 180.
-    dip = 180.
-    rake = 0.
-    alpha, gamma, delta = triaxial_ellipsoid.structural_angles(strike, dip,
-                                                               rake)
-    matrix = triaxial_ellipsoid.V(alpha, gamma, delta)
-    assert np.allclose(matrix, np.identity(3))

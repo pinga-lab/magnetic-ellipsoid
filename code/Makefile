@@ -1,14 +1,16 @@
-NOTEBOOKS := $(shell find . -maxdepth 1 -name '*.ipynb')
-NOTEBOOK_PDFS := $(NOTEBOOKS:.ipynb=.pdf)
+# Run flake8 and pytest
 
-all: pdf
+PEP8ARGS=--show-source --ignore=W503,E226,E241,E731
 
-pdf: $(NOTEBOOK_PDFS)
+help:
+	@echo "Options:"
+	@echo ""
+	@echo "    style         check for style consistency"
+	@echo "    test          run the test suite"
+	@echo ""
 
-# Convert the Jupyter notebooks to PDF for offline reading
-%.pdf: %.ipynb
-	jupyter nbconvert --to pdf $<
+style:
+	flake8
 
-clean:
-	rm -rf $(NOTEBOOK_PDFS)
-	find . -name "*.pyc" -exec rm -v {} \;
+test:
+	python -m pytest --doctest-modules --cov=code --cov-report term-missing

@@ -69,7 +69,7 @@
 
 \begin{document}
 
-\title{3D Magnetic modelling of ellipsoidal bodies}
+\title{Ellipsoids (v1.0): 3D Magnetic modelling of ellipsoidal bodies}
 
 
 % \Author[affil]{given_name}{surname}
@@ -330,12 +330,15 @@ and
 \end{equation}
 where $-90^{\circ} \leq \gamma \leq 90^{\circ}$ and
 $0 \leq \delta \leq 90^{\circ}$.
-Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$ (Fig. \ref{fig:orientation-angles}a and Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
-\ref{eq:delta}), we define the unit vectors
+Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$ 
+(Fig. \ref{fig:orientation-angles}a), we define the auxiliary angles 
+$\alpha$, $\gamma$ and $\delta$ (Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
+\ref{eq:delta}) and, finally, the unit vectors
 $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
 (Fig. \ref{fig:orientation-angles}b) according to the ellipsoid type.
-For triaxial ellipsoids (i.e., $a > b > c$), these unit vectors are 
-given by \citep{clark1986}:
+For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
+(i.e., $a > b = c$), we opted for defining these unit vectors 
+by following \citet{clark1986}:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \cos\delta \\
@@ -360,13 +363,12 @@ given by \citep{clark1986}:
                   \end{array} \right] \: .
 \label{eq:v3_triaxial_prolate}
 \end{equation}
-Similarly, the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-for prolate ellipsoids (i.e., $a > b = c$) are calculated
-by using Eqs. \ref{eq:v1_triaxial_prolate}, \ref{eq:v2_triaxial_prolate}, and
-\ref{eq:v3_triaxial_prolate}, but with $\gamma = 0^{\circ}$
-\citep{emerson1985}.
-Finally, the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-for oblate ellipsoids (i.e., $a < b = c$) are calculated as follows:
+\citet{emerson1985} calculated the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
+and $\mathbf{v}_{3}$ similarly by using Eqs. \ref{eq:v1_triaxial_prolate},
+\ref{eq:v2_triaxial_prolate}, and \ref{eq:v3_triaxial_prolate}, but
+with $\gamma = 0^{\circ}$.
+Finally, we define the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
+and $\mathbf{v}_{3}$ for oblate ellipsoids (i.e., $a < b = c$) as follows:
 \begin{equation}
 \mathbf{v}_{1} = \left[\begin{array}{c} 
                   -\cos\alpha \; \sin\gamma \; \sin\delta + \sin\alpha \; \cos\gamma \\               
@@ -391,7 +393,7 @@ for oblate ellipsoids (i.e., $a < b = c$) are calculated as follows:
                   \end{array} \right] \: .
 \label{eq:v3_oblate}
 \end{equation}
-These formulas are similar to those presented by \citep{emerson1985}.
+This approach is very similar to that presented by \citet{emerson1985}.
 
 The magnetic modelling of an ellipsoidal body is commonly performed
 in a particular Cartesian coordinate system that is aligned 
@@ -446,8 +448,8 @@ Earth's magnetic field, which is usually assumed to be generated
 by the Earth's liquid core.
 In the absence of conduction currents, 
 the total magnetic field $\mathbf{H}(\mathbf{r})$
-at the position $\mathbf{r}$ (Eqs. \ref{eq:A} and 
-\ref{eq:coord_transformation}) of a point referred to the main 
+at the position $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}) 
+of a point referred to the main 
 coordinate system is defined as follows \citep{sharma1966, 
 eskola1980, reitz1992, sttraton2007}:
 \begin{equation}
@@ -470,7 +472,7 @@ is the position vector of a point located within the volume $\vartheta$,
 the integral is conducted over the variables 
 $x^{\prime}$, $y^{\prime}$ and, $z^{\prime}$ and 
 $\mathbf{M}(\mathbf{r}^{\prime})$ is the magnetization vector
-(in $\unit{Am^{-1}}$).
+(in \unit{Am^{-1}}).
 Eq. \ref{eq:V-potential} is valid anywhere, 
 independently if the position vector $\mathbf{r}$ represents
 a point located inside or outside the magnetized body
@@ -488,7 +490,8 @@ constant and symmetrical 2nd-order tensor representing the
 magnetic susceptibility of the body. 
 This is a good approximation for bodies at room temperature,
 subjected to an inducing field $\mathbf{H}_{0}$ with 
-strength $\leq 1$ \unit{mT} \citep{rochette1992}.
+strength $\leq 10^{-3} \mu_{0}^{-1}$ \unit{A \, m^{-1}} \citep{rochette1992},
+where $\mu_{0}$ represents the magnetic constant (in \unit{H \, m^{-1}}).
 In this case, the susceptibility tensor $\mathbf{K}$ is commonly
 represented, in the main coordinate system (Fig. \ref{fig:orientation-angles}a),
 as follows:
@@ -1567,9 +1570,9 @@ Figure \ref{fig:tfa-warrego} shows the total-field anomaly
 $\Delta T (\mathbf{r})$ (Eq. \ref{eq:delta-T-approx}) produced
 by the synthetic body on a regular grid of $100 \times 100$
 points at a constant vertical coordinate $z = 0$ \unit{m}.
-The total-field anomaly varies from $\approx -295.3$ \unit{nT}
-to $\approx 149.5$ \unit{nT}, resulting in a peak-to-peak amplitude
-of $\approx 444.9$ \unit{nT}, and was calculated by using the 
+The total-field anomaly varies from $\approx -176$ \unit{nT}
+to $\approx 237$ \unit{nT}, resulting in a peak-to-peak amplitude
+of $\approx 413$ \unit{nT}, and was calculated by using the 
 true magnetization $\mathbf{M}$ defined in Eqs. 
 \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}.
 
@@ -1590,8 +1593,8 @@ $\chi_{2} = 0.116$ \unit{SI}.
 
 As expected, the differences calculated by using the higher isotropic
 susceptibility (Fig. \ref{fig:tfa-differences-warrego}a) are very large.
-The peak-to-peak amplitude is $\approx 212.0$ \unit{nT}
-and represents $\approx 48 \%$ of the peak-to-peak amplitude of
+The peak-to-peak amplitude is $\approx 141$ \unit{nT}
+and represents $\approx 34 \%$ of the peak-to-peak amplitude of
 the total-field anomaly shown in Fig. \ref{fig:tfa-warrego}.
 This result reinforces that the use of the approximated magnetization
 $\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx}) may negatively impact
@@ -1605,11 +1608,11 @@ consequently, the magnetization $\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx})
 is a good approximation of the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 In our test, the use of $\chi_{1} = 0.1$ \unit{SI} leads to a relative error
-$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 4.2 \%$
+$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 2.4 \%$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization.
 The peak-to-peak amplitude of the differences in the total-field anomaly
-(Fig. \ref{fig:tfa-differences-warrego}b) is $\approx 1.5$ \unit{nT},
-which represents $\approx 4.5 \%$ of the peak-to-peak amplitude of the
+(Fig. \ref{fig:tfa-differences-warrego}b) is $\approx 0.8$ \unit{nT},
+which represents $\approx 2.9 \%$ of the peak-to-peak amplitude of the
 total-field anomaly calculates by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 
@@ -1624,11 +1627,11 @@ $\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1}$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization be
 lower than or equal to the target relative error $\epsilon = 8 \%$.
 In this test, the use of $\chi_{2} = 0.116$ \unit{SI} leads to a relative error
-$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 4.9 \%$
+$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 2.8 \%$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization.
 The peak-to-peak amplitude of the differences in the total-field anomaly
-(Fig. \ref{fig:tfa-differences-warrego}c) is $\approx 2.0$ \unit{nT},
-which represents $\approx 5.1 \%$ of the peak-to-peak amplitude of the
+(Fig. \ref{fig:tfa-differences-warrego}c) is $\approx 1.1$ \unit{nT},
+which represents $\approx 3.3 \%$ of the peak-to-peak amplitude of the
 total-field anomaly calculates by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 In this case, the use an isotropic susceptibility greater than the usual

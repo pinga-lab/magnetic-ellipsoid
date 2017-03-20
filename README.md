@@ -38,8 +38,8 @@ self-demagnetization must be taken into consideration. Tests with
 synthetic data validate our approach. Finally, we provide a set 
 of routines to model the magnetic field produced 
 by ellipsoids. The routines are written in Python language as 
-part of the Fatiando a Terra, which is an open-source library 
-for modelling and inversion in geophysics.
+part of the [Fatiando a Terra](http://www.fatiando.org/index.html),
+which is an open-source library for modelling and inversion in geophysics.
 
 
 ## Reproducing the results
@@ -99,10 +99,10 @@ or, if you're on Windows,
     deactivate
 
 
-**Windows users:** We recommend having a bash shell and `make` installed
-to run the code and produce the results. You may download [*Git for Windows*]
-(https://git-for-windows.github.io/) and the [*Software Carpentry Windows Installer*]
-(https://github.com/swcarpentry/windows-installer/releases).
+**Windows users:** We recommend having a bash shell and the `make` installed
+to run the code, produce the results and check the code. You may download the
+[*Git for Windows*](https://git-for-windows.github.io/) and the 
+[*Software Carpentry Windows Installer*](https://github.com/swcarpentry/windows-installer/releases).
 
 
 ### Running the code

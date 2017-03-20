@@ -1,5 +1,5 @@
 """
-Generate and operate on various kinds of meshes and geometric elements
+Generate and operate the geometric elements representing ellipsoids
 """
 from __future__ import division, absolute_import
 from future.builtins import super

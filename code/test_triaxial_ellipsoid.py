@@ -6,6 +6,7 @@ from fatiando import utils, gridder
 from mesher import TriaxialEllipsoid
 import triaxial_ellipsoid
 from numpy.testing import assert_almost_equal
+from pytest import raises
 
 # Local-geomagnetic field
 F = 30000
@@ -80,6 +81,16 @@ def test_triaxial_ellipsoid_force_prop():
     assert_almost_equal(bz2, f*bz, decimal=12)
     assert_almost_equal(tf2, f*tf, decimal=12)
 
+    # pmag not None requires demag not True
+    raises(AssertionError, triaxial_ellipsoid.bx, x, y, z, model,
+           F, inc, dec, demag=True, pmag=pmag)
+    raises(AssertionError, triaxial_ellipsoid.by, x, y, z, model,
+           F, inc, dec, demag=True, pmag=pmag)
+    raises(AssertionError, triaxial_ellipsoid.bz, x, y, z, model,
+           F, inc, dec, demag=True, pmag=pmag)
+    raises(AssertionError, triaxial_ellipsoid.tf, x, y, z, model,
+           F, inc, dec, demag=True, pmag=pmag)
+
 
 def test_triaxial_ellipsoid_ignore_none():
     "Triaxial ellipsoid ignores model elements that are None"
@@ -120,44 +131,27 @@ def test_triaxial_ellipsoid_ignore_none():
     assert_almost_equal(tf2, tf, decimal=15)
 
 
-def test_triaxial_ellipsoid_ignore_missing_prop():
-    "Triaxial ellipsoid ignores model without the needed properties"
+def test_triaxial_ellipsoid_missing_prop():
+    "Self-demagnetization requires specific properties"
 
-    # forced physical property
-    pmag = utils.ang2vec(2, -4, 17)
+    # demag=True requires specific properties
+    raises(AssertionError, triaxial_ellipsoid._bx, x, y, z, model[2],
+           F, inc, dec, demag=True)
+    raises(AssertionError, triaxial_ellipsoid._by, x, y, z, model[2],
+           F, inc, dec, demag=True)
+    raises(AssertionError, triaxial_ellipsoid._bz, x, y, z, model[2],
+           F, inc, dec, demag=True)
 
-    # copy of the original model
-    model_none = deepcopy(model)
 
-    # remove the required properties of an element of the copy
-    del model_none[1].props['principal susceptibilities']
-    del model_none[1].props['remanent magnetization']
+def test_triaxial_ellipsoid_susceptibility_tensor_missing_prop():
+    "Susceptibility tensor requires specific properties"
 
-    # magnetic field produced by the original model
-    # without an element
-    bx = triaxial_ellipsoid.bx(x, y, z, [model[0], model[2]],
-                               F, inc, dec, demag=False, pmag=pmag)
-    by = triaxial_ellipsoid.by(x, y, z, [model[0], model[2]],
-                               F, inc, dec, demag=False, pmag=pmag)
-    bz = triaxial_ellipsoid.bz(x, y, z, [model[0], model[2]],
-                               F, inc, dec, demag=False, pmag=pmag)
-    tf = triaxial_ellipsoid.tf(x, y, z, [model[0], model[2]],
-                               F, inc, dec, demag=False, pmag=pmag)
-
-    # magnetic field produced by the copy
-    bx2 = triaxial_ellipsoid.bx(x, y, z, model_none,
-                                F, inc, dec, demag=False, pmag=pmag)
-    by2 = triaxial_ellipsoid.by(x, y, z, model_none,
-                                F, inc, dec, demag=False, pmag=pmag)
-    bz2 = triaxial_ellipsoid.bz(x, y, z, model_none,
-                                F, inc, dec, demag=False, pmag=pmag)
-    tf2 = triaxial_ellipsoid.tf(x, y, z, model_none,
-                                F, inc, dec, demag=False, pmag=pmag)
-
-    assert_almost_equal(bx2, bx, decimal=15)
-    assert_almost_equal(by2, by, decimal=15)
-    assert_almost_equal(bz2, bz, decimal=15)
-    assert_almost_equal(tf2, tf, decimal=15)
+    suscep1 = model[0].susceptibility_tensor
+    suscep2 = model[1].susceptibility_tensor
+    suscep3 = model[2].susceptibility_tensor
+    assert suscep1 is not None
+    assert suscep2 is not None
+    assert suscep3 is None
 
 
 def test_triaxial_ellipsoid_demag_factors_sum():

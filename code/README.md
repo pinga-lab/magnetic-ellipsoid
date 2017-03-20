@@ -6,14 +6,14 @@
     At this folder, check the code consistency by executing
 
         make style
-        
+
     and run the tests by executing
 
-        make tests
+        make test
 
     This command run the automated tests in the files `test_ellipsoids.py`,
     `test_triaxial_ellipsoid.py`, `test_prolate_ellipsoid.py` and `test_oblate_ellipsoid.py`.
-    
+
     To see a brief description of the rules in the `Makefile`, run
 
         make help
@@ -23,7 +23,7 @@
 
     Set of classes used to create geometric elements defining triaxial, prolate
     and oblate ellipsoids.
-    
+
 * `triaxial_ellipsoid.py`, `prolate_ellipsoid.py` and `oblate_ellipsoid.py`:
 
     Set of routines to calculate, respectively, the magnetic induction produced by triaxial,
@@ -56,5 +56,5 @@
 * [dlambda_prolate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/dlambda_prolate_ellipsoids.ipynb) and
 [dlambda_oblate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/dlambda_oblate_ellipsoids.ipynb):
 
-    Notebooks illustrating the computation of the spatial derivatives of the 
+    Notebooks illustrating the computation of the spatial derivatives of the
     parameter lambda for, respectively, prolate and oblate ellipsoids.

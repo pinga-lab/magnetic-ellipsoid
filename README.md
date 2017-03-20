@@ -6,38 +6,38 @@ by
 
 <sup>1</sup>[Observatório Nacional](http://www.on.br/index.php/pt-br/)
 
-This paper has been submitted for publication in 
+This paper has been submitted for publication in
 [*Geoscientific Model Development (GMD)*](http://www.geoscientific-model-development.net/).
 
 
 ## Abstract
 
-A considerable amount of literature has been published on the magnetic 
-modelling of uniformly magnetized ellipsoids since the second half of 
-the nineteenth century. Ellipsoids have flexibility to represent a wide 
-range of geometrical forms, are the only known bodies which can be 
-uniformly magnetized in the presence of a uniform inducing field and 
-are the only bodies for which the self-demagnetization can be treated 
-analytically. This property makes ellipsoids particularly useful for 
-modelling compact orebodies having high susceptibility. In this case, 
-neglecting the self-demagnetization may strongly mislead the interpretation 
-of these bodies by using magnetic methods. A number of previous studies 
-consider that the self-demagnetization can be neglected for the case in 
-which the geological body has an isotropic susceptibility lower than or 
-equal to 0.1 SI. This limiting value, however, seems to be determined 
-empirically and there has been no discussion about how this value was 
-determined. Besides, the geoscientific community lacks an easy-to-use 
-tool to simulate the magnetic field produced by uniformly magnetized 
-ellipsoids. Here, we present an integrated review of the magnetic 
-modelling of arbitrarily oriented triaxial, prolate and oblate 
-ellipsoids. Our review includes ellipsoids with both induced and 
-remanent magnetization, as well as with isotropic or anisotropic 
-susceptibility. We also propose a 
-way of determining the isotropic susceptibility above which the 
-self-demagnetization must be taken into consideration. Tests with 
-synthetic data validate our approach. Finally, we provide a set 
-of routines to model the magnetic field produced 
-by ellipsoids. The routines are written in Python language as 
+A considerable amount of literature has been published on the magnetic
+modelling of uniformly magnetized ellipsoids since the second half of
+the nineteenth century. Ellipsoids have flexibility to represent a wide
+range of geometrical forms, are the only known bodies which can be
+uniformly magnetized in the presence of a uniform inducing field and
+are the only bodies for which the self-demagnetization can be treated
+analytically. This property makes ellipsoids particularly useful for
+modelling compact orebodies having high susceptibility. In this case,
+neglecting the self-demagnetization may strongly mislead the interpretation
+of these bodies by using magnetic methods. A number of previous studies
+consider that the self-demagnetization can be neglected for the case in
+which the geological body has an isotropic susceptibility lower than or
+equal to 0.1 SI. This limiting value, however, seems to be determined
+empirically and there has been no discussion about how this value was
+determined. Besides, the geoscientific community lacks an easy-to-use
+tool to simulate the magnetic field produced by uniformly magnetized
+ellipsoids. Here, we present an integrated review of the magnetic
+modelling of arbitrarily oriented triaxial, prolate and oblate
+ellipsoids. Our review includes ellipsoids with both induced and
+remanent magnetization, as well as with isotropic or anisotropic
+susceptibility. We also propose a
+way of determining the isotropic susceptibility above which the
+self-demagnetization must be taken into consideration. Tests with
+synthetic data validate our approach. Finally, we provide a set
+of routines to model the magnetic field produced
+by ellipsoids. The routines are written in Python language as
 part of the [Fatiando a Terra](http://www.fatiando.org/index.html),
 which is an open-source library for modelling and inversion in geophysics.
 
@@ -101,7 +101,7 @@ or, if you're on Windows,
 
 **Windows users:** We recommend having a bash shell and the `make` installed
 to run the code, produce the results and check the code. You may download the
-[*Git for Windows*](https://git-for-windows.github.io/) and the 
+[*Git for Windows*](https://git-for-windows.github.io/) and the
 [*Software Carpentry Windows Installer*](https://github.com/swcarpentry/windows-installer/releases).
 
 
@@ -118,11 +118,12 @@ This will start the server and open your default web browser to the Jupyter
 interface. In the page, go into the `code` folder and select the
 notebook that you wish to view/run.
 
-The notebook is divided cells (some have text while other have code).
+The notebook is divided into cells (some have text while other have code).
 Each cell can be executed using `Shift + Enter`.
-Executing text cells does nothing and executing code cells runs the code
+Executing text cells does nothing while executing code cells runs the code
 and produces it's output.
-To execute the whole notebook, run all cells in order.
+To execute the whole notebook, run all cells in order or use "Cell -> Run All"
+from the menu bar.
 
 
 ## License
@@ -132,5 +133,5 @@ use and modify the code, without warranty, so long as you provide attribution
 to the authors.  See `LICENSE.md` for the full license text.
 
 The manuscript text is not open source. The authors reserve the rights to the
-article content, which is currently submitted for publication in the
+article content, which is currently submitted for publication in
 [*Geoscientific Model Development (GMD)*](http://www.geoscientific-model-development.net/).

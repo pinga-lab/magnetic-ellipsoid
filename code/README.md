@@ -11,7 +11,7 @@
 
         make tests
 
-    This command run the automated tests in the files `test_ellipsoids.py`,
+    This command runs the automated tests in the files `test_ellipsoids.py`,
     `test_triaxial_ellipsoid.py`, `test_prolate_ellipsoid.py` and `test_oblate_ellipsoid.py`.
     
     To see a brief description of the rules in the `Makefile`, run

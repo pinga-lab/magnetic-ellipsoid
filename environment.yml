@@ -1,6 +1,9 @@
 # Activate the environmet to run the code using "source activate ellipsoids"
 # or "activate ellipsoids" on Windows.
 name: ellipsoids
+channels:
+    - defaults
+    - conda-forge
 dependencies:
     - python=2.7
     - pip
@@ -12,5 +15,4 @@ dependencies:
     - pytest
     - pytest-cov
     - flake8
-    - pip:
-        - fatiando
+    - fatiando=0.5

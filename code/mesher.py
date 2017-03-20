@@ -2,13 +2,9 @@
 Generate and operate on various kinds of meshes and geometric elements
 """
 from __future__ import division, absolute_import
-from future.builtins import range, super
+from future.builtins import super
 import numpy
-import scipy.special
-import scipy.interpolate
 import copy as cp
-
-from fatiando import gridder
 
 
 class GeometricElement(object):

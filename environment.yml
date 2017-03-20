@@ -1,0 +1,16 @@
+# Activate the environmet to run the code using "source activate ellipsoids"
+# or "activate ellipsoids" on Windows.
+name: ellipsoids
+dependencies:
+    - python=2.7
+    - pip
+    - future
+    - numpy
+    - scipy
+    - matplotlib
+    - jupyter
+    - pytest
+    - pytest-cov
+    - flake8
+    - pip:
+        - fatiando

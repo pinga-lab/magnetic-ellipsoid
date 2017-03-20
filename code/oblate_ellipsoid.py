@@ -685,9 +685,10 @@ susceptibility tensor'
 
     else:
 
-        assert (suscep is not None) or ('remanent magnetization' \
-            in ellipsoid.props), 'neglecting self-demagnetization requires a \
-susceptibility tensor or a remanent magnetization'
+        assert (suscep is not None) or ('remanent magnetization'
+                                        in ellipsoid.props), 'neglecting \
+            self-demagnetization requires a susceptibility tensor or a rem\
+            anent magnetization'
 
         # resultant magnetization in the main system
         resultant_mag = induced_mag + remanent_mag

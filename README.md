@@ -1,22 +1,45 @@
-# Paper title
+# Ellipsoids (v1.0): 3D Magnetic modelling of ellipsoidal bodies
 
 by
-Author 1,
-Author 2,
-etc
+[Diego Takahashi Tomazella](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup> and
+[Vanderlei C. Oliveira Jr.](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
 
-This paper has been submitted for publication in *Some Journal*.
+<sup>1</sup>[Observatório Nacional](http://www.on.br/index.php/pt-br/)
 
-Brief description of what this paper is about (2-3 sentences). Include a figure
-as well with the main result of your paper.
-
-![Figure goes here.](https://raw.githubusercontent.com/pinga-lab/PAPER-REPO/master/FIGURE_FILE)
-Brief figure caption.
+This paper has been submitted for publication in 
+[*Geoscientific Model Development (GMD)*](http://www.geoscientific-model-development.net/).
 
 
 ## Abstract
 
-Paste here the abstract.
+A considerable amount of literature has been published on the magnetic 
+modelling of uniformly magnetized ellipsoids since the second half of 
+the nineteenth century. Ellipsoids have flexibility to represent a wide 
+range of geometrical forms, are the only known bodies which can be 
+uniformly magnetized in the presence of a uniform inducing field and 
+are the only bodies for which the self-demagnetization can be treated 
+analytically. This property makes ellipsoids particularly useful for 
+modelling compact orebodies having high susceptibility. In this case, 
+neglecting the self-demagnetization may strongly mislead the interpretation 
+of these bodies by using magnetic methods. A number of previous studies 
+consider that the self-demagnetization can be neglected for the case in 
+which the geological body has an isotropic susceptibility lower than or 
+equal to 0.1 SI. This limiting value, however, seems to be determined 
+empirically and there has been no discussion about how this value was 
+determined. Besides, the geoscientific community lacks an easy-to-use 
+tool to simulate the magnetic field produced by uniformly magnetized 
+ellipsoids. Here, we present an integrated review of the magnetic 
+modelling of arbitrarily oriented triaxial, prolate and oblate 
+ellipsoids. Our review includes ellipsoids with both induced and 
+remanent magnetization, as well as with isotropic or anisotropic 
+susceptibility. We also propose a 
+way of determining the isotropic susceptibility above which the 
+self-demagnetization must be taken into consideration. Tests with 
+synthetic data validate our approach. Finally, we provide a set 
+of routines to model the magnetic field produced 
+by ellipsoids. The routines are written in Python language as 
+part of the Fatiando a Terra, which is an open-source library 
+for modelling and inversion in geophysics.
 
 
 ## Reproducing the results
@@ -24,97 +47,82 @@ Paste here the abstract.
 You can download a copy of all the files in this repository by cloning the
 [git](https://git-scm.com/) repository:
 
-    git clone https://github.com/pinga-lab/PAPER-REPO.git
+    git clone https://github.com/pinga-lab/magnetic-ellipsoid.git
 
-or [click here to download a zip archive](https://github.com/pinga-lab/PAPER-REPO/archive/master.zip).
-
-*Describe here the folder structure and what is in each folder. Suggested
-layout would be:*
 
 All source code used to generate the results and figures in the paper are in
-the `code` folder.
-The data used in this study is provided in `data` and the sources for the
-manuscript text and figures are in `manuscript`.
+the `code` folder. The sources for the manuscript text and figures are in `manuscript`.
 See the `README.md` files in each directory for a full description.
 
 The calculations and figure generation are all run inside
 [Jupyter notebooks](http://jupyter.org/).
 You can view a static (non-executable) version of the notebooks in the
-[nbviewer]() webservice:
+[nbviewer](https://nbviewer.jupyter.org/) webservice:
 
-http://nbviewer.jupyter.org/github/pinga-lab/PAPER-REPO
-
-Also provided are read-only PDF versions of the notebooks.
+http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid
 
 See sections below for instructions on executing the code.
 
 
 ### Setting up your environment
 
-Describe what you need to install. Usually it's Anaconda with Python 2.7. Here
-is template for that:
+You'll need a working Python **2.7** environment with all the standard
+scientific packages installed (numpy, scipy, matplotlib, etc).  The easiest
+(and recommended) way to get this is to download and install the
+[Anaconda Python distribution](http://continuum.io/downloads#all).
+Make sure you get the **Python 2.7** version.
 
-> You'll need a working Python **2.7** environment with all the standard
-> scientific packages installed (numpy, scipy, matplotlib, etc).  The easiest
-> (and recommended) way to get this is to download and install the
-> [Anaconda Python distribution](http://continuum.io/downloads#all).
-> Make sure you get the **Python 2.7** version.
-
-If you need Fatiando, use this:
-
-> You'll also need to install version X.Y of the
-> [Fatiando a Terra](http://www.fatiando.org/) library.
-> See the install instructions on the website.
-
-If you provide a conda environment through an `environment.yml` file, use:
-
-> You can use `conda` package manager (included in Anaconda) to create a
-> virtual environment with all the required packages installed.
-> Run the following command in the repository folder (where `environment.yml`
-> is located):
+Use `conda` package manager (included in Anaconda) to create a
+[virtual environment](https://conda.io/docs/using/envs.html) with
+all the required packages installed.
+Run the following command in this folder (where `environment.yml`
+is located):
 
     conda env create
 
-> To activate the conda environment, run
+To activate the conda environment, run
 
-    source activate moho
+    source activate ellipsoids
 
-> or, if you're on Windows,
+or, if you're on Windows,
 
-    activate moho
+    activate ellipsoids
 
-> This will enable the environment for your current terminal session.
+This will enable the environment for your current terminal session.
+After running the code, deactivate the environment with the following
+commands:
 
-I would recommend having a bash shell with `make` installed in Windows to make
-life easier for everyone. Put these instructions if you want this:
+    source deactivate
 
-> **Windows users:** It is highly recommended that you install the bash shell
-> to run code and produce the results here.
-> You can download bash for Windows at http://git-for-windows.github.io/.
-> Install the "Git for Windows SDK" that will come with bash and `make` as
-> well.
+or, if you're on Windows,
+
+    deactivate
+
+
+**Windows users:** We recommend having a bash shell and `make` installed
+to run the code and produce the results. You may download [*Git for Windows*]
+(https://git-for-windows.github.io/) and the [*Software Carpentry Windows Installer*]
+(https://github.com/swcarpentry/windows-installer/releases).
 
 
 ### Running the code
 
-If using Jupyter notebooks, use this text:
-
-> To execute the code in the Jupyter notebooks, you must first start the
-> notebook server by going into the repository folder and running:
+To execute the code in the Jupyter notebooks, you must first start the
+notebook server by going into the repository folder and running:
 
     jupyter notebook
 
-> Make sure you have the `conda` environment enabled first.
+Make sure you have the `conda` environment enabled first.
 
-> This will start the server and open your default web browser to the Jupyter
-> interface. In the page, go into the `code` folder and select the
-> notebook that you wish to view/run.
+This will start the server and open your default web browser to the Jupyter
+interface. In the page, go into the `code` folder and select the
+notebook that you wish to view/run.
 
-> The notebook is divided cells (some have text while other have code).
-> Each cell can be executed using `Shift + Enter`.
-> Executing text cells does nothing and executing code cells runs the code
-> and produces it's output.
-> To execute the whole notebook, run all cells in order.
+The notebook is divided cells (some have text while other have code).
+Each cell can be executed using `Shift + Enter`.
+Executing text cells does nothing and executing code cells runs the code
+and produces it's output.
+To execute the whole notebook, run all cells in order.
 
 
 ## License
@@ -125,4 +133,4 @@ to the authors.  See `LICENSE.md` for the full license text.
 
 The manuscript text is not open source. The authors reserve the rights to the
 article content, which is currently submitted for publication in the
-JOURNAL NAME.
+[*Geoscientific Model Development (GMD)*](http://www.geoscientific-model-development.net/).

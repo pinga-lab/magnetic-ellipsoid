@@ -43,8 +43,8 @@ def tf(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. Ellipsoids that do not have
-        these physical properties or are ``None`` will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        Ellipsoids that are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -94,8 +94,8 @@ def bx(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. Ellipsoids that do not have
-        these physical properties or are ``None`` will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        Ellipsoids that are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -152,8 +152,8 @@ def by(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. Ellipsoids that do not have
-        these physical properties or are ``None`` will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        Ellipsoids that are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -210,8 +210,8 @@ def bz(xp, yp, zp, ellipsoids, F, inc, dec, demag=True, pmag=None):
     * ellipsoids : list of :class:`mesher.ProlateEllipsoid`
         The ellipsoids. Ellipsoids must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. Ellipsoids that do not have
-        these physical properties or are ``None`` will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        Ellipsoids that are ``None`` will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -266,10 +266,10 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`mesher.ProlateEllipsoid`.
-        The ellipsoid. The ellipsoid must have the physical properties
+        The ellipsoid. It must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. If it does not have
-        these physical properties or is ``None``, it will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        If the ellipsoid is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -332,10 +332,10 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`mesher.ProlateEllipsoid`
-        The ellipsoid. The ellipsoid must have the physical properties
+        The ellipsoid. It must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. If it does not have
-        these physical properties or is ``None``, it will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        If the ellipsoid is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.
@@ -398,10 +398,10 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
     * xp, yp, zp : arrays
         The x, y, and z coordinates where the anomaly will be calculated
     * ellipsoid : element of :class:`mesher.ProlateEllipsoid`
-        The ellipsoid. The ellipsoid must have the physical properties
+        The ellipsoid. It must have the physical properties
         ``'principal susceptibilities'`` and ``'susceptibility angles'``
-        and/or ``'remanent magnetization'``. If it does not have
-        these physical properties or is ``None``, it will be ignored.
+        as prerequisite to calculate the self-demagnetization.
+        If the ellipsoid is ``None``, it will be ignored.
     * F, inc, dec : floats
        The intensity (in nT), inclination and declination (in degrees) of
        the local-geomagnetic field.

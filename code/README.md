@@ -58,3 +58,11 @@
 
     Notebooks illustrating the computation of the spatial derivatives of the
     parameter lambda for, respectively, prolate and oblate ellipsoids.
+
+* `plot_functions.py`:
+
+    Routines for saving figures and plot ellipsoids.
+
+* [plot_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/plot_ellipsoids.ipynb):
+
+    Notebook illustrating the use of the routines in `plot_functions.py`.

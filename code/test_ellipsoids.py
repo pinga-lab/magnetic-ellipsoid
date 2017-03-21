@@ -347,3 +347,14 @@ def test__auxiliary_angles_known():
     assert_almost_equal(alpha_ref, alpha, decimal=15)
     assert_almost_equal(gamma_ref, gamma, decimal=15)
     assert_almost_equal(delta_ref, delta, decimal=15)
+
+    alpha_ref = -np.pi
+    gamma_ref = np.pi/2
+    delta_ref = 0
+    strike = 0
+    dip = 0
+    rake = 180
+    alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
+    assert_almost_equal(alpha_ref, alpha, decimal=15)
+    assert_almost_equal(gamma_ref, gamma, decimal=15)
+    assert_almost_equal(delta_ref, delta, decimal=15)

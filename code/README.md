@@ -66,3 +66,9 @@
 * [plot_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/plot_ellipsoids.ipynb):
 
     Notebook illustrating the use of the routines in `plot_functions.py`.
+
+* [demagnetizing_factors_Stoner1945.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/demagnetizing_factors_Stoner1945.ipynb):
+
+    Notebook comparing the demagnetizing factors calculated with our routines (Eqs. 34 and 36) and those presented by
+    Stoner (1945, Table I). The results presented by Stoner (1945, Table I) are in the file `Stoner1945_TableI.txt`.
+

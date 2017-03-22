@@ -6,7 +6,7 @@ from __future__ import division, absolute_import
 import numpy as np
 from scipy.special import ellipeinc, ellipkinc
 
-from fatiando.constants import CM, T2NT
+from fatiando.constants import PERM_FREE_SPACE, T2NT
 from fatiando import utils
 
 
@@ -309,7 +309,7 @@ impedes the computation of self-demagnetization'
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= -CM*T2NT*2*np.pi*a*b*c
+    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
     return res
 
 
@@ -376,7 +376,7 @@ impedes the computation of self-demagnetization'
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= -CM*T2NT*2*np.pi*a*b*c
+    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
     return res
 
 
@@ -443,7 +443,7 @@ impedes the computation of self-demagnetization'
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= -CM*T2NT*2*np.pi*a*b*c
+    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
     return res
 
 

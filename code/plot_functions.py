@@ -103,11 +103,11 @@ def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
     if ellipsoid.__class__ is mesher.ProlateEllipsoid:
         a = ellipsoid.large_axis
         b = ellipsoid.small_axis
-        c = b
+        c = ellipsoid.small_axis
     if ellipsoid.__class__ is mesher.OblateEllipsoid:
         a = ellipsoid.small_axis
         b = ellipsoid.large_axis
-        c = b
+        c = ellipsoid.large_axis
 
     if plot_axes is True:
 

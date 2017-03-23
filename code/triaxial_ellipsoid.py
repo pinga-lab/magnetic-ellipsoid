@@ -305,11 +305,15 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     kappa, phi = _E_F_field_args(ellipsoid, lamb)
     g = _gv_tejedor(ellipsoid, kappa, phi, lamb, v='x')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mx
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
+    res *= -0.5*a*b*c
+
+    res *= -PERM_FREE_SPACE*T2NT
+
     return res
 
 
@@ -372,11 +376,15 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     kappa, phi = _E_F_field_args(ellipsoid, lamb)
     g = _gv_tejedor(ellipsoid, kappa, phi, lamb, v='y')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*my
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
+    res *= -0.5*a*b*c
+
+    res *= -PERM_FREE_SPACE*T2NT
+
     return res
 
 
@@ -439,11 +447,15 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     kappa, phi = _E_F_field_args(ellipsoid, lamb)
     g = _gv_tejedor(ellipsoid, kappa, phi, lamb, v='z')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mz
     a = ellipsoid.large_axis
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*c
+    res *= -0.5*a*b*c
+
+    res *= -PERM_FREE_SPACE*T2NT
+
     return res
 
 
@@ -636,11 +648,13 @@ def _E_F_demag(ellipsoid):
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
 
-    kappa = np.sqrt(((a*a-b*b)/(a*a-c*c)))
+    kappa = (a*a-b*b)/(a*a-c*c)
     phi = np.arccos(c/a)
 
-    E = ellipeinc(phi, kappa*kappa)
-    F = ellipkinc(phi, kappa*kappa)
+    # E = ellipeinc(phi, kappa*kappa)
+    # F = ellipkinc(phi, kappa*kappa)
+    E = ellipeinc(phi, kappa)
+    F = ellipkinc(phi, kappa)
 
     return E, F
 
@@ -755,7 +769,7 @@ def _E_F_field(ellipsoid, kappa, phi):
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * kappa: numpy array 1D
-        Modulus of the elliptic integral.
+        Squared modulus of the elliptic integral.
     * phi: numpy array 1D
         Amplitude of the elliptic integral.
 
@@ -765,8 +779,8 @@ def _E_F_field(ellipsoid, kappa, phi):
         Legendre's normal elliptic integrals of first and second kinds.
     '''
 
-    E = ellipeinc(phi, kappa*kappa)
-    F = ellipkinc(phi, kappa*kappa)
+    E = ellipeinc(phi, kappa)
+    F = ellipkinc(phi, kappa)
 
     return E, F
 
@@ -785,7 +799,7 @@ def _E_F_field_args(ellipsoid, lamb):
     Returns:
 
     * kappa: numpy array 1D
-        Modulus of the elliptic integral.
+        Squared modulus of the elliptic integral.
     * phi: numpy array 1D
         Amplitude of the elliptic integral.
     '''
@@ -794,7 +808,7 @@ def _E_F_field_args(ellipsoid, lamb):
     b = ellipsoid.intermediate_axis
     c = ellipsoid.small_axis
 
-    kappa = np.sqrt((a*a - b*b)/(a*a - c*c))
+    kappa = (a*a - b*b)/(a*a - c*c)
     phi = np.arcsin(np.sqrt((a*a - c*c)/(a*a + lamb)))
 
     return kappa, phi
@@ -855,7 +869,7 @@ def _gv(ellipsoid, kappa, phi, v='x'):
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * kappa: numpy array 1D
-        Modulus of the elliptic integral.
+        Squared modulus of the elliptic integral.
     * phi: numpy array 1D
         Amplitude of the elliptic integral.
     * v: string
@@ -891,15 +905,15 @@ def _gv(ellipsoid, kappa, phi, v='x'):
         aux2 = (b*b - c*c)/(a*a - c*c)
         sinphi = np.sin(phi)
         cosphi = np.cos(phi)
-        aux3 = ((kappa*kappa)*sinphi*cosphi) /\
-            np.sqrt(1. - (kappa*sinphi*kappa*sinphi))
+        aux3 = (kappa*sinphi*cosphi) /\
+            np.sqrt(1. - (kappa*sinphi*sinphi))
         gv = aux1*(E - aux2*F - aux3)
 
     if v is 'z':
         aux1 = 2./((b*b - c*c)*np.sqrt(a*a - c*c))
         sinphi = np.sin(phi)
         cosphi = np.cos(phi)
-        aux2 = (sinphi*np.sqrt(1. - (kappa*sinphi*kappa*sinphi)))/cosphi
+        aux2 = (sinphi*np.sqrt(1. - (kappa*sinphi*sinphi)))/cosphi
         gv = aux1*(aux2 - E)
 
     return gv
@@ -917,7 +931,7 @@ def _gv_tejedor(ellipsoid, kappa, phi, lamb, v='x'):
     * lamb: numpy array 1D
         Parameter lambda for each point in the ellipsoid system.
     * kappa: numpy array 1D
-        Modulus of the elliptic integral.
+        Squared modulus of the elliptic integral.
     * phi: numpy array 1D
         Amplitude of the elliptic integral.
     * v: string

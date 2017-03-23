@@ -5,7 +5,6 @@ from __future__ import division, absolute_import
 
 import numpy as np
 
-from fatiando.constants import PERM_FREE_SPACE, T2NT
 from fatiando import utils
 
 
@@ -308,10 +307,14 @@ impedes the computation of self-demagnetization'
     h2 = _hv(ellipsoid, lamb, v='y')
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='x')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mx
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*b
+    res *= -2*np.pi*a*b*b
+
+    res *= -100 # -PERM_FREE_SPACE*T2NT
+
     return res
 
 
@@ -374,10 +377,14 @@ impedes the computation of self-demagnetization'
     h2 = _hv(ellipsoid, lamb, v='y')
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='y')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*my
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*b
+    res *= -2*np.pi*a*b*b
+
+    res *= -100 # -PERM_FREE_SPACE*T2NT
+
     return res
 
 
@@ -440,10 +447,14 @@ impedes the computation of self-demagnetization'
     h2 = _hv(ellipsoid, lamb, v='y')
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='z')
+
     res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mz
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= PERM_FREE_SPACE*T2NT*0.5*a*b*b
+    res *= -2*np.pi*a*b*b
+
+    res *= -100 # -PERM_FREE_SPACE*T2NT
+
     return res
 
 

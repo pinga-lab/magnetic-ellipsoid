@@ -5,6 +5,7 @@ from __future__ import division, absolute_import
 
 import numpy as np
 
+from fatiando.constants import CM, T2NT
 from fatiando import utils
 
 
@@ -299,6 +300,12 @@ def _bx(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
+    # Transform the magnetization to the local coordinate system
+    V = ellipsoid.transf_matrix
+    mx_local = V[0, 0]*mx + V[1, 0]*my + V[2, 0]*mz
+    my_local = V[0, 1]*mx + V[1, 1]*my + V[2, 1]*mz
+    mz_local = V[0, 2]*mx + V[1, 2]*my + V[2, 2]*mz
+
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
     lamb = _lamb(x1, x2, x3, ellipsoid)
     denominator = _dlamb_aux(x1, x2, x3, ellipsoid, lamb)
@@ -308,12 +315,14 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='x')
 
-    res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mx
+    res = dlamb*(h1*x1*mx_local + h2*x2*my_local + h3*x3*mz_local)
+    res += g*mx_local
+
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= -2*np.pi*a*b*b
+    volume = 4*np.pi*a*b*b/3
 
-    res *= -100 # -PERM_FREE_SPACE*T2NT
+    res *= -1.5*volume*CM*T2NT
 
     return res
 
@@ -369,6 +378,12 @@ def _by(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
+    # Transform the magnetization to the local coordinate system
+    V = ellipsoid.transf_matrix
+    mx_local = V[0, 0]*mx + V[1, 0]*my + V[2, 0]*mz
+    my_local = V[0, 1]*mx + V[1, 1]*my + V[2, 1]*mz
+    mz_local = V[0, 2]*mx + V[1, 2]*my + V[2, 2]*mz
+
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
     lamb = _lamb(x1, x2, x3, ellipsoid)
     denominator = _dlamb_aux(x1, x2, x3, ellipsoid, lamb)
@@ -378,12 +393,14 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='y')
 
-    res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*my
+    res = dlamb*(h1*x1*mx_local + h2*x2*my_local + h3*x3*mz_local)
+    res += g*my_local
+
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= -2*np.pi*a*b*b
+    volume = 4*np.pi*a*b*b/3
 
-    res *= -100 # -PERM_FREE_SPACE*T2NT
+    res *= -1.5*volume*CM*T2NT
 
     return res
 
@@ -439,6 +456,12 @@ def _bz(xp, yp, zp, ellipsoid, F, inc, dec, demag=True, pmag=None):
 impedes the computation of self-demagnetization'
         mx, my, mz = pmag
 
+    # Transform the magnetization to the local coordinate system
+    V = ellipsoid.transf_matrix
+    mx_local = V[0, 0]*mx + V[1, 0]*my + V[2, 0]*mz
+    my_local = V[0, 1]*mx + V[1, 1]*my + V[2, 1]*mz
+    mz_local = V[0, 2]*mx + V[1, 2]*my + V[2, 2]*mz
+
     x1, x2, x3 = x1x2x3(xp, yp, zp, ellipsoid)
     lamb = _lamb(x1, x2, x3, ellipsoid)
     denominator = _dlamb_aux(x1, x2, x3, ellipsoid, lamb)
@@ -448,12 +471,14 @@ impedes the computation of self-demagnetization'
     h3 = _hv(ellipsoid, lamb, v='z')
     g = _gv(ellipsoid, lamb, v='z')
 
-    res = dlamb*(h1*x1*mx + h2*x2*my + h3*x3*mz) + g*mz
+    res = dlamb*(h1*x1*mx_local + h2*x2*my_local + h3*x3*mz_local)
+    res += g*mz_local
+
     a = ellipsoid.small_axis
     b = ellipsoid.large_axis
-    res *= -2*np.pi*a*b*b
+    volume = 4*np.pi*a*b*b/3
 
-    res *= -100 # -PERM_FREE_SPACE*T2NT
+    res *= -1.5*volume*CM*T2NT
 
     return res
 

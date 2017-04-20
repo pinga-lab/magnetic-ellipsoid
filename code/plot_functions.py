@@ -114,9 +114,7 @@ def get_parameters(ellipsoid):
     return V, a, b, c, xc, yc, zc
 
 
-def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
-                   npoints=100, plot_axes=True,
-                   axes_color=(0, 0, 0), label_size=16):
+def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha, npoints=100):
     '''
     Plot the surface of an ellipsoid.
 
@@ -132,18 +130,9 @@ def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
     * npoints: int
         Number of points used to interpolate the surface
         of the ellipsoid.
-    * plot_axes: boolean
-        If True, plot the ellipsoid semi-axes.
-    * axes_color: RGB matplotlib tuple
-        Color of the axes. The default is (0,0,0) - black color.
-    * label_size: float
-        Size of the label font. Default is 22.
     '''
 
     V, a, b, c, xc, yc, zc = get_parameters(ellipsoid)
-
-    if plot_axes is True:
-        draw_axes(ax, V, a, b, c, xc, yc, zc, axes_color, label_size)
 
     # Spherical angles (in radians) for plotting the ellipsoidal surface.
     u = np.linspace(0, 2 * np.pi, 2*npoints)
@@ -164,50 +153,52 @@ def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
     ax.plot_surface(x, y, z, linewidth=0., color=body_color, alpha=body_alpha)
 
 
-def draw_axes(ax, V, a, b, c, xc, yc, zc,
-              axes_color=(0, 0, 0), label_size=16):
+def draw_axes(ax, ellipsoid, axes_color=(0, 0, 0),
+              label_axes=True, label_size=16):
     '''
     Plot three orthogonal axes.
 
     Parameters:
 
     * ax: axes of a matplotlib figure.
-    * V: numpy array 2D
-        Orthogonal matrix whose columns are unit vectors
-        defining the orthogonal axes.
-    * a, b, c: floats
-        Magnitude of the axes.
-    * xc, yc, zc: floats
-        Origin of the axes.
-    * axes_color: RGB matplotlib tuple
-        Color of the axes. The default is (0,0,0) - black color.
-    * label_size: float
-        Size of the label font. Default is 22.
+    * ellipsoid : element of :class:`mesher.TriaxialEllipsoid`,
+        `mesher.ProlateEllipsoid` or `mesher.OblateEllipsoid`.
+    * label_axes : boolean
+        If True, plot the label of all axes.
+    * label_size : int
+        Define the size of the label of all axes.
     '''
+
+    V, a, b, c, xc, yc, zc = get_parameters(ellipsoid)
 
     ax.quiver(xc+V[0, 0]*a, yc+V[1, 0]*a, zc+V[2, 0]*a,
               V[0, 0], V[1, 0], V[2, 0],
               length=a, color=axes_color, linewidth=3.0, linestyle='-',
               arrow_length_ratio=0.1)
-    ax.text(xc+V[0, 0]*a*1.05, yc+V[1, 0]*a*1.05, zc+V[2, 0]*a*1.05,
-            '$a \hat{\mathbf{v}}_{1}$', color=axes_color,
-            fontsize=label_size)
 
     ax.quiver(xc+V[0, 1]*b, yc+V[1, 1]*b, zc+V[2, 1]*b,
               V[0, 1], V[1, 1], V[2, 1],
               length=b, color=axes_color, linewidth=3.0, linestyle='-',
               arrow_length_ratio=0.1)
-    ax.text(xc+V[0, 1]*b*1.05, yc+V[1, 1]*b*1.05, zc+V[2, 1]*b*1.05,
-            '$b \hat{\mathbf{v}}_{2}$', color=axes_color,
-            fontsize=label_size)
 
     ax.quiver(xc+V[0, 2]*c, yc+V[1, 2]*c, zc+V[2, 2]*c,
               V[0, 2], V[1, 2], V[2, 2],
               length=c, color=axes_color, linewidth=3.0, linestyle='-',
               arrow_length_ratio=0.1)
-    ax.text(xc+V[0, 2]*c*1.05, yc+V[1, 2]*c*1.05, zc+V[2, 2]*c*1.05,
-            '$c \hat{\mathbf{v}}_{3}$', color=axes_color,
-            fontsize=label_size)
+
+    if label_axes is True:
+
+        ax.text(xc+V[0, 0]*a*1.05, yc+V[1, 0]*a*1.05, zc+V[2, 0]*a*1.05,
+                '$a \hat{\mathbf{v}}_{1}$', color=axes_color,
+                fontsize=label_size)
+
+        ax.text(xc+V[0, 1]*b*1.05, yc+V[1, 1]*b*1.05, zc+V[2, 1]*b*1.05,
+                '$b \hat{\mathbf{v}}_{2}$', color=axes_color,
+                fontsize=label_size)
+
+        ax.text(xc+V[0, 2]*c*1.05, yc+V[1, 2]*c*1.05, zc+V[2, 2]*c*1.05,
+                '$c \hat{\mathbf{v}}_{3}$', color=axes_color,
+                fontsize=label_size)
 
 
 def limits(ax, xmin, xmax, ymin, ymax, zmin, zmax):
@@ -228,226 +219,3 @@ def limits(ax, xmin, xmax, ymin, ymax, zmin, zmax):
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
     ax.set_zlim(zmin, zmax)
-
-
-def rotation_matrix_x(phi, theta, psi):
-    '''
-    Calculates a rotation matrix from given Euler angles
-    phi, theta and psi (in degrees).
-
-    Parameters:
-
-    * phi, theta, psi: floats
-        Euler angles used to compute the rotation matrix
-        by following the x-convention (Weisstein, 2017).
-
-    Returns:
-    * R: numpy array 2D
-        Rotation matrix. It is calculated as the product of
-        three rotation matrices.
-
-    References:
-    Weisstein, Eric W. "Euler Angles." From MathWorld--A Wolfram Web Resource.
-    http://mathworld.wolfram.com/EulerAngles.html. Accesed on March 2017
-    '''
-
-    # Transform the Euler angles from degrees to radians
-    phir = np.deg2rad(phi)
-    thetar = np.deg2rad(theta)
-    psir = np.deg2rad(psi)
-
-    # Calculate the cosine and sine of the Euler angles
-    cphi = np.cos(phir)
-    sphi = np.sin(phir)
-    ctheta = np.cos(thetar)
-    stheta = np.sin(thetar)
-    cpsi = np.cos(psir)
-    spsi = np.sin(psir)
-
-    # Define the rotation matrix B
-    B = np.array([[cpsi, spsi, 0],
-                  [-spsi, cpsi, 0],
-                  [0, 0, 1]])
-
-    # Define the rotation matrix C
-    C = np.array([[1, 0, 0],
-                  [0, ctheta, stheta],
-                  [0, -stheta, ctheta]])
-
-    # Define the rotation matrix D
-    D = np.array([[cphi, sphi, 0],
-                  [-sphi, cphi, 0],
-                  [0, 0, 1]])
-
-    # Resultant rotation matrix
-    R = np.dot(B, np.dot(C, D))
-
-    return R
-
-
-def rotation_matrix_y(phi, theta, psi):
-    '''
-    Calculates a rotation matrix from given Euler angles
-    phi, theta and psi (in degrees).
-
-    Parameters:
-
-    * phi, theta, psi: floats
-        Euler angles used to compute the rotation matrix
-        by following the y-convention (Weisstein, 2017).
-
-    Returns:
-    * R: numpy array 2D
-        Rotation matrix. It is calculated as the product of
-        three rotation matrices.
-
-    References:
-    Weisstein, Eric W. "Euler Angles." From MathWorld--A Wolfram Web Resource.
-    http://mathworld.wolfram.com/EulerAngles.html. Accesed on March 2017
-    '''
-
-    # Transform the Euler angles from degrees to radians
-    phir = np.deg2rad(phi)
-    thetar = np.deg2rad(theta)
-    psir = np.deg2rad(psi)
-
-    # Calculate the cosine and sine of the Euler angles
-    cphi = np.cos(phir)
-    sphi = np.sin(phir)
-    ctheta = np.cos(thetar)
-    stheta = np.sin(thetar)
-    cpsi = np.cos(psir)
-    spsi = np.sin(psir)
-
-    # Define the rotation matrix B
-    B = np.array([[spsi, -cpsi, 0],
-                  [cpsi, spsi, 0],
-                  [0, 0, 1]])
-
-    # Define the rotation matrix C
-    C = np.array([[1, 0, 0],
-                  [0, ctheta, stheta],
-                  [0, -stheta, ctheta]])
-
-    # Define the rotation matrix D
-    D = np.array([[-sphi, cphi, 0],
-                  [-cphi, -sphi, 0],
-                  [0, 0, 1]])
-
-    # Resultant rotation matrix
-    R = np.dot(B, np.dot(C, D))
-
-    return R
-
-
-def rotation_matrix_xyz(phi, theta, psi):
-    '''
-    Calculates a rotation matrix from given Euler angles
-    phi, theta and psi (in degrees).
-
-    Parameters:
-
-    * phi, theta, psi: floats
-        Euler angles used to compute the rotation matrix
-        by following the xyz- or or pitch-roll-yaw-convention
-        (Weisstein, 2017).
-
-    Returns:
-    * R: numpy array 2D
-        Rotation matrix. It is calculated as the product of
-        three rotation matrices.
-
-    References:
-    Weisstein, Eric W. "Euler Angles." From MathWorld--A Wolfram Web Resource.
-    http://mathworld.wolfram.com/EulerAngles.html. Accesed on March 2017
-    '''
-
-    # Transform the Euler angles from degrees to radians
-    phir = np.deg2rad(phi)
-    thetar = np.deg2rad(theta)
-    psir = np.deg2rad(psi)
-
-    # Calculate the cosine and sine of the Euler angles
-    cphi = np.cos(phir)
-    sphi = np.sin(phir)
-    ctheta = np.cos(thetar)
-    stheta = np.sin(thetar)
-    cpsi = np.cos(psir)
-    spsi = np.sin(psir)
-
-    # Define the rotation matrix B
-    B = np.array([[cpsi, spsi, 0],
-                  [-spsi, cpsi, 0],
-                  [0, 0, 1]])
-
-    # Define the rotation matrix C
-    C = np.array([[ctheta, 0, -stheta],
-                  [0, 1, 0],
-                  [stheta, 0, ctheta]])
-
-    # Define the rotation matrix D
-    D = np.array([[cphi, sphi, 0],
-                  [-sphi, cphi, 0],
-                  [0, 0, 1]])
-
-    # Resultant rotation matrix
-    R = np.dot(B, np.dot(C, D))
-
-    return R
-
-
-def rotation_matrix_custom(strike, dip, rake):
-    '''
-    Calculates a rotation matrix from given geological angles
-    strike, dip and rake (in degrees).
-
-    Parameters:
-
-    * strike, dip, rake: floats
-        Geological angles used in structural geology to the
-        orientation of planes and lines.
-
-    Returns:
-    * R: numpy array 2D
-        Rotation matrix. It is calculated as the product of
-        three rotation matrices.
-    '''
-
-    A = R3(-strike)
-    B = R1(dip+90)
-    C = R3(rake)
-
-    # Resultant rotation matrix
-    R = np.dot(A, np.dot(B, C))
-
-    return R
-
-
-def R1(angle):
-    angle_rad = np.deg2rad(angle)
-    cos_angle = np.cos(angle_rad)
-    sin_angle = np.sin(angle_rad)
-    R = np.array([[1, 0, 0],
-                  [0, cos_angle, sin_angle],
-                  [0, -sin_angle, cos_angle]])
-    return R
-
-
-def R2(angle):
-    angle_rad = np.deg2rad(angle)
-    cos_angle = np.cos(angle_rad)
-    sin_angle = np.sin(angle_rad)
-    R = np.array([[cos_angle, 0, sin_angle],
-                  [0, 1, 0],
-                  [-sin_angle, 0, cos_angle]])
-    return R
-
-
-def R3(angle):
-    angle_rad = np.deg2rad(angle)
-    cos_angle = np.cos(angle_rad)
-    sin_angle = np.sin(angle_rad)
-    R = np.array([[cos_angle, sin_angle, 0],
-                  [-sin_angle, cos_angle, 0],
-                  [0, 0, 1]])
-    return R

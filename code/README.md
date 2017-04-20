@@ -19,56 +19,57 @@
         make help
 
 
-* `mesher.py`:
+* `mesher.py`
 
     Set of classes used to create geometric elements defining triaxial, prolate
     and oblate ellipsoids.
 
-* `triaxial_ellipsoid.py`, `prolate_ellipsoid.py` and `oblate_ellipsoid.py`:
+* `triaxial_ellipsoid.py`, `prolate_ellipsoid.py` and `oblate_ellipsoid.py`
 
     Set of routines to calculate, respectively, the magnetic induction produced by triaxial,
     prolate and oblate ellipsoids.
 
 * [Cookbook_triaxial.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/Cookbook_triaxial.ipynb),
 [Cookbook_prolate.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/Cookbook_prolate.ipynb) and
-[Cookbook_oblate.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/Cookbook_oblate.ipynb):
+[Cookbook_oblate.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/Cookbook_oblate.ipynb)
 
     Notebooks illustrating, respectively, the computation of the total-field anomaly produced
     by triaxial, prolate and oblate ellipsoids.
 
-* [demagnetizing_factors.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/demagnetizing_factors.ipynb):
+* [demagnetizing_factors.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/demagnetizing_factors.ipynb)
 
     Notebook generating the results presented in the subsection 4.1 of the manuscript about
     the demagnetizing factors of triaxial, prolate and oblate ellipsoids.
 
-* [warrego.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/warrego.ipynb):
+* [warrego.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/warrego.ipynb)
 
     Notebook generating the results presented in the subsection 4.2 of the manuscript about
     effect of neglecting the self-demagnetization in the magnetic modelling.
 
 * [lambda_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/lambda_triaxial_ellipsoids.ipynb),
 [lambda_prolate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/lambda_prolate_ellipsoids.ipynb) and
-[lambda_oblate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/lambda_oblate_ellipsoids.ipynb):
+[lambda_oblate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/lambda_oblate_ellipsoids.ipynb)
 
     Notebooks illustrating the parameter lambda for, respectively, triaxial,
     prolate and oblate ellipsoids.
 
 * [dlambda_prolate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/dlambda_prolate_ellipsoids.ipynb) and
-[dlambda_oblate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/dlambda_oblate_ellipsoids.ipynb):
+[dlambda_oblate_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/dlambda_oblate_ellipsoids.ipynb)
 
     Notebooks illustrating the computation of the spatial derivatives of the
     parameter lambda for, respectively, prolate and oblate ellipsoids.
 
-* `plot_functions.py`:
+* `plot_functions.py`
 
     Routines for saving figures and plot ellipsoids.
 
-* [plot_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/plot_ellipsoids.ipynb):
+* [plot_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/plot_ellipsoids.ipynb)
 
     Notebook illustrating the use of the routines in `plot_functions.py`.
 
-* [demagnetizing_factors_Stoner1945.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/demagnetizing_factors_Stoner1945.ipynb):
+* [demagnetizing_factors_Stoner1945.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/demagnetizing_factors_Stoner1945.ipynb)
 
     Notebook comparing the demagnetizing factors calculated with our routines (Eqs. 34 and 36) and those presented by
-    Stoner (1945, Table I). The results presented by Stoner (1945, Table I) are in the file `Stoner1945_TableI.txt`.
+    Stoner (1945, Table I). The results presented by Stoner (1945, Table I) are in the file
+    `Stoner1945_TableI.txt`, in the folder `data`.
 

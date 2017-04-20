@@ -1,6 +1,7 @@
 from __future__ import division
 import os
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import mesher
 
@@ -64,27 +65,28 @@ def draw_main_system(ax, length_axes=1, label_size=22, elev=200,
     ax.view_init(elev=elev, azim=azim)
 
 
-def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
-                   plot_axes=True, axes_color=(0, 0, 0), label_size=16):
+def get_parameters(ellipsoid):
     '''
-    Plot an ellipsoidal body with axes a, b, c and
-    origin at (xc, yc, zc).
+    Get the coordinate transformation matrix and
+    the semi-axes of a given ellipsoid.
 
     Parameters:
 
-    * ax: axes of a matplotlib figure.
     * ellipsoid : element of :class:`mesher.TriaxialEllipsoid`,
         `mesher.ProlateEllipsoid` or `mesher.OblateEllipsoid`.
-    * body_color: RGB matplotlib tuple
-        Color of the body.
-    * body_alpha: float
-        Transparency of the body.
-    * plot_axes: boolean
-        If True (default), plot the body axes.
-    * axes_color: RGB matplotlib tuple
-        Color of the axes. The default is (0,0,0) - black color.
-    * label_size: float
-        Size of the label font. Default is 22.
+
+    Returns:
+
+    * V: numpy array 2D
+        Coordinate transformation matrix from the main coordinate system
+        to the local coordinate system. The local coordinate system
+        has the origin at the centre of the ellipsoid and the axes
+        aligned with the semi-axes of the ellipsoid.
+    * a, b, c: floats
+        Semi-axes of the ellipsoid.
+    * xc, yc, zc: floats
+        Coordinates of the elliposid centre referred to the
+        main coordinate system.
     '''
 
     # Coordinate transformation matrix
@@ -103,41 +105,38 @@ def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
     if ellipsoid.__class__ is mesher.ProlateEllipsoid:
         a = ellipsoid.large_axis
         b = ellipsoid.small_axis
-        c = b
+        c = ellipsoid.small_axis
     if ellipsoid.__class__ is mesher.OblateEllipsoid:
         a = ellipsoid.small_axis
         b = ellipsoid.large_axis
-        c = b
+        c = ellipsoid.large_axis
 
-    if plot_axes is True:
+    return V, a, b, c, xc, yc, zc
 
-        ax.quiver(xc+V[0, 0]*a, yc+V[1, 0]*a, zc+V[2, 0]*a,
-                  V[0, 0], V[1, 0], V[2, 0],
-                  length=a, color=axes_color, linewidth=3.0, linestyle='-',
-                  arrow_length_ratio=0.1)
-        ax.text(xc+V[0, 0]*a*1.05, yc+V[1, 0]*a*1.05, zc+V[2, 0]*a*1.05,
-                '$a \hat{\mathbf{v}}_{1}$', color=axes_color,
-                fontsize=label_size)
 
-        ax.quiver(xc+V[0, 1]*b, yc+V[1, 1]*b, zc+V[2, 1]*b,
-                  V[0, 1], V[1, 1], V[2, 1],
-                  length=b, color=axes_color, linewidth=3.0, linestyle='-',
-                  arrow_length_ratio=0.1)
-        ax.text(xc+V[0, 1]*b*1.05, yc+V[1, 1]*b*1.05, zc+V[2, 1]*b*1.05,
-                '$b \hat{\mathbf{v}}_{2}$', color=axes_color,
-                fontsize=label_size)
+def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha, npoints=100):
+    '''
+    Plot the surface of an ellipsoid.
 
-        ax.quiver(xc+V[0, 2]*c, yc+V[1, 2]*c, zc+V[2, 2]*c,
-                  V[0, 2], V[1, 2], V[2, 2],
-                  length=c, color=axes_color, linewidth=3.0, linestyle='-',
-                  arrow_length_ratio=0.1)
-        ax.text(xc+V[0, 2]*c*1.05, yc+V[1, 2]*c*1.05, zc+V[2, 2]*c*1.05,
-                '$c \hat{\mathbf{v}}_{3}$', color=axes_color,
-                fontsize=label_size)
+    Parameters:
+
+    * ax: axes of a matplotlib figure.
+    * ellipsoid : element of :class:`mesher.TriaxialEllipsoid`,
+        `mesher.ProlateEllipsoid` or `mesher.OblateEllipsoid`.
+    * body_color: RGB matplotlib tuple
+        Color of the body.
+    * body_alpha: float
+        Transparency of the body.
+    * npoints: int
+        Number of points used to interpolate the surface
+        of the ellipsoid.
+    '''
+
+    V, a, b, c, xc, yc, zc = get_parameters(ellipsoid)
 
     # Spherical angles (in radians) for plotting the ellipsoidal surface.
-    u = np.linspace(0, 2 * np.pi, 100)
-    v = np.linspace(0, np.pi, 100)
+    u = np.linspace(0, 2 * np.pi, 2*npoints)
+    v = np.linspace(0, np.pi, npoints)
 
     # Cartesian coordinates referred to the body system
     # (https://en.wikipedia.org/wiki/Ellipsoid)
@@ -152,3 +151,71 @@ def draw_ellipsoid(ax, ellipsoid, body_color, body_alpha,
 
     # Plot:
     ax.plot_surface(x, y, z, linewidth=0., color=body_color, alpha=body_alpha)
+
+
+def draw_axes(ax, ellipsoid, axes_color=(0, 0, 0),
+              label_axes=True, label_size=16):
+    '''
+    Plot three orthogonal axes.
+
+    Parameters:
+
+    * ax: axes of a matplotlib figure.
+    * ellipsoid : element of :class:`mesher.TriaxialEllipsoid`,
+        `mesher.ProlateEllipsoid` or `mesher.OblateEllipsoid`.
+    * label_axes : boolean
+        If True, plot the label of all axes.
+    * label_size : int
+        Define the size of the label of all axes.
+    '''
+
+    V, a, b, c, xc, yc, zc = get_parameters(ellipsoid)
+
+    ax.quiver(xc+V[0, 0]*a, yc+V[1, 0]*a, zc+V[2, 0]*a,
+              V[0, 0], V[1, 0], V[2, 0],
+              length=a, color=axes_color, linewidth=3.0, linestyle='-',
+              arrow_length_ratio=0.1)
+
+    ax.quiver(xc+V[0, 1]*b, yc+V[1, 1]*b, zc+V[2, 1]*b,
+              V[0, 1], V[1, 1], V[2, 1],
+              length=b, color=axes_color, linewidth=3.0, linestyle='-',
+              arrow_length_ratio=0.1)
+
+    ax.quiver(xc+V[0, 2]*c, yc+V[1, 2]*c, zc+V[2, 2]*c,
+              V[0, 2], V[1, 2], V[2, 2],
+              length=c, color=axes_color, linewidth=3.0, linestyle='-',
+              arrow_length_ratio=0.1)
+
+    if label_axes is True:
+
+        ax.text(xc+V[0, 0]*a*1.05, yc+V[1, 0]*a*1.05, zc+V[2, 0]*a*1.05,
+                '$a \hat{\mathbf{v}}_{1}$', color=axes_color,
+                fontsize=label_size)
+
+        ax.text(xc+V[0, 1]*b*1.05, yc+V[1, 1]*b*1.05, zc+V[2, 1]*b*1.05,
+                '$b \hat{\mathbf{v}}_{2}$', color=axes_color,
+                fontsize=label_size)
+
+        ax.text(xc+V[0, 2]*c*1.05, yc+V[1, 2]*c*1.05, zc+V[2, 2]*c*1.05,
+                '$c \hat{\mathbf{v}}_{3}$', color=axes_color,
+                fontsize=label_size)
+
+
+def limits(ax, xmin, xmax, ymin, ymax, zmin, zmax):
+    '''
+    Set the limits of the 3D plot.
+
+    Parameters:
+
+    * ax: axes of a matplotlib figure.
+    * xmin, xmax, ymin, ymax, zmin, zmax: floats
+        Lower and upper limites along the x-, y- and z- axes.
+    '''
+
+    x = [xmin, xmax, xmin, xmin]
+    y = [ymin, ymin, ymax, ymin]
+    z = [zmin, zmin, zmin, zmax]
+    ax.scatter(x, y, z, s=0)
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ax.set_zlim(zmin, zmax)

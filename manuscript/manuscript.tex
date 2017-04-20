@@ -282,14 +282,13 @@ $x$, $y$ and $z$ pointing to, respectively, North, East and down.
 For convenience, we denominate this coordinate system as
 \textit{main coordinate system} (Fig. \ref{fig:orientation-angles}a).
 Let us consider an ellipsoidal body with centre at the point
-$(x_{c}, y_{c}, z_{c})$, orientation defined by three angles
-$\varepsilon$, $\zeta$, and $\eta$ (Fig. \ref{fig:orientation-angles}a),
-and semi-axes defined by
+$(x_{c}, y_{c}, z_{c})$, orientation defined by the angles
+\textit{strike} $\varepsilon$, \textit{dip} $\zeta$, and \textit{rake} $\eta$
+(Fig. \ref{fig:orientation-angles}a), and semi-axes defined by
 positive constants $a$, $b$, $c$ (Fig. \ref{fig:orientation-angles}b).
-The angles $\varepsilon$, $\zeta$, and $\eta$ are called \textit{strike},
-\textit{dip}, and \textit{rake}, respectively, and are commonly used to
-define the orientation of lines in structural geology
-\citep{clark1986, allmendinger2012}.
+The orientation angles \textit{strike}, \textit{dip}, and \textit{rake}
+are commonly used to define the orientation of lines in structural geology
+\citep{pollard2005, allmendinger2012}.
 The points $(x, y, z)$ located on the surface of this ellipsoidal body
 satisfy the following equation:
 \begin{equation}
@@ -311,91 +310,56 @@ a^{-2} & 0 & 0 \\
 and $\mathbf{V}$ is an orthogonal matrix whose first, second and third columns
 are defined by unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
 (Fig. \ref{fig:orientation-angles}b), respectively.
-These unit vectors are commonly described in terms of auxiliary
-orientation angles $\alpha$, $\gamma$, and $delta$, which are not used
-by the geoscientific community. These angles, however, can be defined from
-$\varepsilon$, $\zeta$, and $\eta$ (Fig. \ref{fig:orientation-angles}a)
-as follows \citep{clark1986}:
+The matrix $\mathbf{V}$ can be defined in terms of three rotation matrices:
 \begin{equation}
-\alpha = \varepsilon - \cos^{-1} \left[ \frac{\cos \eta}
-{\left( 1 - \sin^{2} \zeta \, \sin^{2} \eta \right)^{\frac{1}{2}}}\right] \: ,
-\label{eq:alpha}
+\mathbf{R}_{1}(\theta) = \left[ \begin{array}{ccc}
+1 & 0 & 0 \\
+0 & \cos \theta & \sin \theta \\
+0 & -\sin \theta & \cos \theta
+\end{array} \right] \: ,
+\label{eq:R1}
 \end{equation}
 \begin{equation}
-\gamma = \tan^{-1} \left( \frac{\cos \zeta}{\sin \zeta \, \cos \eta}\right)
-\label{eq:gamma}
+\mathbf{R}_{2}(\theta) = \left[ \begin{array}{ccc}
+\cos \theta & 0 & -\sin \theta \\
+0 & 1 & 0 \\
+\sin \theta & 0 & \cos \theta
+\end{array} \right]
+\label{eq:R2}
 \end{equation}
 and
 \begin{equation}
-\delta = \sin^{-1} \left( \sin \zeta \, \sin \eta \right) \: ,
-\label{eq:delta}
+\mathbf{R}_{3}(\theta) = \left[ \begin{array}{ccc}
+\cos \theta & \sin \theta & 0 \\
+-\sin \theta & \cos \theta & 0 \\
+0 & 0 & 1
+\end{array} \right] \: .
+\label{eq:R3}
 \end{equation}
-where $-90^{\circ} \leq \gamma \leq 90^{\circ}$ and
-$0 \leq \delta \leq 90^{\circ}$.
-Then, given the orientation angles $\varepsilon$, $\zeta$, and $\eta$
-(Fig. \ref{fig:orientation-angles}a), we define the auxiliary angles
-$\alpha$, $\gamma$ and $\delta$ (Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
-\ref{eq:delta}) and, finally, the unit vectors
-$\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
-(Fig. \ref{fig:orientation-angles}b) according to the ellipsoid type.
 For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
-(i.e., $a > b = c$), we opted for defining these unit vectors
-by following \citet{clark1986}:
+(i.e., $a > b = c$), we define the orthogonal matrix $\mathbf{V}$
+as follows:
 \begin{equation}
-\mathbf{v}_{1} = \left[\begin{array}{c}
-                  -\cos\alpha \; \cos\delta \\
-                  -\sin\alpha \; \cos\delta \\
-                  -\sin\delta
-                  \end{array} \right] \: ,
-\label{eq:v1_triaxial_prolate}
+\mathbf{V} =
+\mathbf{R}_{1} \left( \frac{\pi}{2} \right) \;
+\mathbf{R}_{2} \left( \varepsilon \right) \;
+\mathbf{R}_{1} \left( \frac{\pi}{2} - \zeta \right) \;
+\mathbf{R}_{3} \left( \eta \right) \: .
+\label{eq:V_triaxial_prolate}
 \end{equation}
+For oblate ellipsoids (i.e., $a < b = c$), we define $\mathbf{V}$ as follows:
 \begin{equation}
-\mathbf{v}_{2} = \left[\begin{array}{c}
-                  \cos\alpha \; \cos\gamma \; \sin\delta + \sin\alpha \; \sin\gamma \\
-                  \sin\alpha \; \cos\gamma \; \sin\delta - \cos\alpha \; \sin\gamma \\
-                  -\cos\gamma \; \cos\delta
-                  \end{array} \right] \: ,
-\label{eq:v2_triaxial_prolate}
+\mathbf{V} =
+\mathbf{R}_{3} \left( -\frac{\pi}{2} \right) \;
+\mathbf{R}_{1} \left( \pi \right) \,
+\mathbf{R}_{3} \left( \varepsilon \right) \,
+\mathbf{R}_{2} \left( \frac{\pi}{2} - \zeta \right) \,
+\mathbf{R}_{1} \left( \eta \right) \: .
+\label{eq:V_oblate}
 \end{equation}
-\begin{equation}
-\mathbf{v}_{3} = \left[\begin{array}{c}
-                  \sin\alpha \; \cos\gamma - \cos\alpha \; \sin\gamma \; \sin\delta \\
-                  -\cos\alpha \; \cos\gamma - \sin\alpha \; \sin\gamma \; \sin\delta \\
-                  \sin\gamma \; \cos\delta
-                  \end{array} \right] \: .
-\label{eq:v3_triaxial_prolate}
-\end{equation}
-\citet{emerson1985} calculated the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
-and $\mathbf{v}_{3}$ similarly by using Eqs. \ref{eq:v1_triaxial_prolate},
-\ref{eq:v2_triaxial_prolate}, and \ref{eq:v3_triaxial_prolate}, but
-with $\gamma = 0^{\circ}$.
-Finally, we define the unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
-and $\mathbf{v}_{3}$ for oblate ellipsoids (i.e., $a < b = c$) as follows:
-\begin{equation}
-\mathbf{v}_{1} = \left[\begin{array}{c}
-                  -\cos\alpha \; \sin\gamma \; \sin\delta + \sin\alpha \; \cos\gamma \\
-                  -\sin\alpha \; \sin\gamma \; \sin\delta - \cos\alpha \; \cos\gamma \\
-                  \sin\gamma \; \cos\delta
-                  \end{array} \right] \: ,
-\label{eq:v1_oblate}
-\end{equation}
-\begin{equation}
-\mathbf{v}_{2} = \left[\begin{array}{c}
-                  -\cos\alpha \; \cos\delta \\
-                  -\sin\alpha \; \cos\delta \\
-                  -\sin\delta
-                  \end{array} \right] \: ,
-\label{eq:v2_oblate}
-\end{equation}
-\begin{equation}
-\mathbf{v}_{3} = \left[\begin{array}{c}
-                  \sin\alpha \; \sin\gamma + \cos\alpha \; \cos\gamma \; \sin\delta \\
-                  -\cos\alpha \; \sin\gamma + \sin\alpha \; \cos\gamma \; \sin\delta \\
-                  -\cos\gamma \; \cos\delta
-                  \end{array} \right] \: .
-\label{eq:v3_oblate}
-\end{equation}
-This approach is very similar to that presented by \citet{emerson1985}.
+The orthogonal matrices $\mathbf{V}$ used here for triaxial, prolate and oblate
+ellipsoids (Eqs. \ref{eq:V_triaxial_prolate} and \ref{eq:V_oblate}) are
+different from that used by \citet{emerson1985} and \citet{clark1986}.
 
 The magnetic modelling of an ellipsoidal body is commonly performed
 in a particular Cartesian coordinate system that is aligned
@@ -511,14 +475,19 @@ where $k_{1} > k_{2} > k_{3}$ are the
 an orthogonal matrix whose columns $\mathbf{u}_{i}$,
 $i = 1, 2, 3$, are unit vectors called
 \textit{principal directions}.
-The unit vectors $\mathbf{u}_{i}$ may be defined
-similarly to $\mathbf{v}_{1}$, $\mathbf{v}_{2}$,
-and $\mathbf{v}_{3}$ (Eqs. \ref{eq:v1_triaxial_prolate},
-\ref{eq:v2_triaxial_prolate}, \ref{eq:v3_triaxial_prolate},
-\ref{eq:v1_oblate}, \ref{eq:v2_oblate}, and \ref{eq:v3_oblate}),
-by a given set of orientation angles $\varepsilon$, $\zeta$,
-and $\eta$ (Eqs. \ref{eq:alpha}, \ref{eq:gamma}, and
-\ref{eq:delta}).
+Similarly to the matrix $\mathbf{V}$ (Eqs. \ref{eq:ellipsoid_surface},
+\ref{eq:V_triaxial_prolate} and \ref{eq:V_oblate}), we define
+the matrix $\mathbf{U}$ as a function
+of given orientation angles $\varepsilon$, $\zeta$,
+and $\eta$ depending on the ellipsoid type. For triaxial
+and prolate ellipsoids, we define $\mathbf{U}$ by
+using Eq. \ref{eq:V_triaxial_prolate}, whereas for oblate ellipsoids
+we use Eq. \ref{eq:V_oblate}.
+Notice that the orientation angles $\varepsilon$, $\zeta$,
+and $\eta$ defining the orthogonal matrix $\mathbf{U}$
+may be different from that angles $\varepsilon$, $\zeta$,
+and $\eta$ defining the ellipsoid orientation
+(Fig. \ref{fig:orientation-angles}).
 
 If the principal susceptibilities are different from
 each other, we say that the body has an
@@ -1176,24 +1145,6 @@ The angular difference between the resultant magnetization
 and the inducing field depends on the combined effect of the
 anisotropy of magnetic susceptibility and the shape anisotropy.
 
-%The angular difference $\theta$ between the resultant magnetization
-%and the inducing field is the same, whether the quantities
-%are defined in the main coordinate system (Fig. \ref{fig:orientation-angles}a)
-%or local coordinate system (Fig. \ref{fig:orientation-angles}b).
-%For convenience, we define $\theta$ (in degrees) in the main coordinate system
-%by using the scalar product definition as follows:
-%\begin{equation}
-%\theta = \frac{180}{\pi} \, \cos^{-1} \left(
-%\frac{\mathbf{M}^{\top}\mathbf{H}_{0}}
-%{\| \mathbf{M} \| \; \| \mathbf{H}_{0} \|}\right) \: ,
-%\label{eq:theta}
-%\end{equation}
-%where $\mathbf{M}$ is obtained by pre-multiplying the
-%magnetization $\tilde{\mathbf{M}}$ (Eq. \ref{eq:M-tilde-remanence})
-%by the orthogonal matrix $\mathbf{V}$ (Eq. \ref{eq:A}),
-%which is defined according to the ellipsoid type, and
-%$\mathbf{H}_{0}$ is given by Eq. \ref{eq:H0}.
-%
 For the particular case in which the susceptibility is isotropic,
 the susceptibility tensor is defined according to Eq. \ref{eq:K-isotropic}.
 In this case, the magnetization $\mathbf{M}$ (Eqs. \ref{eq:M-KH} and \ref{eq:M-remanence}),
@@ -1465,6 +1416,12 @@ are available in a repository on GitHub
 \section{Numerical simulations}
 
 
+All the code developed for generating the results presented in the following
+subsections, as well as the code developed for generating additional numerical simulations,
+can be found at the folder \textit{code} of the repository
+\url{https://github.com/pinga-lab/magnetic-ellipsoid}.
+
+
 \subsection{Demagnetizing factors}
 
 
@@ -1544,22 +1501,26 @@ are close to $1/3$ for $m$ close to $0$ and satisfy the condition
 $\tilde{n}^{\dagger}_{11} > \tilde{n}^{\dagger}_{22}$ for all values
 of $m$.
 
+The code used for generating the results presented in this section
+can found at \url{https://github.com/pinga-lab/magnetic-ellipsoid/code}
+
 
 \subsection{Simulation of a geological body}
 
 
-\citet{farrar1979} represented the Warrego orebody as a triaxial
-ellipsoid having a high isotropic susceptibility.
-In this case, the self-demagnetization strongly impacts the
-magnetic modelling of this body.
+We simulated an ellipsoidal body similar to the Warrego orebody,
+which was the resource on which the well-known Warrego mine was
+developed in Tennant Creek, Australia. After nearly a decade as
+one of the most important gold and copper mines in Australia, the
+Warrego mine was closed in late 1989.
 According to \citet{wedekind1990}, the Warrego orebody is a combination of
 two major and several small ironstone lodes, which are discrete bodies
 comprised predominantly of magnetite or hematite above the base of
 oxidation.
-The Warrego orebody was the resource on which the Warrego mine was
-developed. After nearly a decade as one of the most important
-gold and copper mines in Australia, the Warrego mine was closed
-in late 1989.
+\citet{farrar1979} represented the Warrego orebody as a triaxial
+ellipsoid having a high isotropic susceptibility.
+In this case, the self-demagnetization strongly impacts the
+magnetic modelling of this body.
 
 Table \ref{tab:parameters-warrego} shows the parameters defining
 a synthetic orebody which is based on that presented by
@@ -1568,9 +1529,9 @@ Figure \ref{fig:tfa-warrego} shows the total-field anomaly
 $\Delta T (\mathbf{r})$ (Eq. \ref{eq:delta-T-approx}) produced
 by the synthetic body on a regular grid of $100 \times 100$
 points at a constant vertical coordinate $z = 0$ \unit{m}.
-The total-field anomaly varies from $\approx -176$ \unit{nT}
-to $\approx 237$ \unit{nT}, resulting in a peak-to-peak amplitude
-of $\approx 413$ \unit{nT}, and was calculated by using the
+The total-field anomaly varies from $\approx -71$ \unit{nT}
+to $\approx 482$ \unit{nT}, resulting in a peak-to-peak amplitude
+of $\approx 553$ \unit{nT}, and was calculated by using the
 true magnetization $\mathbf{M}$ defined in Eqs.
 \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}.
 
@@ -1591,12 +1552,12 @@ $\chi_{2} = 0.116$ \unit{SI}.
 
 As expected, the differences calculated by using the higher isotropic
 susceptibility (Fig. \ref{fig:tfa-differences-warrego}a) are very large.
-The peak-to-peak amplitude is $\approx 141$ \unit{nT}
-and represents $\approx 34 \%$ of the peak-to-peak amplitude of
+The peak-to-peak amplitude is $\approx 40$ \unit{nT}
+and represents $\approx 8 \%$ of the peak-to-peak amplitude of
 the total-field anomaly shown in Fig. \ref{fig:tfa-warrego}.
-This result reinforces that the use of the approximated magnetization
-$\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx}) may negatively impact
-the magnetic modelling of bodies with high isotropic susceptibility.
+%This result reinforces that the use of the approximated magnetization
+%$\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx}) may negatively impact
+%the magnetic modelling of bodies with high isotropic susceptibility.
 
 Figure \ref{fig:tfa-differences-warrego}b shows the differences calculated
 by using $\chi_{1} = 0.1$ \unit{SI}.
@@ -1606,11 +1567,11 @@ consequently, the magnetization $\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx})
 is a good approximation of the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 In our test, the use of $\chi_{1} = 0.1$ \unit{SI} leads to a relative error
-$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 2.4 \%$
+$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 0.7 \%$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization.
 The peak-to-peak amplitude of the differences in the total-field anomaly
-(Fig. \ref{fig:tfa-differences-warrego}b) is $\approx 0.8$ \unit{nT},
-which represents $\approx 2.9 \%$ of the peak-to-peak amplitude of the
+(Fig. \ref{fig:tfa-differences-warrego}b) is $\approx 0.2$ \unit{nT},
+which represents $\approx 0.6 \%$ of the peak-to-peak amplitude of the
 total-field anomaly calculates by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 
@@ -1625,11 +1586,11 @@ $\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1}$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization be
 lower than or equal to the target relative error $\epsilon = 8 \%$.
 In this test, the use of $\chi_{2} = 0.116$ \unit{SI} leads to a relative error
-$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 2.8 \%$
+$\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 0.8 \%$
 (Eq. \ref{eq:perturbed-M-inequality}) in the magnetization.
 The peak-to-peak amplitude of the differences in the total-field anomaly
-(Fig. \ref{fig:tfa-differences-warrego}c) is $\approx 1.1$ \unit{nT},
-which represents $\approx 3.3 \%$ of the peak-to-peak amplitude of the
+(Fig. \ref{fig:tfa-differences-warrego}c) is $\approx 0.3$ \unit{nT},
+which represents $\approx 0.7 \%$ of the peak-to-peak amplitude of the
 total-field anomaly calculates by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 In this case, the use an isotropic susceptibility greater than the usual
@@ -2154,14 +2115,13 @@ $\mathbf{w}$ define the semi-axes $b$ and $c$, respectively.
 The strike direction is defined by the intersection of the
 dark gray plane and the horizontal plane (represented in light gray),
 which contains the $x$ and $y$ axes. The angle $\varepsilon$
-between "minus $x$" and the strike direction is called \textit{strike}.
+between the $x$-axis and the strike direction is called \textit{strike}.
 The angle $\zeta$ between the horizontal plane and the dark gray plane
-is called \textit{dip}. The line containing the unit vector
-$\mathbf{u}$ defines the \textit{plunge direction}.
-The angle $\eta$ between the strike direction and the plunge direction
-is called \textit{rake}. The projection
-of the plunge direction on the horizontal plane is called
-\textit{plunge azimuth direction}. (b) Local coordinate system
+is called \textit{dip}. The angle $\eta$ between the strike direction
+and the line containing the unit vector $\mathbf{u}$
+is called \textit{rake}. The projection of this line on the
+horizontal plane (not shown) is called \textit{dip direction}
+\citep{pollard2005, allmendinger2012}. (b) Local coordinate system
 with origin at the ellipsoid centre $(x_{c}, y_{c}, z_{c})$
 (black dot) and axes defined by unit vectors $\mathbf{v}_{1}$,
 $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$. These unit vectors

@@ -73,10 +73,10 @@ def test_oblate_ellipsoid_force_prop():
                               F, inc, dec, demag=False, pmag=f*pmag)
 
     # the fields must be proportional
-    assert_almost_equal(bx2, f*bx, decimal=12)
-    assert_almost_equal(by2, f*by, decimal=12)
-    assert_almost_equal(bz2, f*bz, decimal=12)
-    assert_almost_equal(tf2, f*tf, decimal=12)
+    assert_almost_equal(bx2, f*bx, decimal=10)
+    assert_almost_equal(by2, f*by, decimal=10)
+    assert_almost_equal(bz2, f*bz, decimal=10)
+    assert_almost_equal(tf2, f*tf, decimal=10)
 
     # pmag not None requires demag not True
     raises(AssertionError, oblate_ellipsoid.bx, x, y, z, model,

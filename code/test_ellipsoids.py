@@ -4,7 +4,7 @@ from mesher import ProlateEllipsoid
 from mesher import OblateEllipsoid
 from mesher import _coord_transf_matrix_triaxial
 from mesher import _coord_transf_matrix_oblate
-from mesher import _auxiliary_angles
+from mesher import _multi_dot, _R1, _R2, _R3
 import numpy as np
 from numpy.testing import assert_almost_equal
 from pytest import raises
@@ -113,19 +113,22 @@ def test_triaxial_ellipsoid_principal_susceptibilities_signal():
 
 def test_coord_transf_matrix_triaxial_known():
     'Coordinate transformation matrix built with known orientation angles'
-    alpha = -np.pi
-    gamma = np.pi/2
-    delta = 0
-    transf_matrix = _coord_transf_matrix_triaxial(alpha, gamma, delta)
-    assert_almost_equal(transf_matrix, np.identity(3), decimal=15)
+    strike = 0
+    dip = 0
+    rake = 0
+    transf_matrix = _coord_transf_matrix_triaxial(strike, dip, rake)
+    benchmark = np.array([[1, 0, 0],
+                          [0, -1, 0],
+                          [0, 0, -1]])
+    assert_almost_equal(transf_matrix, benchmark, decimal=15)
 
 
 def test_coord_transf_matrix_triaxial_orthogonal():
     'Coordinate transformation matrix must be orthogonal'
-    alpha = 38.9
-    gamma = -0.2
-    delta = 174
-    transf_matrix = _coord_transf_matrix_triaxial(alpha, gamma, delta)
+    strike = 38.9
+    dip = -0.2
+    rake = 174
+    transf_matrix = _coord_transf_matrix_triaxial(strike, dip, rake)
     dot1 = np.dot(transf_matrix, transf_matrix.T)
     dot2 = np.dot(transf_matrix.T, transf_matrix)
     assert_almost_equal(dot1, dot2, decimal=15)
@@ -315,19 +318,22 @@ def test_oblate_ellipsoid_principal_susceptibilities_signal():
 
 def test_coord_transf_matrix_oblate_known():
     'Coordinate transformation matrix built with known orientation angles'
-    alpha = -np.pi
-    gamma = np.pi/2
-    delta = 0
-    transf_matrix = _coord_transf_matrix_oblate(alpha, gamma, delta)
-    assert_almost_equal(transf_matrix, np.identity(3)[[1, 2, 0]], decimal=15)
+    strike = 0
+    dip = 0
+    rake = 0
+    transf_matrix = _coord_transf_matrix_oblate(strike, dip, rake)
+    benchmark = np.array([[0, 1, 0],
+                          [0, 0, -1],
+                          [-1, 0, 0]])
+    assert_almost_equal(transf_matrix, benchmark, decimal=15)
 
 
 def test_coord_transf_matrix_oblate_orthonal():
     'Coordinate transformation matrix must be orthogonal'
-    alpha = 7
-    gamma = 23
-    delta = -np.pi/3
-    transf_matrix = _coord_transf_matrix_oblate(alpha, gamma, delta)
+    strike = 7
+    dip = 23
+    rake = -np.pi/3
+    transf_matrix = _coord_transf_matrix_oblate(strike, dip, rake)
     dot1 = np.dot(transf_matrix, transf_matrix.T)
     dot2 = np.dot(transf_matrix.T, transf_matrix)
     assert_almost_equal(dot1, dot2, decimal=15)
@@ -335,26 +341,43 @@ def test_coord_transf_matrix_oblate_orthonal():
     assert_almost_equal(dot2, np.identity(3), decimal=15)
 
 
-def test__auxiliary_angles_known():
-    'Calculate the auxiliary angles with specific input'
-    alpha_ref = np.pi - np.arccos(2/np.sqrt(7))
-    gamma_ref = np.arctan(2*np.sqrt(1.5))
-    delta_ref = np.arcsin(np.sqrt(2)/4)
-    strike = 180
-    dip = 30
-    rake = 45
-    alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
-    assert_almost_equal(alpha_ref, alpha, decimal=15)
-    assert_almost_equal(gamma_ref, gamma, decimal=15)
-    assert_almost_equal(delta_ref, delta, decimal=15)
+def test_multi_dot_numpy_dot():
+    'Compare the multi_dot with the nested numpy.dot'
+    A = _R1(-87)
+    B = _R2(1)
+    C = _R3(24)
 
-    alpha_ref = -np.pi
-    gamma_ref = np.pi/2
-    delta_ref = 0
-    strike = 0
-    dip = 0
-    rake = 180
-    alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
-    assert_almost_equal(alpha_ref, alpha, decimal=15)
-    assert_almost_equal(gamma_ref, gamma, decimal=15)
-    assert_almost_equal(delta_ref, delta, decimal=15)
+    assert_almost_equal(_multi_dot([A, B, C]),
+                        np.dot(A, np.dot(B, C)), decimal=15)
+    assert_almost_equal(_multi_dot([A, B, C]),
+                        np.dot(np.dot(A, B), C), decimal=15)
+
+
+def test_multi_dot_bad_arguments():
+    'multi_dot fails for matrices with different sizes'
+    A = _R1(7)
+    B = _R2(-10)
+    C = _R3(3)
+
+    raises(AssertionError, _multi_dot, [A, B, C, np.identity(4)])
+    raises(AssertionError, _multi_dot, [A, B, np.identity(5), C])
+    raises(AssertionError, _multi_dot, [A, np.identity(6), B, C])
+
+
+def test_R1_R2_R3_orthonal():
+    'Rotation matrices must be orthogonal'
+    A = _R1(-19)
+    B = _R2(34.71)
+    C = _R3(28)
+
+    assert_almost_equal(np.dot(A, A.T), np.dot(A.T, A), decimal=15)
+    assert_almost_equal(np.dot(A, A.T), np.identity(3), decimal=15)
+    assert_almost_equal(np.dot(A.T, A), np.identity(3), decimal=15)
+
+    assert_almost_equal(np.dot(B, B.T), np.dot(B.T, B), decimal=15)
+    assert_almost_equal(np.dot(B, B.T), np.identity(3), decimal=15)
+    assert_almost_equal(np.dot(B.T, B), np.identity(3), decimal=15)
+
+    assert_almost_equal(np.dot(C, C.T), np.dot(C.T, C), decimal=15)
+    assert_almost_equal(np.dot(C, C.T), np.identity(3), decimal=15)
+    assert_almost_equal(np.dot(C.T, C), np.identity(3), decimal=15)

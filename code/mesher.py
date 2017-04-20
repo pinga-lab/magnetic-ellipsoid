@@ -124,15 +124,10 @@ strike:10 | dip:20 | rake:30 | density:20 | remanent magnetization:[10, 25, 40\
             self.intermediate_axis > self.small_axis, "large_axis must be grea\
 ter than intermediate_axis and intermediate_axis must greater than small_axis"
 
-        # Auxiliary orientation angles
-        alpha, gamma, delta = _auxiliary_angles(self.strike,
-                                                self.dip,
-                                                self.rake)
-
         # Coordinate transformation matrix
-        self.transf_matrix = _coord_transf_matrix_triaxial(alpha,
-                                                           gamma,
-                                                           delta)
+        self.transf_matrix = _coord_transf_matrix_triaxial(self.strike,
+                                                           self.dip,
+                                                           self.rake)
 
     def __str__(self):
         """
@@ -186,13 +181,14 @@ susceptibilities must be all positive'
 
             # Angles (in degrees) defining the eigenvector matrix
             # of the susceptibility tensor
-            strike = self.props['susceptibility angles'][0]
-            dip = self.props['susceptibility angles'][1]
-            rake = self.props['susceptibility angles'][2]
+            strike_suscep = self.props['susceptibility angles'][0]
+            dip_suscep = self.props['susceptibility angles'][1]
+            rake_suscep = self.props['susceptibility angles'][2]
 
             # Eigenvector matrix of the susceptibility tensor
-            alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
-            U = _coord_transf_matrix_triaxial(alpha, gamma, delta)
+            U = _coord_transf_matrix_triaxial(strike_suscep,
+                                              dip_suscep,
+                                              rake_suscep)
 
             suscep_tensor = numpy.dot(U, numpy.diag([k1, k2, k3]))
             suscep_tensor = numpy.dot(suscep_tensor, U.T)
@@ -284,15 +280,10 @@ ake:30 | density:2670
         assert self.large_axis > self.small_axis, "large_axis must be greater \
 than small_axis"
 
-        # Auxiliary orientation angles
-        alpha, gamma, delta = _auxiliary_angles(self.strike,
-                                                self.dip,
-                                                self.rake)
-
         # Coordinate transformation matrix
-        self.transf_matrix = _coord_transf_matrix_triaxial(alpha,
-                                                           gamma,
-                                                           delta)
+        self.transf_matrix = _coord_transf_matrix_triaxial(self.strike,
+                                                           self.dip,
+                                                           self.rake)
 
     def __str__(self):
         """
@@ -345,13 +336,14 @@ susceptibilities must be all positive'
 
             # Angles (in degrees) defining the eigenvector matrix
             # of the susceptibility tensor
-            strike = self.props['susceptibility angles'][0]
-            dip = self.props['susceptibility angles'][1]
-            rake = self.props['susceptibility angles'][2]
+            strike_suscep = self.props['susceptibility angles'][0]
+            dip_suscep = self.props['susceptibility angles'][1]
+            rake_suscep = self.props['susceptibility angles'][2]
 
             # Eigenvector matrix of the susceptibility tensor
-            alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
-            U = _coord_transf_matrix_triaxial(alpha, gamma, delta)
+            U = _coord_transf_matrix_triaxial(strike_suscep,
+                                              dip_suscep,
+                                              rake_suscep)
 
             suscep_tensor = numpy.dot(U, numpy.diag([k1, k2, k3]))
             suscep_tensor = numpy.dot(suscep_tensor, U.T)
@@ -444,15 +436,10 @@ ake:30 | density:2670
         assert self.large_axis > self.small_axis, "large_axis must be greater \
 than small_axis"
 
-        # Auxiliary orientation angles
-        alpha, gamma, delta = _auxiliary_angles(self.strike,
-                                                self.dip,
-                                                self.rake)
-
         # Coordinate transformation matrix
-        self.transf_matrix = _coord_transf_matrix_triaxial(alpha,
-                                                           gamma,
-                                                           delta)
+        self.transf_matrix = _coord_transf_matrix_oblate(self.strike,
+                                                         self.dip,
+                                                         self.rake)
 
     def __str__(self):
         """
@@ -505,13 +492,14 @@ susceptibilities must be all positive'
 
             # Angles (in degrees) defining the eigenvector matrix
             # of the susceptibility tensor
-            strike = self.props['susceptibility angles'][0]
-            dip = self.props['susceptibility angles'][1]
-            rake = self.props['susceptibility angles'][2]
+            strike_suscep = self.props['susceptibility angles'][0]
+            dip_suscep = self.props['susceptibility angles'][1]
+            rake_suscep = self.props['susceptibility angles'][2]
 
             # Eigenvector matrix of the susceptibility tensor
-            alpha, gamma, delta = _auxiliary_angles(strike, dip, rake)
-            U = _coord_transf_matrix_triaxial(alpha, gamma, delta)
+            U = _coord_transf_matrix_oblate(strike_suscep,
+                                            dip_suscep,
+                                            rake_suscep)
 
             suscep_tensor = numpy.dot(U, numpy.diag([k1, k2, k3]))
             suscep_tensor = numpy.dot(suscep_tensor, U.T)
@@ -522,132 +510,170 @@ susceptibilities must be all positive'
             return None
 
 
-def _auxiliary_angles(strike, dip, rake):
+def _coord_transf_matrix_triaxial(strike, dip, rake):
     '''
-    Calculate auxiliary angles alpha, gamma and delta (Clark et al., 1986)
-    as functions of geological angles strike, dip and rake
-    (Clark et al., 1986; Allmendinger et al., 2012), given in degrees.
-    This function implements the formulas presented by
-    Clark et al. (1986).
+    Calculate a coordinate transformation matrix for triaxial or prolate
+    ellipsoids as a function of given geological angles strike, dip and rake
+    (Allmendinger et al., 2012), given in degrees.
+
+    The matrix obtained by performing succesive rotations around the
+    axes forming the main-coordinate system.
 
     References:
 
-    Clark, D., Saul, S., and Emerson, D.: Magnetic and gravity anomalies
-    of a triaxial ellipsoid, Exploration Geophysics, 17, 189-200, 1986.
+    Allmendinger, R., Cardozo, N., and Fisher, D. M.: Structural geology
+    algorithms : vectors and tensors, Cambridge University Press, 2012.
 
-    Allmendinger, R., Cardozo, N., and Fisher, D. M.:
-    Structural geology algorithms : vectors and tensors,
-    Cambridge University Press, 2012.
     '''
 
-    strike_r = numpy.deg2rad(strike)
-    cos_dip = numpy.cos(numpy.deg2rad(dip))
-    sin_dip = numpy.sin(numpy.deg2rad(dip))
-    cos_rake = numpy.cos(numpy.deg2rad(rake))
-    sin_rake = numpy.sin(numpy.deg2rad(rake))
+    # Transform the angles strike, dip and rake from degrees to radians
+    strike_rad = numpy.deg2rad(strike)
+    dip_rad = numpy.deg2rad(dip)
+    rake_rad = numpy.deg2rad(rake)
 
-    aux = sin_dip*sin_rake
-    aux1 = cos_rake/numpy.sqrt(1 - aux*aux)
-    aux2 = sin_dip*cos_rake
+    halfpi = numpy.pi/2
 
-    if aux1 > 1.:
-        aux1 = 1.
-    if aux1 < -1.:
-        aux1 = -1.
+    A = _R1(halfpi)            # Rotation around x-axis
+    B = _R2(strike_rad)        # Rotation around y-axis
+    C = _R1(halfpi - dip_rad)  # Rotation around x-axis
+    D = _R3(rake_rad)          # Rotation around z-axis
 
-    alpha = strike_r - numpy.arccos(aux1)
-    if aux2 != 0:
-        gamma = numpy.arctan(cos_dip/aux2)
-    else:
-        if cos_dip > 0:
-            gamma = numpy.pi/2
-        if cos_dip < 0:
-            gamma = -numpy.pi/2
-        if cos_dip == 0:
-            gamma = 0
-    delta = numpy.arcsin(aux)
-
-    assert delta <= numpy.pi/2, 'delta must be lower than or equalt to 90 \
-degrees'
-
-    assert (gamma >= -numpy.pi/2) and (gamma <= numpy.pi/2), 'gamma must lie \
-between -90 and 90 degrees.'
-
-    return alpha, gamma, delta
-
-
-def _coord_transf_matrix_triaxial(alpha, gamma, delta):
-    '''
-    Calculate the coordinate transformation matrix
-    for triaxial or prolate ellipsoids by using the auxiliary angles
-    alpha, gamma and delta.
-
-    The columns of this matrix are defined according to the unit vectors
-    v1, v2 and v3 presented by Clark et al. (1986, p. 192).
-
-    References:
-
-    Clark, D., Saul, S., and Emerson, D.: Magnetic and gravity anomalies
-    of a triaxial ellipsoid, Exploration Geophysics, 17, 189-200, 1986.
-    '''
-
-    cos_alpha = numpy.cos(alpha)
-    sin_alpha = numpy.sin(alpha)
-
-    cos_gamma = numpy.cos(gamma)
-    sin_gamma = numpy.sin(gamma)
-
-    cos_delta = numpy.cos(delta)
-    sin_delta = numpy.sin(delta)
-
-    v1 = numpy.array([-cos_alpha*cos_delta, -sin_alpha*cos_delta,
-                      -sin_delta])
-
-    v2 = numpy.array([cos_alpha*cos_gamma*sin_delta +
-                      sin_alpha*sin_gamma, sin_alpha*cos_gamma*sin_delta -
-                      cos_alpha*sin_gamma, -cos_gamma*cos_delta])
-
-    v3 = numpy.array([sin_alpha*cos_gamma - cos_alpha*sin_gamma*sin_delta,
-                      -cos_alpha*cos_gamma -
-                      sin_alpha*sin_gamma*sin_delta,
-                      sin_gamma*cos_delta])
-
-    transf_matrix = numpy.vstack((v1, v2, v3)).T
+    # Resultant rotation for triaxial and prolate ellipsoids
+    transf_matrix = _multi_dot([A, B, C, D])
 
     return transf_matrix
 
 
-def _coord_transf_matrix_oblate(alpha, gamma, delta):
+def _coord_transf_matrix_oblate(strike, dip, rake):
     '''
-    Calculate the coordinate transformation matrix
-    for oblate ellipsoids by using the auxiliary angles
-    alpha, gamma and delta.
+    Calculate a coordinate transformation matrix for oblate
+    ellipsoids as a function of given geological angles strike, dip and rake
+    (Allmendinger et al., 2012), given in degrees.
 
-    The columns of this matrix are defined by unit vectors
-    v1, v2 and v3.
+    The matrix obtained by performing succesive rotations around the
+    axes forming the main-coordinate system.
+
+    References:
+
+    Allmendinger, R., Cardozo, N., and Fisher, D. M.: Structural geology
+    algorithms : vectors and tensors, Cambridge University Press, 2012.
+
     '''
 
-    cos_alpha = numpy.cos(alpha)
-    sin_alpha = numpy.sin(alpha)
+    # Transform the angles strike, dip and rake from degrees to radians
+    strike_rad = numpy.deg2rad(strike)
+    dip_rad = numpy.deg2rad(dip)
+    rake_rad = numpy.deg2rad(rake)
 
-    cos_gamma = numpy.cos(gamma)
-    sin_gamma = numpy.sin(gamma)
+    halfpi = numpy.pi/2
+    pi = numpy.pi
 
-    cos_delta = numpy.cos(delta)
-    sin_delta = numpy.sin(delta)
+    A = _R3(-halfpi)           # Rotation around z-axis
+    B = _R1(pi)                # Rotation around x-axis
+    C = _R3(strike_rad)        # Rotation around x-axis
+    D = _R2(halfpi - dip_rad)  # Rotation around z-axis
+    E = _R1(rake_rad)          # Rotation around x-axis
 
-    v1 = numpy.array([-cos_alpha*sin_gamma*sin_delta +
-                      sin_alpha*cos_gamma, -sin_alpha*sin_gamma*sin_delta -
-                      cos_alpha*cos_gamma, sin_gamma*cos_delta])
-
-    v2 = numpy.array([-cos_alpha*cos_delta, -sin_alpha*cos_delta,
-                      -sin_delta])
-
-    v3 = numpy.array([sin_alpha*sin_gamma + cos_alpha*cos_gamma*sin_delta,
-                      -cos_alpha*sin_gamma +
-                      sin_alpha*cos_gamma*sin_delta,
-                      -cos_gamma*cos_delta])
-
-    transf_matrix = numpy.vstack((v1, v2, v3)).T
+    # Resultant rotation for oblate ellipsoids
+    transf_matrix = _multi_dot([A, B, C, D, E])
 
     return transf_matrix
+
+
+def _multi_dot(matrices):
+    '''
+    Multiply an ordered list of matrices.
+
+    Parameters:
+
+    * matrices :  list of 2D numpy arrays
+        List of matrices to be multiplied. The multiplication
+        is performed by following the order of the elements of
+        matrices.
+
+    Returns:
+
+    * resultant_matrix : 2D numpy array
+        Resultant matrix obtained by multiplying the
+        elements of matrices.
+    '''
+
+    shape = matrices[0].shape
+    for mat in matrices[1:]:
+        assert mat.shape == shape, 'All matrices must have the same shape'
+
+    resultant_matrix = reduce(numpy.dot, matrices)
+
+    return resultant_matrix
+
+
+def _R1(angle):
+    '''
+    Orthogonal matrix performing a rotation around
+    the x-axis of a Cartesian coordinate system.
+
+    Parameters:
+    * angle : float
+        Rotation angle (in radians).
+
+    Returns:
+    * R : 2D numpy array
+        Rotation matrix.
+    '''
+
+    cos_angle = numpy.cos(angle)
+    sin_angle = numpy.sin(angle)
+
+    R = numpy.array([[1, 0, 0],
+                    [0, cos_angle, sin_angle],
+                    [0, -sin_angle, cos_angle]])
+
+    return R
+
+
+def _R2(angle):
+    '''
+    Orthogonal matrix performing a rotation around
+    the y-axis of a Cartesian coordinate system.
+
+    Parameters:
+    * angle : float
+        Rotation angle (in radians).
+
+    Returns:
+    * R : 2D numpy array
+        Rotation matrix.
+    '''
+
+    cos_angle = numpy.cos(angle)
+    sin_angle = numpy.sin(angle)
+
+    R = numpy.array([[cos_angle, 0, -sin_angle],
+                     [0, 1, 0],
+                     [sin_angle, 0, cos_angle]])
+
+    return R
+
+
+def _R3(angle):
+    '''
+    Orthogonal matrix performing a rotation around
+    the z-axis of a Cartesian coordinate system.
+
+    Parameters:
+    * angle : float
+        Rotation angle (in radians).
+
+    Returns:
+    * R : 2D numpy array
+        Rotation matrix.
+    '''
+
+    cos_angle = numpy.cos(angle)
+    sin_angle = numpy.sin(angle)
+
+    R = numpy.array([[cos_angle, sin_angle, 0],
+                     [-sin_angle, cos_angle, 0],
+                     [0, 0, 1]])
+
+    return R

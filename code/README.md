@@ -73,3 +73,9 @@
     Stoner (1945, Table I). The results presented by Stoner (1945, Table I) are in the file
     `Stoner1945_TableI.txt`, in the folder `data`.
 
+* [confocal_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/confocal_triaxial_ellipsoids.ipynb)
+
+    Notebook illustrating the total-field anomalies produced by two
+    confocal ellipsoids with the same magnetic moment.
+
+

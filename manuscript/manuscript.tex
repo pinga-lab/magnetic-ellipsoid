@@ -1,4 +1,4 @@
-%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
 %% ---------------------------------
 %% This template should be used for copernicus.cls
 %% The class file and some style files are bundled in the Copernicus Latex Package which can be downloaded from the different journal webpages.
@@ -1100,6 +1100,7 @@ represents the transformed magnetization, as can be easily
 verified by using Eqs. \ref{eq:M-KH} and \ref{eq:H-tilde}.
 The matrix identity used for obtaining the second line of Eq.
 \ref{eq:M-tilde} is given by \citet[p. ~151]{searle1982}.
+
 Equation \ref{eq:M-tilde} can be easily generalized for the case in
 which the ellipsoid has also a uniform remanent magnetization
 $\tilde{\mathbf{M}}_{R}$. Let us first consider that
@@ -1328,6 +1329,69 @@ as a good approximation of the true magnetization $\mathbf{M}$
 Equation \ref{eq:chi-max}, on the other hand, defines $\chi_{max}$
 as a function of the ellipsoid semi-axes, according to a
 user-specified relative error $\epsilon$.
+
+
+\subsubsection{Ambiguity between confocal ellipsoids with the same magnetic moment}
+
+
+There is a fundamental non-uniqueness of ellipsoidal bodies, analogous to the
+equivalence of concentric spheres with the same magnetic moment.
+To show this ambiguity, let us first
+consider an ellipsoid which is immersed in a uniform inducing
+field and has semi-axes $a$, $b$, and $c$, isotropic susceptibility $\chi$
+and no remanence.
+The magnetization of this ellipsoid, defined in the local coordinate system,
+can be obtained by using Eqs. \ref{eq:K-isotropic}, \ref{eq:H-tilde}, and \ref{eq:M-tilde}
+as follows:
+\begin{equation}
+\tilde{\mathbf{M}} = \chi \left( \mathbf{I} + \chi \, \tilde{\mathbf{N}}^{\dagger} 
+\right)^{-1} \tilde{\mathbf{H}}_{0} \: .
+\label{eq:M-tilde-K-isotropic}
+\end{equation}
+In this case, the magnetic moment $\tilde{\mathbf{P}}$, defined in the
+local coordinate system, is given by
+\begin{equation}
+\tilde{\mathbf{P}} = \vartheta \tilde{\mathbf{M}} \: ,
+\label{eq:P-tilde}
+\end{equation}
+where $\vartheta = \frac{4}{3}\pi a b c$ is the ellipsoid volume.
+From Eqs. \ref{eq:M-tilde-K-isotropic} and \ref{eq:P-tilde},
+we can easily show that, if the inducing field $\tilde{\mathbf{H}}_{0}$
+is parallel to a semi-axis $e_{i}$, where $i = 1, 2, 3$, $e_{1} = a$, $e_{2} = b$,
+$e_{3} = c$, only the $i$th component $P_{i}$ of the magnetic moment $\tilde{\mathbf{P}}$
+is non null and given by
+\begin{equation}
+P_{i} = \vartheta \frac{\chi \, H_{0}}{1 + \chi \, \tilde{n}^{\dagger}_{ii}} \: ,
+\label{eq:P-tilde-i}
+\end{equation}
+where $H_{0}$ is the intensity of the inducing field $\tilde{\mathbf{H}}_{0}$
+and the demagnetizing factor $\tilde{n}^{\dagger}_{ii}$ is defined
+by Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
+or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
+
+Now, consider a confocal ellipsoid with semi-axes $a^{\prime} = \sqrt{a^2+u}$,
+$b^{\prime} = \sqrt{b^2+u}$, and $c^{\prime} = \sqrt{c^2+u}$, where $u$ is a
+positive real number. From Eq. \ref{eq:P-tilde-i}, we can define the
+isotropic susceptibility $\chi^{\prime}$ that is necessary to this confocal
+ellipsoid produce the same magnetic moment $\tilde{\mathbf{P}}$ (Eq. \ref{eq:P-tilde})
+as follows:
+\begin{equation}
+\chi^{\prime} = \frac{P_{i}}{\vartheta^{\prime} \, H_{0} - \tilde{n}^{\dagger}_{ii} \, P_{i}} \: ,
+\label{eq:chi-prime}
+\end{equation}
+where $\vartheta^{\prime} = \frac{4}{3}\pi a^{\prime} b^{\prime} c^{\prime}$ and
+$\tilde{n}^{\dagger}_{ii}$ is the new demagnetizing factor computed for the
+confocal ellipsoid by using Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
+or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
+It can be shown that this confocal ellipsoid produce the same magnetic field
+as the ellipsoid with semi-axes $a$, $b$, and $c$.
+
+This ambiguity between confocal ellipsoids with the same magnetic moment
+has already been pointed out by Clark (2014) and is verified for the
+particular case in which the uniform inducing field is parallel
+to an ellipsoid axis.
+Otherwise, the magnetic field produced by the confocal ellipsoids
+will be different due to the shape anisotropy.
 
 
 \subsection{External magnetic field and total-field anomaly}

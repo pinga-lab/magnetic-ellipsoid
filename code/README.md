@@ -75,7 +75,5 @@
 
 * [confocal_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/confocal_triaxial_ellipsoids.ipynb)
 
-    Notebook illustrating the total-field anomalies produced by two
-    confocal ellipsoids with the same magnetic moment.
-
-
+    Notebook generating the results presented in the subsection 2.5.2 of the manuscript
+    about the ambiguity between confocal ellipsoids with the same magnetic moment.

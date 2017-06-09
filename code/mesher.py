@@ -198,6 +198,16 @@ susceptibilities must be all positive'
         else:
             return None
 
+    @property
+    def volume(self):
+        '''
+        Calculate the ellipsoid volume.
+        '''
+
+        cte = 4*numpy.pi/3 # constant
+        volume = cte*self.large_axis*self.intermediate_axis*self.small_axis
+        return volume
+
 
 class ProlateEllipsoid(GeometricElement):
     """
@@ -354,6 +364,17 @@ susceptibilities must be all positive'
             return None
 
 
+    @property
+    def volume(self):
+        '''
+        Calculate the ellipsoid volume.
+        '''
+
+        cte = 4*numpy.pi/3 # constant
+        volume = cte*self.large_axis*self.small_axis*self.small_axis
+        return volume
+
+
 class OblateEllipsoid(GeometricElement):
     """
     Create an arbitrarily-oriented oblate ellipsoid.
@@ -508,6 +529,17 @@ susceptibilities must be all positive'
 
         else:
             return None
+
+
+    @property
+    def volume(self):
+        '''
+        Calculate the ellipsoid volume.
+        '''
+
+        cte = 4*numpy.pi/3 # constant
+        volume = cte*self.large_axis*self.large_axis*self.small_axis
+        return volume
 
 
 def _coord_transf_matrix_triaxial(strike, dip, rake):

@@ -1,4 +1,4 @@
-%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
 %% ---------------------------------
 %% This template should be used for copernicus.cls
 %% The class file and some style files are bundled in the Copernicus Latex Package which can be downloaded from the different journal webpages.
@@ -117,7 +117,7 @@ modelling of uniformly magnetized ellipsoids since the second half of
 the nineteenth century. Ellipsoids have flexibility to represent a wide
 range of geometrical forms, are the only known bodies which can be
 uniformly magnetized in the presence of a uniform inducing field and
-are the only bodies for which the self-demagnetization can be treated
+are the only finite bodies for which the self-demagnetization can be treated
 analytically. This property makes ellipsoids particularly useful for
 modelling compact orebodies having high susceptibility. In this case,
 neglecting the self-demagnetization may strongly mislead the interpretation
@@ -132,7 +132,8 @@ ellipsoids. Here, we present an integrated review of the magnetic
 modelling of arbitrarily oriented triaxial, prolate and oblate
 ellipsoids. Our review includes ellipsoids with both induced and
 remanent magnetization, as well as with isotropic or anisotropic
-susceptibility. We also propose a
+susceptibility. We also discuss the ambiguity between confocal ellipsoids
+with the same magnetic moment and propose a
 way of determining the isotropic susceptibility above which the
 self-demagnetization must be taken into consideration. Tests with
 synthetic data validate our approach. Finally, we provide a set
@@ -244,9 +245,10 @@ are to be found the names of many researchers.
 Nevertheless, interest in this subject has not yet died
 out, as is evidenced by a list of modern papers in this
 field.
-Besides, the geoscientific community lacks an easy-to-use
+Besides, the geoscientific community lacks a free easy-to-use
 tool to simulate the magnetic field produced by uniformly
-magnetized ellipsoids.
+magnetized ellipsoids. Software packages that includes the 
+ellipsoid model exist, but all very expensive.
 Such a tool could prove to be useful either for teaching
 and researching geophysics.
 
@@ -689,7 +691,7 @@ ellipsoidal body.
 Let $\tilde{\mathbf{N}}^{\dagger}$ be the transformed
 depolarization tensor calculated for the case in which
 $\tilde{\mathbf{r}}$ (Eq. \ref{eq:coord_transformation})
-represents a point located outside
+represents a point located inside
 the ellipsoidal body. In this case,
 the elements of $\tilde{\mathbf{N}}^{\dagger}$
 are calculated according to Eq. \ref{eq:nij-tilde},
@@ -1099,6 +1101,7 @@ represents the transformed magnetization, as can be easily
 verified by using Eqs. \ref{eq:M-KH} and \ref{eq:H-tilde}.
 The matrix identity used for obtaining the second line of Eq.
 \ref{eq:M-tilde} is given by \citet[p. ~151]{searle1982}.
+
 Equation \ref{eq:M-tilde} can be easily generalized for the case in
 which the ellipsoid has also a uniform remanent magnetization
 $\tilde{\mathbf{M}}_{R}$. Let us first consider that
@@ -1329,6 +1332,69 @@ as a function of the ellipsoid semi-axes, according to a
 user-specified relative error $\epsilon$.
 
 
+\subsubsection{Ambiguity between confocal ellipsoids with the same magnetic moment}
+
+
+There is a fundamental non-uniqueness of ellipsoidal bodies, analogous to the
+equivalence of concentric spheres with the same magnetic moment.
+To show this ambiguity, let us first
+consider a reference ellipsoid which is immersed in a uniform inducing
+field and has semi-axes $a$, $b$, and $c$, isotropic susceptibility $\chi$
+and no remanence.
+The magnetization of this ellipsoid, defined in the local coordinate system,
+can be obtained by using Eqs. \ref{eq:K-isotropic}, \ref{eq:H-tilde}, and \ref{eq:M-tilde}
+as follows:
+\begin{equation}
+\tilde{\mathbf{M}} = \chi \left( \mathbf{I} + \chi \, \tilde{\mathbf{N}}^{\dagger} 
+\right)^{-1} \tilde{\mathbf{H}}_{0} \: .
+\label{eq:M-tilde-K-isotropic}
+\end{equation}
+In this case, the magnetic moment $\tilde{\mathbf{P}}$, defined in the
+local coordinate system, is given by
+\begin{equation}
+\tilde{\mathbf{P}} = \vartheta \tilde{\mathbf{M}} \: ,
+\label{eq:P-tilde}
+\end{equation}
+where $\vartheta = \frac{4}{3}\pi a b c$ is the ellipsoid volume.
+From Eqs. \ref{eq:M-tilde-K-isotropic} and \ref{eq:P-tilde},
+we can easily show that, if the inducing field $\tilde{\mathbf{H}}_{0}$
+is parallel to a semi-axis $e_{i}$, where $i = 1, 2, 3$, $e_{1} = a$, $e_{2} = b$,
+$e_{3} = c$, only the $i$th component $P_{i}$ of the magnetic moment $\tilde{\mathbf{P}}$
+is non null and given by
+\begin{equation}
+P_{i} = \vartheta \frac{\chi \, H_{0}}{1 + \chi \, \tilde{n}^{\dagger}_{ii}} \: ,
+\label{eq:P-tilde-i}
+\end{equation}
+where $H_{0}$ is the intensity of the inducing field $\tilde{\mathbf{H}}_{0}$
+and the demagnetizing factor $\tilde{n}^{\dagger}_{ii}$ is defined
+by Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
+or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
+
+Now, consider a confocal ellipsoid with semi-axes $a^{\prime} = \sqrt{a^2+u}$,
+$b^{\prime} = \sqrt{b^2+u}$, and $c^{\prime} = \sqrt{c^2+u}$, where $u$ is a
+positive real number. From Eq. \ref{eq:P-tilde-i}, we can define the
+isotropic susceptibility $\chi^{\prime}$ that is necessary to this confocal
+ellipsoid produce the same magnetic moment $\tilde{\mathbf{P}}$ (Eq. \ref{eq:P-tilde})
+as follows:
+\begin{equation}
+\chi^{\prime} = \frac{P_{i}}{\vartheta^{\prime} \, H_{0} - \tilde{n}^{\dagger}_{ii} \, P_{i}} \: ,
+\label{eq:chi-prime}
+\end{equation}
+where $\vartheta^{\prime} = \frac{4}{3}\pi a^{\prime} b^{\prime} c^{\prime}$ and
+$\tilde{n}^{\dagger}_{ii}$ is the new demagnetizing factor computed for the
+confocal ellipsoid by using Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
+or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
+It can be shown that this confocal ellipsoid produce the same magnetic field
+as the reference ellipsoid.
+
+This ambiguity between confocal ellipsoids with the same magnetic moment
+has already been pointed out by Clark (2014). It occurs for the
+particular case in which the uniform inducing field is parallel
+to an ellipsoid axis and there is no remanence.
+Otherwise, the magnetic field produced by the confocal ellipsoids
+will be different due to the shape anisotropy.
+
+
 \subsection{External magnetic field and total-field anomaly}
 
 
@@ -1425,9 +1491,9 @@ can be found at the folder \textit{code} of the online repository
 \subsection{Demagnetizing factors}
 
 
-We simulate a triaxial ellipsoid with semi-axes
+We simulated a triaxial ellipsoid with semi-axes
 $a_{0} = 1000$ \unit{m}, $b_{0} = 700$ \unit{m}, and $c_{0} = 200$ \unit{m}.
-Then we use this ellipsoid as a reference to generate
+Then we used this ellipsoid as a reference to generate
 100 different triaxial ellipsoids and calculate
 their demagnetizing factors $\tilde{n}^{\dagger}_{11}$,
 $\tilde{n}^{\dagger}_{22}$, and $\tilde{n}^{\dagger}_{33}$
@@ -1500,6 +1566,59 @@ respectively,
 are close to $1/3$ for $m$ close to $0$ and satisfy the condition
 $\tilde{n}^{\dagger}_{11} > \tilde{n}^{\dagger}_{22}$ for all values
 of $m$.
+
+
+\subsection{Confocal ellipsoids}
+
+
+We simulated two confocal ellipsoids by using the parameters
+shown in Tab. \ref{tab:parameters-confocal-ellipsoids}.
+The semi-axes of the Ellipsoid 2 were defined as $\sqrt{a^{2} + u}$,
+$\sqrt{b^{2} + u}$, and $\sqrt{c^{2} + u}$, where $a$, $b$, and $c$
+are the semi-axes of the Ellipsoid 1 and $u = 2 \times 10^{6}$ \unit{m}.
+
+We have computed the total-field anomalies produced by the Ellipsoid 1
+and Ellipsoid 2 at the same regular grid of $200 \times 200$ points
+located on a horizontal plane at $z = 0$ \unit{m} by using two different
+inducing fields $\mathbf{H}_{0}$.
+
+In the first case, we used an uniform inducing field $\mathbf{H}_{0}$ which is
+parallel to the semi-axis $a$ of the confocal ellipsoids and
+has inclination $\approx -4.98^{\circ}$, declination $\approx 15.38^{\circ}$,
+and intensity $H_{0} \approx 18.7$ \unit{A \, m^{-1}}.
+The total-field anomaly produced by the Ellipsoid 1 by using this
+inducing field is shown in Fig. \ref{fig:tfa-confocal-ellipsoids-H0-parallel}.
+In this case, the Ellipsoid 2 produces the same total-field
+anomaly as the Ellipsoid 1.
+The isotropic susceptibility of the Ellipsoid 2 was calculated with
+Eq. \ref{eq:chi-prime} and, consequently, its magnetic moment is equal
+to that of the Ellipsoid 1.
+Notice that the volume of the Ellipsoid 2 is approximately $79$ times greater
+than that of the Ellipsoid 1, whereas the isotropic susceptibility
+of the Ellipsoid 1 is approximately $85$ times greater than that
+of the Ellipsoid 2.
+This result illustrates the ambiguity between the field produced
+by confocal ellipsoids with the same magnetic moment.
+
+The second inducing field $\mathbf{H}_{0}$ used is oblique to
+the semi-axes of the confocal ellipsoids, has the same
+intensity as the other one, but a different direction.
+In this case, the inclination and declination of $\mathbf{H}_{0}$
+are, respectively, $-30^{\circ}$ and $60^{\circ}$.
+Figures \ref{fig:tfa-confocal-ellipsoids-H0-oblique}a and
+\ref{fig:tfa-confocal-ellipsoids-H0-oblique}b show the total-field anomalies
+produced, respectively, by the Ellipsoid 1 and Ellipsoid 2
+by using this new inducing field $\mathbf{H}_{0}$.
+Notice that by using this oblique inducing field, 
+the total-field anomalies produced by the confocal ellipsoids
+are different to each other due to the shape anisotropy.
+The differences are show in Fig. \ref{fig:tfa-confocal-ellipsoids-H0-oblique}c.
+These results confirm numerically what was pointed out by
+\cite{clark2014}: confocal ellipsoids with
+properly scaled isotropic susceptibilities, no remanence and
+the same magnetic moment produce different magnetic fields at the
+same external points, unless the inducing field happens to lie along one
+of their axes.
 
 
 \subsection{Simulation of a geological body}
@@ -1603,7 +1722,9 @@ magnetic modelling and validates Eq. \ref{eq:chi-max}.
 We present an integrated review of the vast literature
 about the magnetic modelling of triaxial, prolate and
 oblate ellipsoids.
-We also present a theoretical discussion about the
+We also present a numerical simulation confirming the
+ambiguity between confocal ellipsoids with the same magnetic moment
+and present a theoretical discussion about the
 determination of the isotropic susceptibility value above which
 the self-demagnetization must be taken into consideration.
 We propose an alternative way of determining this value
@@ -1615,20 +1736,20 @@ has been used by the geoscientific community.
 Our alternative approach is validated
 by the results obtained with numerical simulations.
 In a future work,
-it would be interesting to use a similar approach to
-to bound the maximum relative error in the
+it would be interesting to use a similar approach
+to determine bounds for the maximum relative error in the
 magnetic field calculated by neglecting the self-demagnetization.
 
-This work also provide a set of routines to model the magnetic
+This work also provides a set of routines to model the magnetic
 field produced by ellipsoids.
-The routines are written in Python language as part of
-the Fatiando a Terra \citep{uieda2013}, which is an
+The routines are written in the Python language as part of
+the Fatiando a Terra \citep{uieda2013}
 open-source library for modelling and inversion in geophysics.
 The current version of our code is freely distributed
-in a repository of GitHub. We are working to integrate our
-routines in the following stable release of Fatiando a Terra.
-We hope that these routines be useful to the wide geoscientific
-community either in researching and teaching.
+in a repository hosted on the GitHub website. We are working to integrate our
+routines in the next stable release of Fatiando a Terra.
+We hope that these routines will be useful to the wide geoscientific
+community, either for research or for teaching.
 
 
 \section{Code availability}
@@ -1659,14 +1780,14 @@ to the local coordinate system (Fig. \ref{fig:orientation-angles}b).
 For convenience, let us rewrite Eq.
 \ref{eq:coord_transformation} as follows:
 \begin{equation}
-\tilde{r}_{k} = v_{k1} \, r_{1} + v_{k2} \, r_{2} + v_{k3} \, r_{3} + c_{k} \: ,
+\tilde{r}_{k} = v_{1k} \, r_{1} + v_{2k} \, r_{2} + v_{3k} \, r_{3} + c_{k} \: ,
 \label{eq:r-tilde-k}
 \end{equation}
 where $\tilde{r}_{k}$, $k = 1, 2, 3$, are the elements of the transformed
 position vector $\tilde{\mathbf{r}}$ (Eq. \ref{eq:coord_transformation}),
 $r_{j}$, $j = 1, 2, 3$, are the elements of the position vector
 $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}),
-$v_{kj}$, $j = 1, 2, 3$, are the elements of the matrix
+$v_{jk}$, $j = 1, 2, 3$, are the elements of the matrix
 $\mathbf{V}$ (Eq. \ref{eq:A}),
 and $c_{k}$ is a constant defined by the coordinates
 $x_{c}$, $y_{c}$, and $z_{c}$ of the centre of the ellipsoidal body.
@@ -2171,8 +2292,37 @@ The horizontal black line represent the value $1/3$.}
 
 %f
 \begin{figure}[t]
+\includegraphics[width=8.3cm]{figures/confocal_ellipsoids_parallel_field.pdf}
+\caption{Total-field anomaly (in \unit{nT}) produced by the 
+synthetic bodies Ellipsoid 1 and Ellispoid 2, both
+defined in Tab. \ref{tab:parameters-confocal-ellipsoids}.
+The synthetic data produced by these confocal ellipsoids
+were calculated on a regular grid of $200 \times 200$ points
+at the constant vertical coordinate $z = 0$ \unit{m}.
+These data were calculated with an uniform inducing field
+parallel to the semi-axis $a$ of the confocal ellipsoids.}
+\label{fig:tfa-confocal-ellipsoids-H0-parallel}
+\end{figure}
+
+%f
+\begin{figure}[t]
+\includegraphics[width=8.3cm]{figures/confocal_ellipsoids_oblique_field.pdf}
+\caption{Total-field anomalies (in \unit{nT}) produced by the (a) Ellipsoid 1
+and (b) Ellipsoid 2, both defined in Tab. \ref{tab:parameters-confocal-ellipsoids}.
+The synthetic data produced by these confocal ellipsoids
+were calculated on a regular grid of $200 \times 200$ points
+at the constant vertical coordinate $z = 0$ \unit{m}.
+These data were calculated with an uniform inducing field
+which is oblique to the semi-axes of the confocal ellipsoids.
+(c) Difference between the total-field anomalies shown in
+b and a.}
+\label{fig:tfa-confocal-ellipsoids-H0-oblique}
+\end{figure}
+
+%f
+\begin{figure}[t]
 \includegraphics[width=8.3cm]{figures/total-field_anomaly.pdf}
-\caption{Total-field anomaly produced by the synthetic orebody
+\caption{Total-field anomaly (in \unit{nT}) produced by the synthetic orebody
 defined in Tab. \ref{tab:parameters-warrego}. The synthetic data
 are calculated on a regular grid of $100 \times 100$ points
 at the constant vertical coordinate $z = 0$ \unit{m}.}
@@ -2187,7 +2337,8 @@ anomaly calculated with the approximated magnetization $\breve{\mathbf{M}}$
 (Eq. \ref{eq:M-approx}) and with the
 true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
-The total-field anomalies are calculated with Eq. \ref{eq:delta-T-approx},
+The total-field anomalies are in \unit{nT} and were
+calculated with Eq. \ref{eq:delta-T-approx},
 on a regular grid of $100 \times 100$ points,
 at the constant vertical coordinate $z = 0$ \unit{m}.
 The differences are produced by the synthetic orebody defined in
@@ -2233,6 +2384,30 @@ with Eq. \ref{eq:chi-max}, by using $\epsilon = 8 \%$.}
 %
 
 \newpage
+
+%t
+\begin{table}[t]
+\caption{Parameters defining two confocal ellipsoids.}
+%\begin{tabular}{column = lcr}
+\begin{tabular}{lccr}
+\tophline
+Parameter & Ellipsoid 1 & Ellipsoid 2 & Unit \\
+\middlehline
+Semi-axis $a$ & $900$ & $\approx 1676.31$ & \unit{m} \\
+Semi-axis $b$ & $500$ & $1500$ & \unit{m} \\
+Semi-axis $c$ & $100$ & $\approx 1417.74$ & \unit{m} \\
+Coordinate of the centre $x_{c}$ & 0 & 0 & \unit{m} \\
+Coordinate of the centre $y_{c}$ & 0 & 0 & \unit{m} \\
+Coordinate of the centre $z_{c}$ & 1500 & 1500 & \unit{m} \\
+Orientation angle $\varepsilon$ $^{\ast}$ & $45$ & $45$ & $^{\circ}$ \\
+Orientation angle $\zeta$ $^{\ast}$ & $10$ & $10$ & $^{\circ}$ \\
+Orientation angle $\eta$ $^{\ast}$ & $-30$ & $-30$ & $^{\circ}$ \\
+Isotropic susceptibility $\chi$ & $1.2$ & $\approx 0.014$ & \unit{SI} \\
+\bottomhline
+\end{tabular}
+\belowtable{$^{\ast}$ Defined in Fig. \ref{fig:orientation-angles}a} % Table Footnotes
+\label{tab:parameters-confocal-ellipsoids}
+\end{table}
 
 %t
 \begin{table}[t]

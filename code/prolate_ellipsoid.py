@@ -505,15 +505,19 @@ def x1x2x3(xp, yp, zp, ellipsoid):
     assert xp.size == yp.size == zp.size, \
         'xp, yp and zp must have the same size'
 
-    x1 = ellipsoid.transf_matrix[0, 0]*(xp - ellipsoid.x) + \
-        ellipsoid.transf_matrix[1, 0]*(yp - ellipsoid.y) + \
-        ellipsoid.transf_matrix[2, 0]*(zp - ellipsoid.z)
-    x2 = ellipsoid.transf_matrix[0, 1]*(xp - ellipsoid.x) + \
-        ellipsoid.transf_matrix[1, 1]*(yp - ellipsoid.y) + \
-        ellipsoid.transf_matrix[2, 1]*(zp - ellipsoid.z)
-    x3 = ellipsoid.transf_matrix[0, 2]*(xp - ellipsoid.x) + \
-        ellipsoid.transf_matrix[1, 2]*(yp - ellipsoid.y) + \
-        ellipsoid.transf_matrix[2, 2]*(zp - ellipsoid.z)
+    dx = xp - ellipsoid.x
+    dy = yp - ellipsoid.y
+    dz = zp - ellipsoid.z
+
+    x1 = ellipsoid.transf_matrix[0, 0]*dx + \
+        ellipsoid.transf_matrix[1, 0]*dy + \
+        ellipsoid.transf_matrix[2, 0]*dz
+    x2 = ellipsoid.transf_matrix[0, 1]*dx + \
+        ellipsoid.transf_matrix[1, 1]*dy + \
+        ellipsoid.transf_matrix[2, 1]*dz
+    x3 = ellipsoid.transf_matrix[0, 2]*dx + \
+        ellipsoid.transf_matrix[1, 2]*dy + \
+        ellipsoid.transf_matrix[2, 2]*dz
 
     return x1, x2, x3
 

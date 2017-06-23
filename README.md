@@ -17,7 +17,7 @@ modelling of uniformly magnetized ellipsoids since the second half of
 the nineteenth century. Ellipsoids have flexibility to represent a wide
 range of geometrical forms, are the only known bodies which can be
 uniformly magnetized in the presence of a uniform inducing field and
-are the only bodies for which the self-demagnetization can be treated
+are the only finite bodies for which the self-demagnetization can be treated
 analytically. This property makes ellipsoids particularly useful for
 modelling compact orebodies having high susceptibility. In this case,
 neglecting the self-demagnetization may strongly mislead the interpretation
@@ -32,7 +32,8 @@ ellipsoids. Here, we present an integrated review of the magnetic
 modelling of arbitrarily oriented triaxial, prolate and oblate
 ellipsoids. Our review includes ellipsoids with both induced and
 remanent magnetization, as well as with isotropic or anisotropic
-susceptibility. We also propose a
+susceptibility. We also discuss the ambiguity between confocal ellipsoids
+with the same magnetic moment and propose a
 way of determining the isotropic susceptibility above which the
 self-demagnetization must be taken into consideration. Tests with
 synthetic data validate our approach. Finally, we provide a set
@@ -40,6 +41,18 @@ of routines to model the magnetic field produced
 by ellipsoids. The routines are written in Python language as
 part of the [Fatiando a Terra](http://www.fatiando.org/index.html),
 which is an open-source library for modelling and inversion in geophysics.
+
+![](manuscript/figures/ellipsoids_tfa.png)
+
+**Figure 1:** *Total-field anomaly produced by two triaxial ellipsoids.
+Red lines indicate high values and blue lines indicate low values.*
+
+
+![](manuscript/figures/confocal_ellipsoids.png)
+
+**Figure 2:** *Total-field anomalies produced by two confocal triaxial ellipsoids.
+The solid red lines represent the total-field anomaly produced by the red ellipsoid.
+The dashed blue lines represent the total-field anomaly produced by the blue ellipsoid.*
 
 
 ## Reproducing the results

@@ -282,3 +282,58 @@ def test_prolate_ellipsoid_isotropic_susceptibility():
     strike, dip, rake = model[0].props['susceptibility angles']
     suscep = model[0].susceptibility_tensor
     assert np.allclose(suscep, k1*np.identity(3))
+
+
+def test_confocal_prolate_ellipsoids():
+    "Confocal bodies with properly scaled suscep produce the same field"
+    # Reference ellipsoid
+    a, b, = 1000., 400.  # semi-axes
+    chi = 1.2  # reference susceptibility
+    ellipsoid = ProlateEllipsoid(0., 0., 1500., a, b, 45., 10., -30.,
+                                 {'principal susceptibilities': [chi,
+                                                                 chi,
+                                                                 chi],
+                                  'susceptibility angles': [0., 0., 0.]})
+    # Intensity of the local-geomagnetic field (in nT)
+    B0 = 23500.
+    # Direction parallel to the semi-axis a
+    _, inc, dec = utils.vec2ang(ellipsoid.transf_matrix.T[0])
+    # Magnetic moment of the reference ellipsoid
+    volume = ellipsoid.volume
+    mag = prolate_ellipsoid.magnetization(ellipsoid, B0,
+                                          inc, dec, demag=True)
+    moment = volume*mag
+    # Confocal ellipsoid
+    u = 2.0e6
+    a_confocal = np.sqrt(a*a + u)
+    b_confocal = np.sqrt(b*b + u)
+    xc = ellipsoid.x
+    yc = ellipsoid.y
+    zc = ellipsoid.z
+    strike = ellipsoid.strike
+    dip = ellipsoid.dip
+    rake = ellipsoid.rake
+    confocal_ellipsoid = ProlateEllipsoid(xc, yc, zc,
+                                          a_confocal, b_confocal,
+                                          strike, dip, rake,
+                                          {'susceptibility angles':
+                                           [0., 0., 0.]})
+    n11, n22 = prolate_ellipsoid.demag_factors(confocal_ellipsoid)
+    H0 = B0/(4*np.pi*100)
+    volume_confocal = confocal_ellipsoid.volume
+    # Equivalent susceptibility
+    moment_norm = np.sqrt(np.sum(moment*moment))
+    chi_confocal = moment_norm/(volume_confocal*H0 - n11*moment_norm)
+    confocal_ellipsoid.addprop('principal susceptibilities',
+                               [chi_confocal, chi_confocal, chi_confocal])
+    # Magnetic moment of the confocal ellipsoid
+    mag_confocal = prolate_ellipsoid.magnetization(confocal_ellipsoid, B0,
+                                                   inc, dec, demag=True)
+    moment_confocal = volume_confocal*mag_confocal
+    # Total-field anomalies
+    tf = prolate_ellipsoid.tf(x, y, z, [ellipsoid], B0, inc, dec)
+    tf_confocal = prolate_ellipsoid.tf(x, y, z, [confocal_ellipsoid],
+                                       B0, inc, dec)
+    # Comparison between the moments and total-field anomalies
+    assert_almost_equal(moment, moment_confocal, decimal=5)
+    assert_almost_equal(tf, tf_confocal, decimal=12)

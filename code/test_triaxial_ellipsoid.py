@@ -15,7 +15,7 @@ dec = 57
 
 gm = 1000  # geometrical factor
 area = [-5.*gm, 5.*gm, -5.*gm, 5.*gm]
-x, y, z = gridder.scatter(area, 300, z=0.)
+x, y, z = gridder.scatter(area, n=300, z=0.)
 axis_ref = gm  # reference semi-axis
 
 # Triaxial ellipsoids used for testing
@@ -286,4 +286,60 @@ def test_triaxial_ellipsoid_isotropic_susceptibility():
     k1, k2, k3 = model[0].props['principal susceptibilities']
     strike, dip, rake = model[0].props['susceptibility angles']
     suscep = model[0].susceptibility_tensor
-    assert np.allclose(suscep, k1*np.identity(3))
+    assert_almost_equal(suscep, k1*np.identity(3), decimal=15)
+
+
+def test_confocal_triaxial_ellipsoids():
+    "Confocal bodies with properly scaled suscep produce the same field"
+    # Reference ellipsoid
+    a, b, c = 900., 500., 100.  # semi-axes
+    chi = 1.2  # reference susceptibility
+    ellipsoid = TriaxialEllipsoid(0., 0., 1500., a, b, c, 45., 10., -30.,
+                                  {'principal susceptibilities': [chi,
+                                                                  chi,
+                                                                  chi],
+                                   'susceptibility angles': [0., 0., 0.]})
+    # Intensity of the local-geomagnetic field (in nT)
+    B0 = 23500.
+    # Direction parallel to the semi-axis a
+    _, inc, dec = utils.vec2ang(ellipsoid.transf_matrix.T[0])
+    # Magnetic moment of the reference ellipsoid
+    volume = ellipsoid.volume
+    mag = triaxial_ellipsoid.magnetization(ellipsoid, B0,
+                                           inc, dec, demag=True)
+    moment = volume*mag
+    # Confocal ellipsoid
+    u = 2.0e6
+    a_confocal = np.sqrt(a*a + u)
+    b_confocal = np.sqrt(b*b + u)
+    c_confocal = np.sqrt(c*c + u)
+    xc = ellipsoid.x
+    yc = ellipsoid.y
+    zc = ellipsoid.z
+    strike = ellipsoid.strike
+    dip = ellipsoid.dip
+    rake = ellipsoid.rake
+    confocal_ellipsoid = TriaxialEllipsoid(xc, yc, zc,
+                                           a_confocal, b_confocal, c_confocal,
+                                           strike, dip, rake,
+                                           {'susceptibility angles':
+                                            [0., 0., 0.]})
+    n11, n22, n33 = triaxial_ellipsoid.demag_factors(confocal_ellipsoid)
+    H0 = B0/(4*np.pi*100)
+    volume_confocal = confocal_ellipsoid.volume
+    # Equivalent susceptibility
+    moment_norm = np.sqrt(np.sum(moment*moment))
+    chi_confocal = moment_norm/(volume_confocal*H0 - n11*moment_norm)
+    confocal_ellipsoid.addprop('principal susceptibilities',
+                               [chi_confocal, chi_confocal, chi_confocal])
+    # Magnetic moment of the confocal ellipsoid
+    mag_confocal = triaxial_ellipsoid.magnetization(confocal_ellipsoid, B0,
+                                                    inc, dec, demag=True)
+    moment_confocal = volume_confocal*mag_confocal
+    # Total-field anomalies
+    tf = triaxial_ellipsoid.tf(x, y, z, [ellipsoid], B0, inc, dec)
+    tf_confocal = triaxial_ellipsoid.tf(x, y, z, [confocal_ellipsoid],
+                                        B0, inc, dec)
+    # Comparison between the moments and total-field anomalies
+    assert_almost_equal(moment, moment_confocal, decimal=5)
+    assert_almost_equal(tf, tf_confocal, decimal=12)

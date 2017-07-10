@@ -139,6 +139,13 @@ To execute the whole notebook, run all cells in order or use "Cell -> Run All"
 from the menu bar.
 
 
+### Archived version at [Zenodo](https://zenodo.org/)
+
+You can also find an archived version of the code at:
+
+[![DOI](https://zenodo.org/badge/82968960.svg)](https://zenodo.org/badge/latestdoi/82968960)
+
+
 ## License
 
 All source code is made available under a BSD 3-clause license.  You can freely

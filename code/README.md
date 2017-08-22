@@ -41,9 +41,14 @@
     Notebook generating the results presented in the subsection 4.1 of the manuscript about
     the demagnetizing factors of triaxial, prolate and oblate ellipsoids.
 
+* [confocal_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/confocal_triaxial_ellipsoids.ipynb)
+
+    Notebook generating the results presented in the subsection 4.2 of the manuscript
+    about the ambiguity between confocal ellipsoids with the same magnetic moment.
+
 * [warrego.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/warrego.ipynb)
 
-    Notebook generating the results presented in the subsection 4.2 of the manuscript about
+    Notebook generating the results presented in the subsection 4.3 of the manuscript about
     effect of neglecting the self-demagnetization in the magnetic modelling.
 
 * [lambda_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/lambda_triaxial_ellipsoids.ipynb),
@@ -72,8 +77,3 @@
     Notebook comparing the demagnetizing factors calculated with our routines (Eqs. 34 and 36) and those presented by
     Stoner (1945, Table I). The results presented by Stoner (1945, Table I) are in the file
     `Stoner1945_TableI.txt`, in the folder `data`.
-
-* [confocal_triaxial_ellipsoids.ipynb](http://nbviewer.jupyter.org/github/pinga-lab/magnetic-ellipsoid/blob/master/code/confocal_triaxial_ellipsoids.ipynb)
-
-    Notebook generating the results presented in the subsection 2.5.2 of the manuscript
-    about the ambiguity between confocal ellipsoids with the same magnetic moment.

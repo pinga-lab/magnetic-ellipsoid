@@ -42,13 +42,13 @@ by ellipsoids. The routines are written in Python language as
 part of the [Fatiando a Terra](http://www.fatiando.org/index.html),
 which is an open-source library for modelling and inversion in geophysics.
 
-![](manuscript/figures/ellipsoids_tfa.png)
+![](manuscript/figures/f07.png)
 
 **Figure 1:** *Total-field anomaly produced by two triaxial ellipsoids.
 Red lines indicate high values and blue lines indicate low values.*
 
 
-![](manuscript/figures/confocal_ellipsoids.png)
+![](manuscript/figures/f08.png)
 
 **Figure 2:** *Total-field anomalies produced by two confocal triaxial ellipsoids.
 The solid red lines represent the total-field anomaly produced by the red ellipsoid.

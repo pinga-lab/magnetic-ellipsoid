@@ -143,7 +143,7 @@ from the menu bar.
 
 You can also find an archived version of the code at:
 
-[![DOI](https://zenodo.org/badge/82968960.svg)](https://zenodo.org/badge/latestdoi/82968960)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.996479.svg)](https://doi.org/10.5281/zenodo.996479)
 
 
 ## License

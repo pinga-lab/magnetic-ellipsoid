@@ -71,12 +71,12 @@
 
 \begin{document}
 
-\title{Ellipsoids (v1.0): 3D Magnetic modelling of ellipsoidal bodies}
+\title{Ellipsoids (v1.0): 3D magnetic modelling of ellipsoidal bodies}
 
 
 % \Author[affil]{given_name}{surname}
 
-\Author[1]{Diego}{Takahashi Tomazella}
+\Author[1]{Diego}{Takahashi}
 \Author[1]{Vanderlei}{C. Oliveira Jr.}
 
 \affil[1]{Department of Geophysics, Observat\'{o}rio Nacional, Rio de Janeiro, Brazil}
@@ -88,7 +88,7 @@
 
 \runningtitle{Magnetic modelling of ellipsoids}
 
-\runningauthor{Tomazella and Oliveira Jr.}
+\runningauthor{D. Takahashi and V. C. Oliveira Jr.}
 
 \correspondence{Vanderlei C. Oliveira Jr. (vandscoelho@gmail.com)}
 
@@ -126,7 +126,7 @@ consider that the self-demagnetization can be neglected for the case in
 which the geological body has an isotropic susceptibility lower than or
 equal to 0.1 SI. This limiting value, however, seems to be determined
 empirically and there has been no discussion about how this value was
-determined. Besides, the geoscientific community lacks an easy-to-use
+determined. In addition, the geoscientific community lacks an easy-to-use
 tool to simulate the magnetic field produced by uniformly magnetized
 ellipsoids. Here, we present an integrated review of the magnetic
 modelling of arbitrarily oriented triaxial, prolate and oblate
@@ -181,21 +181,21 @@ property and hence can be uniformly magnetized
 in the presence of a uniform inducing magnetic field.
 This property can be extended to other bodies
 defined as limiting cases of an ellipsoid
-(e.g., spheres, elliptic cylinders), however all the
+(e.g. spheres, elliptic cylinders). However all the
 remaining non-ellipsoidal bodies cannot be
 uniformly magnetized in the presence of a uniform
 inducing field.
 
 Another particularity of ellipsoids is that they are
 the only bodies which enable an analytical computation
-of its self-demagnetization.
-The self-demagnetization contributes to decrease the
+of their self-demagnetization.
+The self-demagnetization contributes to a decrease in the
 magnitude of the magnetization along the shortest
 axes of a body.
-It is a function of the body shape and gives rise
+This a function of the body shape and gives rise
 to shape anisotropy \citep{uyeda1963, thompson1986,
 dunlop1997, clark1999, tauxe2003}.
-It is well-established in the literature that
+It is well established in the literature that
 the self-demagnetization can be neglected if the
 body has a susceptibility lower than 0.1 \unit{SI}
 \citep{emerson1985, clark1986, eskola1980, guo1998,
@@ -213,7 +213,7 @@ ellipsoidal model in taking into account the
 self-demagnetization and determining reliable
 drilling directions on the Tennant Creek field,
 Australia.
-Posteriorly, \citet{hoschke1991} also showed how the
+Later, \citet{hoschke1991} also showed how the
 ellipsoidal model proved to be highly successful in
 locating and defining ironstone bodies in the
 Tennant Creek field.
@@ -223,7 +223,7 @@ interpretation of the Osborne copper-gold deposit,
 Australia. This deposit is hosted by ironstone
 bodies that have very high susceptibility.
 According to \citet{clark2000}, neglecting the effects
-of self-demagnetisation led errors of $\approx 55^{\circ}$
+of self-demagnetisation led to errors of $\approx 55^{\circ}$
 in the interpreted dip.
 Recently, \citet{austin2014} used magnetic modelling
 and rock property measurements to show that,
@@ -245,10 +245,10 @@ are to be found the names of many researchers.
 Nevertheless, interest in this subject has not yet died
 out, as is evidenced by a list of modern papers in this
 field.
-Besides, the geoscientific community lacks a free easy-to-use
+Furthermore, the geoscientific community lacks a free easy-to-use
 tool to simulate the magnetic field produced by uniformly
 magnetized ellipsoids.
-Such a tool could prove to be useful either for teaching
+Such a tool could prove useful both for teaching
 and researching geophysics.
 
 In this work, we present a review of the vast literature
@@ -267,7 +267,7 @@ The routines are written in Python language as part of
 the Fatiando a Terra \citep{uieda2013}, which is an
 open-source library for modelling and inversion in geophysics.
 We attempt to use the best practices of continuous
-integration, documentation, unit-testing, and version-control
+integration, documentation, unit-testing and version-control
 for the purpose of providing a reliable and easy-to-use
 code.
 
@@ -279,15 +279,15 @@ code.
 
 
 Let $(x, y, z)$ be a point referred to a Cartesian coordinate system with axes
-$x$, $y$ and $z$ pointing to, respectively, North, East and down.
-For convenience, we denominate this coordinate system as
+$x$, $y$ and $z$ pointing to, respectively, north, east and down.
+For convenience, we denominate this coordinate system as the
 \textit{main coordinate system} (Fig. \ref{fig:orientation-angles}a).
 Let us consider an ellipsoidal body with centre at the point
 $(x_{c}, y_{c}, z_{c})$, orientation defined by the angles
-\textit{strike} $\varepsilon$, \textit{dip} $\zeta$, and \textit{rake} $\eta$
+\textit{strike} $\varepsilon$, \textit{dip} $\zeta$ and \textit{rake} $\eta$
 (Fig. \ref{fig:orientation-angles}a), and semi-axes defined by
 positive constants $a$, $b$, $c$ (Fig. \ref{fig:orientation-angles}b).
-The orientation angles \textit{strike}, \textit{dip}, and \textit{rake}
+The orientation angles \textit{strike}, \textit{dip} and \textit{rake}
 are commonly used to define the orientation of lines in structural geology
 \citep{pollard2005, allmendinger2012}.
 The points $(x, y, z)$ located on the surface of this ellipsoidal body
@@ -309,7 +309,7 @@ a^{-2} & 0 & 0 \\
 \label{eq:A}
 \end{equation}
 and $\mathbf{V}$ is an orthogonal matrix whose first, second and third columns
-are defined by unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$, and $\mathbf{v}_{3}$
+are defined by unit vectors $\mathbf{v}_{1}$, $\mathbf{v}_{2}$ and $\mathbf{v}_{3}$
 (Fig. \ref{fig:orientation-angles}b), respectively.
 The matrix $\mathbf{V}$ can be defined in terms of three rotation matrices:
 \begin{equation}
@@ -337,8 +337,8 @@ and
 \end{array} \right] \: .
 \label{eq:R3}
 \end{equation}
-For triaxial ellipsoids (i.e., $a > b > c$) and prolate ellipsoids
-(i.e., $a > b = c$), we define the orthogonal matrix $\mathbf{V}$
+For triaxial ellipsoids (i.e. $a > b > c$) and prolate ellipsoids
+(i.e. $a > b = c$), we define the orthogonal matrix $\mathbf{V}$
 as follows:
 \begin{equation}
 \mathbf{V} =
@@ -348,7 +348,7 @@ as follows:
 \mathbf{R}_{3} \left( \eta \right) \: .
 \label{eq:V_triaxial_prolate}
 \end{equation}
-For oblate ellipsoids (i.e., $a < b = c$), we define $\mathbf{V}$ as follows:
+For oblate ellipsoids (i.e. $a < b = c$), we define $\mathbf{V}$ as follows:
 \begin{equation}
 \mathbf{V} =
 \mathbf{R}_{3} \left( -\frac{\pi}{2} \right) \;
@@ -360,7 +360,7 @@ For oblate ellipsoids (i.e., $a < b = c$), we define $\mathbf{V}$ as follows:
 \end{equation}
 The orthogonal matrices $\mathbf{V}$ used here for triaxial, prolate and oblate
 ellipsoids (Eqs. \ref{eq:V_triaxial_prolate} and \ref{eq:V_oblate}) are
-different from that used by \citet{emerson1985} and \citet{clark1986}.
+different from those used by \citet{emerson1985} and \citet{clark1986}.
 
 The magnetic modelling of an ellipsoidal body is commonly performed
 in a particular Cartesian coordinate system that is aligned
@@ -368,12 +368,12 @@ with the body semi-axes
 and has the origin coincident with the body centre
 (Fig. \ref{fig:orientation-angles}b).
 For convenience, we denominate this particular coordinate
-system as \textit{local coordinate system}.
+system as the \textit{local coordinate system}.
 The relationship between the Cartesian coordinates
 $(\tilde{x}, \tilde{y}, \tilde{z})$ of a point in
 a local coordinate system and the Cartesian
 coordinates $(x, y, z)$ of the same point in the main
-system is given by:
+system is given by
 \begin{equation}
 \tilde{\mathbf{r}} = \mathbf{V}^{\top} \left( \mathbf{r} - \mathbf{r}_{c} \right) \: ,
 \label{eq:coord_transformation}
@@ -385,9 +385,9 @@ $\tilde{\mathbf{r}} = [\begin{array}{ccc} \tilde{x} &
 $\mathbf{r}$ and $\mathbf{r}_{c}$
 are defined in Eq. \ref{eq:ellipsoid_surface} and the matrix $\mathbf{V}$
 (Eq. \ref{eq:A}) is defined according to the ellipsoid type.
-Subsequently, quantities referred to the local coordinate system
-(Fig. \ref{fig:orientation-angles}b) are represented with
-the simbol "$\sim$".
+In what follows, quantities referred to the local coordinate system
+(Fig. \ref{fig:orientation-angles}b) are indicated with
+the symbol "$\sim$".
 
 
 \subsection{Theoretical background}
@@ -407,8 +407,8 @@ given by
 \label{eq:H0}
 \end{equation}
 where $\| \cdot \|$ denotes the Euclidean norm (or 2-norm) and
-$D$ and $I$ are respectively, the declination and inclination of the
-local-geomagnetic field in the main coordinate system
+$D$ and $I$ are respectively the declination and inclination of the
+local geomagnetic field in the main coordinate system
 (Fig. \ref{fig:orientation-angles}a).
 This field represents the main component of the
 Earth's magnetic field, which is usually assumed to be generated
@@ -424,7 +424,7 @@ eskola1980, reitz1992, sttraton2007}:
 \label{eq:H}
 \end{equation}
 where the second term is the negative gradient of
-the magnetic scalar potential $V(\mathbf{r})$ given by:
+the magnetic scalar potential $V(\mathbf{r})$ given by
 \begin{equation}
 V(\mathbf{r}) = -\frac{1}{4\pi} \iiint_{\vartheta}
 \mathbf{M}(\mathbf{r}^{\prime})^{\top}
@@ -453,7 +453,7 @@ assume that the body has a uniform magnetization given by
 \end{equation}
 where $\mathbf{H}^{\dagger}$ is the resultant uniform magnetic field
 at any point within the body and $\mathbf{K}$ is a
-constant and symmetrical 2nd-order tensor representing the
+constant and symmetrical second-order tensor representing the
 magnetic susceptibility of the body.
 This is a good approximation for bodies at room temperature,
 subjected to an inducing field $\mathbf{H}_{0}$ with
@@ -479,21 +479,21 @@ $i = 1, 2, 3$, are unit vectors called
 Similarly to the matrix $\mathbf{V}$ (Eqs. \ref{eq:ellipsoid_surface},
 \ref{eq:V_triaxial_prolate} and \ref{eq:V_oblate}), we define
 the matrix $\mathbf{U}$ as a function
-of given orientation angles $\varepsilon$, $\zeta$,
+of given orientation angles $\varepsilon$, $\zeta$
 and $\eta$ depending on the ellipsoid type. For triaxial
 and prolate ellipsoids, we define $\mathbf{U}$ by
 using Eq. \ref{eq:V_triaxial_prolate}, whereas for oblate ellipsoids
 we use Eq. \ref{eq:V_oblate}.
 Notice that the orientation angles $\varepsilon$, $\zeta$,
 and $\eta$ defining the orthogonal matrix $\mathbf{U}$
-may be different from that angles $\varepsilon$, $\zeta$,
+may be different from the angles $\varepsilon$, $\zeta$
 and $\eta$ defining the ellipsoid orientation
 (Fig. \ref{fig:orientation-angles}).
 
 If the principal susceptibilities are different from
 each other, we say that the body has an
 anisotropy of magnetic susceptibility (AMS).
-The AMS is generally associated to the preferred orientation
+The AMS is generally associated with the preferred orientation
 of the grains of magnetic minerals forming the rock
 \citep{fuller1963, uyeda1963, janak1972, hrouda1982,
 thompson1986, macdonald1987, rochette1992, dunlop1997,
@@ -530,7 +530,7 @@ n_{ij}(\mathbf{r}) =
 \quad j = 1, 2, 3 \: ,
 \label{eq:nij}
 \end{equation}
-$r_{1} = x$, $r_{2} = y$, $r_{3} = z$ are the elements of
+where $r_{1} = x$, $r_{2} = y$, $r_{3} = z$ are the elements of
 the position vector $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}),
 and
 \begin{equation}
@@ -548,7 +548,7 @@ It can be shown that the elements $n_{ij}(\mathbf{r})$ are
 finite whether $\mathbf{r}$ is a point within or without
 the volume $\vartheta$ \citep{peirce1902, webster1904}.
 The matrix $\mathbf{N}(\mathbf{r})$ (Eq. \ref{eq:H-M-uniform})
-is called \textit{depolarization tensor} \citep{soliverez1981, soliverez2008, soliverez2016}.
+is called the \textit{depolarization tensor} \citep{soliverez1981, soliverez2008, soliverez2016}.
 
 The following part of this paper moves on to describe
 the magnetic field $\mathbf{H}(\mathbf{r})$
@@ -572,7 +572,7 @@ local coordinate system (Fig. \ref{fig:orientation-angles}b).
 The function $\tilde{f}(\tilde{\mathbf{r}})$ was first
 presented by \citet{dirichlet1839} to describe the gravitational potential
 produced by homogeneous ellipsoids.
-Posteriorly, several authors also deduced and used this function
+Later, several authors also deduced and used this function
 for describing the magnetic and gravitational fields produced
 by triaxial, prolate, and oblate ellipsoids
 \citep{maxwell1873, thomson1879, dubois1896,
@@ -609,7 +609,7 @@ had a uniform density equal to the inverse of the
 gravitational constant.
 Notice that, in this case, the gravitational potential
 is a quadratic function of the spatial coordinates
-$\tilde{x}$, $\tilde{y}$, and $\tilde{z}$, which
+$\tilde{x}$, $\tilde{y}$ and $\tilde{z}$, which
 supported \citeauthor{maxwell1873}'s (\citeyear{maxwell1873})
 postulate about uniformly magnetized ellipsoids.
 In a similar way, the function $\tilde{f}^{\ddagger}(\tilde{\mathbf{r}})$
@@ -626,7 +626,7 @@ is given by
 where $R(u)$ is defined by Eq. \ref{eq:R} and the
 parameter $\lambda$ is defined according to the
 ellipsoid type as a function of the spatial coordinates
- $\tilde{x}$, $\tilde{y}$, and $\tilde{z}$ (see Appendix B).
+ $\tilde{x}$, $\tilde{y}$ and $\tilde{z}$ (see Appendix B).
 For readers interested in additional information about the
 parameter $\lambda$, we recommend \citet[p.~234]{webster1904},
 \citet[p.~184]{kellogg1929} and \citet{clark1986}.
@@ -672,7 +672,7 @@ as follows:
 \: , \quad i = 1, 2, 3 \: , \quad j = 1, 2, 3 \: ,
 \label{eq:nij-tilde}
 \end{equation}
-where $\tilde{r}_{1} = \tilde{x}$, $\tilde{r}_{2} = \tilde{y}$,
+where $\tilde{r}_{1} = \tilde{x}$, $\tilde{r}_{2} = \tilde{y}$
 and $\tilde{r}_{3} = \tilde{z}$ are the elements of the
 transformed vector $\tilde{\mathbf{r}}$ (Eq. \ref{eq:coord_transformation})
 and $\tilde{f}(\tilde{\mathbf{r}})$ is given by Eq. \ref{eq:fi-tilde}
@@ -704,7 +704,7 @@ elements $\tilde{n}^{\dagger}_{ij}$, $i = 1, 2, 3$,
 $j = 1, 2, 3$, of $\tilde{\mathbf{N}}^{\dagger}$
 do not depend on the elements of the transformed position
 vector $\tilde{\mathbf{r}}$ (Eq. \ref{eq:coord_transformation}).
-Besides, the off-diagonal elements are zero and
+Also, the off-diagonal elements are zero and
 the diagonal elements are given by \citep{stoner1945}:
 \begin{equation}
 \tilde{n}^{\dagger}_{ii} = \frac{abc}{2}
@@ -717,7 +717,7 @@ $e_{1} = a$, $e_{2} = b$, and $e_{3} = c$. These elements
 are commonly known as \textit{demagnetizing factors}
 and are defined according to the ellipsoid type.
 Here, we calculate the demagnetizing factors in the \unit{SI}
-system. Consequently, they satisfies the condition
+system. Consequently, they satisfy the condition
 $\tilde{n}^{\dagger}_{11} + \tilde{n}^{\dagger}_{22} +
 \tilde{n}^{\dagger}_{33} = 1$, independently of the
 ellipsoid type.
@@ -725,7 +725,7 @@ It is worth stressing that, according to Eq. \ref{eq:n-tilde-dagger-ii},
 the demagnetizing factors $\tilde{n}^{\dagger}_{ii}$ are
 constants defined by the ellipsoid semi-axes $a$, $b$, and $c$.
 
-Notice that, according to Eqs. \ref{eq:H-tilde}
+Note that, according to Eqs. \ref{eq:H-tilde}
 and \ref{eq:N-tilde-VT-N-V},
 \begin{equation}
 \mathbf{N}(\mathbf{r}) =
@@ -748,9 +748,9 @@ original depolarization tensor $\mathbf{N}(\mathbf{r})$.
 \subparagraph*{Triaxial ellipsoids}
 
 
-For triaxial ellipsoids (e.g., $a > b > c$), the demagnetizing
+For triaxial ellipsoids (i.g. $a > b > c$), the demagnetizing
 factors obtained by solving Eq. \ref{eq:n-tilde-dagger-ii}
-are given by:
+are given by
 \begin{equation}
 \tilde{n}^{\dagger}_{11} = \frac{abc}
 {\left( a^{2} - c^{2} \right)^{\frac{1}{2}}
@@ -784,7 +784,7 @@ where
 F(\kappa, \phi) =
 \int^{\phi}_{0}
 \frac{1}{\left( 1 - \kappa^{2} \sin^{2} \psi \right)^{\frac{1}{2}}}
-d\psi \: ,
+d\psi
 \label{eq:F-kappa-phi}
 \end{equation}
 and
@@ -801,7 +801,7 @@ $\cos \phi = c/a$.
 The functions $F(\kappa, \phi)$ (Eq. \ref{eq:F-kappa-phi}) and
 $E(\kappa, \phi)$ (Eq. \ref{eq:E-kappa-phi}) are
 called Legendre's normal elliptic integrals of the first and
-second kind, respectivelly. \citet{stoner1945} presented a
+second kind, respectively. \citet{stoner1945} presented a
 detailed deduction of the demagnetizing factors $\tilde{n}^{\dagger}_{11}$
 (Eq. \ref{eq:n-tilde-dagger-11-triaxial}), $\tilde{n}^{\dagger}_{22}$
 (Eq. \ref{eq:n-tilde-dagger-22-triaxial}) and $\tilde{n}^{\dagger}_{33}$
@@ -816,9 +816,9 @@ $\tilde{n}^{\dagger}_{11} < \tilde{n}^{\dagger}_{22} < \tilde{n}^{\dagger}_{33}$
 \subparagraph*{Prolate ellipsoids}
 
 
-For prolate ellipsoids (e.g., $a > b = c$), the demagnetizing
+For prolate ellipsoids (i.e. $a > b = c$), the demagnetizing
 factors obtained by solving Eq. \ref{eq:n-tilde-dagger-ii}
-are given by:
+are given by
 \begin{equation}
 \tilde{n}^{\dagger}_{11} = \frac{1}{m^{2} - 1}
 \left\lbrace \frac{m}{\left( m^{2} - 1 \right)^{\frac{1}{2}}}
@@ -838,7 +838,7 @@ The detailed deduction of the demagnetizing factors
 $\tilde{n}^{\dagger}_{11}$ (Eq. \ref{eq:n-tilde-dagger-11-prolate})
 and $\tilde{n}^{\dagger}_{22}$ (Eq. \ref{eq:n-tilde-dagger-22-prolate})
 can be found, for example, in \citet{stoner1945}.
-These formulas were posteriorly presented by \citet{emerson1985}.
+These formulas were later presented by \citet{emerson1985}.
 It can be shown that these demagnetizing factors
 satisfy the conditions
 $\tilde{n}^{\dagger}_{11} + 2 \; \tilde{n}^{\dagger}_{22} = 1$
@@ -849,9 +849,9 @@ $\tilde{n}^{\dagger}_{11} < \tilde{n}^{\dagger}_{22}$.
 \subparagraph*{Oblate ellipsoids}
 
 
-For oblate ellipsoids (e.g., $a < b = c$), the demagnetizing
+For oblate ellipsoids (i.e. $a < b = c$), the demagnetizing
 factors obtained by solving Eq. \ref{eq:n-tilde-dagger-ii}
-are given by:
+are given by
 \begin{equation}
 \tilde{n}^{\dagger}_{11} =
 \frac{1}{1 - m^{2}} \left[
@@ -919,7 +919,7 @@ h_{i} = -\frac{1}{\left( e_{i}^{2} + \lambda \right) R(\lambda)} \: ,
 g_{i} = \int_{\lambda}^{\infty} \frac{1}{\left( e_{i}^{2} + u \right) R(u)} du \: ,
 \label{eq:gi}
 \end{equation}
-$e_{1} = a$, $e_{2} = b$, $e_{3} = c$, and
+where $e_{1} = a$, $e_{2} = b$, $e_{3} = c$ and
 $\frac{\partial \lambda}{\partial \tilde{r}_{i}}$
 is defined in Appendix B (Eq. \ref{eq:dlambda}).
 The functions $g_{i}$ (Eq. \ref{eq:gi}) are defined according
@@ -942,7 +942,7 @@ of the ellipsoid type.
 \subparagraph*{Triaxial ellipsoids}
 
 
-For triaxial ellipsoids (e.g., $a > b > c$), the functions
+For triaxial ellipsoids (i.e. $a > b > c$), the functions
 $g_{i}$ (Eq. \ref{eq:gi}) are defined as follows:
 \begin{equation}
 g_{1} = \frac{2}{\left( a^{2} - b^{2} \right) \left( a^{2} - c^{2} \right)^{\frac{1}{2}}}
@@ -1000,8 +1000,8 @@ Similar formulas can also be found in \citet{clark1986}.
 \subparagraph*{Prolate ellipsoids}
 
 
-For prolate (e.g., $a > b = c$) ellipsoids, the functions
-$g_{i}$ (Eq. \ref{eq:gi}) are given by:
+For prolate (i.e. $a > b = c$) ellipsoids, the functions
+$g_{i}$ (Eq. \ref{eq:gi}) are given by
 \begin{equation}
 g_{1} =  \frac{2}{\left( a^{2} - b^{2} \right)^{\frac{3}{2}}}
 \left\lbrace
@@ -1033,8 +1033,8 @@ presented by \citet{emerson1985}.
 \subparagraph*{Oblate ellipsoids}
 
 
-For oblate (e.g., $a < b = c$) ellipsoids, the functions
-$g_{i}$ (Eq. \ref{eq:gi}) are given by:
+For oblate (i.e. $a < b = c$) ellipsoids, the functions
+$g_{i}$ (Eq. \ref{eq:gi}) are given by
 \begin{equation}
 g_{1} =  \frac{2}{\left( b^{2} - a^{2} \right)^{\frac{3}{2}}}
 \left\lbrace
@@ -1064,7 +1064,7 @@ presented by \citet{emerson1985}.
 
 
 By considering $\tilde{\mathbf{r}}$ as a point within the
-volume $\vartheta$ of the ellipsoid and using the Maxwell's postulate
+volume $\vartheta$ of the ellipsoid and using the Maxwell postulate
 about the uniformity of the magnetic field $\mathbf{H}(\mathbf{r})$
 inside ellipsoidal bodies, we can use Eq. \ref{eq:H-tilde}
 for defining the resultant uniform magnetic field $\tilde{\mathbf{H}}^{\dagger}$
@@ -1076,7 +1076,7 @@ inside the ellipsoidal body as follows:
 \label{eq:Hi-tilde}
 \end{equation}
 where $\mathbf{I}$ is the identity matrix and
-$\tilde{\mathbf{N}}^{\dagger}$ is defined in the
+$\tilde{\mathbf{N}}^{\dagger}$ is as defined in the
 previous section.
 
 Let us pre-multiply the uniform internal field $\tilde{\mathbf{H}}^{\dagger}$
@@ -1124,7 +1124,7 @@ where
 \mathbf{V}^{\top} \: .
 \label{eq:Lambda}
 \end{equation}
-Despite of the coordinate system transformation represented by the
+Despite the coordinate system transformation represented by the
 matrix $\mathbf{V}$ (Eq. \ref{eq:A}),
 Eq. \ref{eq:M-remanence} is consistent with that given by
 \citet[Eq. ~38]{clark1986}. It shows the combined effect of the
@@ -1149,7 +1149,7 @@ anisotropy of magnetic susceptibility and the shape anisotropy.
 
 For the particular case in which the susceptibility is isotropic,
 the susceptibility tensor is defined according to Eq. \ref{eq:K-isotropic}.
-In this case, the magnetization $\mathbf{M}$ (Eqs. \ref{eq:M-KH} and \ref{eq:M-remanence}),
+In this case the magnetization $\mathbf{M}$ (Eqs. \ref{eq:M-KH} and \ref{eq:M-remanence}),
 referred to the main coordinate system (Fig. \ref{fig:orientation-angles}a),
 and the matrix $\mathbf{\Lambda}$ (Eq. \ref{eq:Lambda})
 can be rewritten as follows:
@@ -1175,7 +1175,7 @@ represents the induced magnetization whereas the term depending on
 $\mathbf{M}_{R}$ is the remanent magnetization.
 Equation \ref{eq:M-K-isotropic} reveals that, as pointed out by
 many authors
-\citep[e.g.,][]{maxwell1873, dubois1896, stoner1945, clark1986, sttraton2007},
+\citep{maxwell1873, dubois1896, stoner1945, clark1986, sttraton2007},
 the induced magnetization opposes the inducing field
 if it is parallel to an ellipsoid axis,
 independently of the ellipsoid type. Otherwise, the
@@ -1185,7 +1185,7 @@ If we additionally consider that $\chi << 1$, the matrix
 $\mathbf{\Lambda}$ (Eq. \ref{eq:Lambda-K-isotropic})
 approaches to the identity and the magnetization
 $\mathbf{M}$ (Eq. \ref{eq:M-K-isotropic})
-can be approximated by:
+can be approximated by
 \begin{equation}
 \breve{\mathbf{M}} = \chi \, \mathbf{H}_{0} +
 \mathbf{M}_{R} \: ,
@@ -1286,7 +1286,7 @@ $\| \delta \mathbf{\Lambda}^{-1} \|$ as follows:
 \label{eq:norm-perturbed-inverse-Lambda}
 \end{equation}
 where $\tilde{n}^{\dagger}_{max}$ is the demagnetization
-factor associated to the shortest ellipsoid semi-axis.
+factor associated with the shortest ellipsoid semi-axis.
 For a triaxial ellipsoid,
 $\tilde{n}^{\dagger}_{max} \equiv \tilde{n}^{\dagger}_{33}$
 (Eq. \ref{eq:n-tilde-dagger-33-triaxial}), for a prolate ellipsoid,
@@ -1313,7 +1313,7 @@ to define
 \label{eq:chi-max}
 \end{equation}
 which represents the maximum isotropic susceptibility
-that the ellipsoidal body can assume in order o guarantee
+that the ellipsoidal body can assume in order to guarantee
 a relative error lower than or equal to $\epsilon$.
 For isotropic susceptibilities greater than $\chi_{max}$,
 there is no guarantee that the relative error in the
@@ -1338,10 +1338,10 @@ There is a fundamental non-uniqueness of ellipsoidal bodies, analogous to the
 equivalence of concentric spheres with the same magnetic moment.
 To show this ambiguity, let us first
 consider a reference ellipsoid which is immersed in a uniform inducing
-field and has semi-axes $a$, $b$, and $c$, isotropic susceptibility $\chi$
+field and has semi-axes $a$, $b$ and $c$, isotropic susceptibility $\chi$
 and no remanence.
 The magnetization of this ellipsoid, defined in the local coordinate system,
-can be obtained by using Eqs. \ref{eq:K-isotropic}, \ref{eq:H-tilde}, and \ref{eq:M-tilde}
+can be obtained by using Eqs. \ref{eq:K-isotropic}, \ref{eq:H-tilde} and \ref{eq:M-tilde}
 as follows:
 \begin{equation}
 \tilde{\mathbf{M}} = \chi \left( \mathbf{I} + \chi \, \tilde{\mathbf{N}}^{\dagger} 
@@ -1359,7 +1359,7 @@ From Eqs. \ref{eq:M-tilde-K-isotropic} and \ref{eq:P-tilde},
 we can easily show that, if the inducing field $\tilde{\mathbf{H}}_{0}$
 is parallel to a semi-axis $e_{i}$, where $i = 1, 2, 3$, $e_{1} = a$, $e_{2} = b$,
 $e_{3} = c$, only the $i$th component $P_{i}$ of the magnetic moment $\tilde{\mathbf{P}}$
-is non null and given by
+is non-null, and given by
 \begin{equation}
 P_{i} = \vartheta \frac{\chi \, H_{0}}{1 + \chi \, \tilde{n}^{\dagger}_{ii}} \: ,
 \label{eq:P-tilde-i}
@@ -1370,7 +1370,7 @@ by Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
 or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
 
 Now, consider a confocal ellipsoid with semi-axes $a^{\prime} = \sqrt{a^2+u}$,
-$b^{\prime} = \sqrt{b^2+u}$, and $c^{\prime} = \sqrt{c^2+u}$, where $u$ is a
+$b^{\prime} = \sqrt{b^2+u}$ and $c^{\prime} = \sqrt{c^2+u}$, where $u$ is a
 positive real number. From Eq. \ref{eq:P-tilde-i}, we can define the
 isotropic susceptibility $\chi^{\prime}$ that is necessary to this confocal
 ellipsoid produce the same magnetic moment $\tilde{\mathbf{P}}$ (Eq. \ref{eq:P-tilde})
@@ -1381,9 +1381,9 @@ as follows:
 \end{equation}
 where $\vartheta^{\prime} = \frac{4}{3}\pi a^{\prime} b^{\prime} c^{\prime}$ and
 $\tilde{n}^{\dagger}_{ii}$ is the new demagnetizing factor computed for the
-confocal ellipsoid by using Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate},
+confocal ellipsoid by using Eq. \ref{eq:n-tilde-dagger-11-triaxial}, \ref{eq:n-tilde-dagger-11-prolate}
 or \ref{eq:n-tilde-dagger-11-oblate}, according to the ellipsoid type.
-It can be shown that this confocal ellipsoid produce the same magnetic field
+It can be shown that this confocal ellipsoid produces the same magnetic field
 as the reference ellipsoid.
 
 This ambiguity between confocal ellipsoids with the same magnetic moment
@@ -1454,7 +1454,7 @@ and, consequently, the following approximation is valid \citep{blakely1996}:
 
 The code is implemented in the Python language,
 by using the NumPy and SciPy libraries \citep{vanderwalt2011},
-as part of the open-source source library
+as part of the open-source library
 Fatiando a Terra \citep{uieda2013}.
 Our code is very modular and has a
 test suite formed by a considerable number of
@@ -1465,7 +1465,7 @@ We refer the readers interested in best practices for scientific computing to
 The numerical simulations presented here were generated with
 the Jupyter Notebook
 (\url{http://jupyter.org}),
-which is a web application that allows creating and sharing
+which is a web application that allows the creation and sharing of
 documents that contain live code, equations, visualizations and
 explanatory text.
 Besides using Fatiando a Terra \citep{uieda2013},
@@ -1482,7 +1482,7 @@ are available in a repository on GitHub
 
 
 All the code developed for generating the results presented in the following
-subsections, as well as the code developed for generating additional numerical simulations,
+sections, as well as the code developed for generating additional numerical simulations,
 can be found at the folder \textit{code} of the online repository
 \url{https://github.com/pinga-lab/magnetic-ellipsoid}.
 
@@ -1491,33 +1491,33 @@ can be found at the folder \textit{code} of the online repository
 
 
 We simulated a triaxial ellipsoid with semi-axes
-$a_{0} = 1000$ \unit{m}, $b_{0} = 700$ \unit{m}, and $c_{0} = 200$ \unit{m}.
+$a_{0} = 1000$ \unit{m}, $b_{0} = 700$ \unit{m} and $c_{0} = 200$ \unit{m}.
 Then we used this ellipsoid as a reference to generate
 100 different triaxial ellipsoids and calculate
 their demagnetizing factors $\tilde{n}^{\dagger}_{11}$,
-$\tilde{n}^{\dagger}_{22}$, and $\tilde{n}^{\dagger}_{33}$
+$\tilde{n}^{\dagger}_{22}$ and $\tilde{n}^{\dagger}_{33}$
 by using Eqs. \ref{eq:n-tilde-dagger-11-triaxial},
-\ref{eq:n-tilde-dagger-22-triaxial}, and \ref{eq:n-tilde-dagger-33-triaxial}.
+\ref{eq:n-tilde-dagger-22-triaxial} and \ref{eq:n-tilde-dagger-33-triaxial}.
 The semi-axes of these 100 ellipsoids are given by
-$a = a_{0} + u \; b_{0}$, $b = b_{0} + u \; b_{0}$, and
+$a = a_{0} + u \; b_{0}$, $b = b_{0} + u \; b_{0}$ and
 $c = c_{0} + u \; b_{0}$, where $0 \leq u \leq 10$.
-Notice that, for $u = 0$, the resulting semi-axes are equal those
+Notice that, for $u = 0$, the resulting semi-axes are equal to those
 of the reference ellipsoid.
 The larger the variable $u$, the larger the resulting semi-axes
-$a$, $b$, and $c$, but the smaller the relative difference between
+$a$, $b$ and $c$, but the smaller the relative difference between
 them.
 Consequently, the resulting ellipsoids obtained from the semi-axes
 $a$, $b$, and $c$ become more spherical as $u$ increases.
 In this case, the demagnetizing factors $\tilde{n}^{\dagger}_{11}$
 (Eq. \ref{eq:n-tilde-dagger-11-triaxial}),
-$\tilde{n}^{\dagger}_{22}$ (Eq. \ref{eq:n-tilde-dagger-22-triaxial}),
+$\tilde{n}^{\dagger}_{22}$ (Eq. \ref{eq:n-tilde-dagger-22-triaxial})
 and
 $\tilde{n}^{\dagger}_{33}$ (Eq. \ref{eq:n-tilde-dagger-33-triaxial})
-tend to $1/3$ \citep[e.g.,][]{stoner1945}.
+tend to $1/3$ \citep[e.g.][]{stoner1945}.
 
 Figure \ref{fig:demag-factors}a shows the calculated
 demagnetizing factors $\tilde{n}^{\dagger}_{11}$ (in red),
-$\tilde{n}^{\dagger}_{22}$ (in green), and
+$\tilde{n}^{\dagger}_{22}$ (in green) and
 $\tilde{n}^{\dagger}_{33}$ (in blue) for the
 100 triaxial ellipsoids.
 The result shows that the relative difference
@@ -1525,7 +1525,7 @@ between the demagnetizing factors is large for
 small values of $u$ and decreases as $u$ increases.
 In this case, all demagnetizing factors tend to $1/3$, according
 to what we know from theory.
-Besides, Fig. \ref{fig:demag-factors}a confirms that the demagnetizing
+Also, Fig. \ref{fig:demag-factors}a confirms that the demagnetizing
 factors satisfy the condition
 $\tilde{n}^{\dagger}_{11} < \tilde{n}^{\dagger}_{22} < \tilde{n}^{\dagger}_{33}$
 independently of the value of $u$.
@@ -1552,7 +1552,7 @@ $\tilde{n}^{\dagger}_{11}$ (red line in Fig. \ref{fig:demag-factors}b)
 and
 $\tilde{n}^{\dagger}_{22}$ (green line in Fig. \ref{fig:demag-factors}b)
 calculated for the prolate ellipsoids are close to $1/3$ for $m$ close to $1$.
-Besides, these demagnetizing factors satisfy the condition
+Also, these demagnetizing factors satisfy the condition
 $\tilde{n}^{\dagger}_{11} < \tilde{n}^{\dagger}_{22}$ for all values
 of $m$.
 The result obtained for the oblate ellipsoids (Fig. \ref{fig:demag-factors}c)
@@ -1572,30 +1572,30 @@ of $m$.
 
 We simulated two confocal ellipsoids by using the parameters
 shown in Tab. \ref{tab:parameters-confocal-ellipsoids}.
-The semi-axes of the Ellipsoid 2 were defined as $\sqrt{a^{2} + u}$,
-$\sqrt{b^{2} + u}$, and $\sqrt{c^{2} + u}$, where $a$, $b$, and $c$
-are the semi-axes of the Ellipsoid 1 and $u = 2 \times 10^{6}$ \unit{m}.
+The semi-axes of Ellipsoid 2 were defined as $\sqrt{a^{2} + u}$,
+$\sqrt{b^{2} + u}$ and $\sqrt{c^{2} + u}$, where $a$, $b$, and $c$
+are the semi-axes of Ellipsoid 1 and $u = 2 \times 10^{6}$ \unit{m}.
 
-We have computed the total-field anomalies produced by the Ellipsoid 1
+We have computed the total-field anomalies produced by Ellipsoid 1
 and Ellipsoid 2 at the same regular grid of $200 \times 200$ points
 located on a horizontal plane at $z = 0$ \unit{m} by using two different
 inducing fields $\mathbf{H}_{0}$.
 
-In the first case, we used an uniform inducing field $\mathbf{H}_{0}$ which is
+In the first case, we used a uniform inducing field $\mathbf{H}_{0}$ which is
 parallel to the semi-axis $a$ of the confocal ellipsoids and
-has inclination $\approx -4.98^{\circ}$, declination $\approx 15.38^{\circ}$,
+has inclination $\approx -4.98^{\circ}$, declination $\approx 15.38^{\circ}$
 and intensity $H_{0} \approx 18.7$ \unit{A \, m^{-1}}.
 The total-field anomaly produced by the Ellipsoid 1 by using this
 inducing field is shown in Fig. \ref{fig:tfa-confocal-ellipsoids-H0-parallel}.
-In this case, the Ellipsoid 2 produces the same total-field
-anomaly as the Ellipsoid 1.
+In this case, Ellipsoid 2 produces the same total-field
+anomaly as Ellipsoid 1.
 The isotropic susceptibility of the Ellipsoid 2 was calculated with
-Eq. \ref{eq:chi-prime} and, consequently, its magnetic moment is equal
-to that of the Ellipsoid 1.
-Notice that the volume of the Ellipsoid 2 is approximately $79$ times greater
-than that of the Ellipsoid 1, whereas the isotropic susceptibility
-of the Ellipsoid 1 is approximately $85$ times greater than that
-of the Ellipsoid 2.
+Eq. \ref{eq:chi-prime} and consequently its magnetic moment is equal
+to that of Ellipsoid 1.
+Notice that the volume of Ellipsoid 2 is approximately $79$ times greater
+than that of Ellipsoid 1, whereas the isotropic susceptibility
+of Ellipsoid 1 is approximately $85$ times greater than that
+of Ellipsoid 2.
 This result illustrates the ambiguity between the field produced
 by confocal ellipsoids with the same magnetic moment.
 
@@ -1606,12 +1606,12 @@ In this case, the inclination and declination of $\mathbf{H}_{0}$
 are, respectively, $-30^{\circ}$ and $60^{\circ}$.
 Figures \ref{fig:tfa-confocal-ellipsoids-H0-oblique}a and
 \ref{fig:tfa-confocal-ellipsoids-H0-oblique}b show the total-field anomalies
-produced, respectively, by the Ellipsoid 1 and Ellipsoid 2
+produced, respectively, by Ellipsoid 1 and Ellipsoid 2
 by using this new inducing field $\mathbf{H}_{0}$.
 Notice that by using this oblique inducing field, 
 the total-field anomalies produced by the confocal ellipsoids
-are different to each other due to the shape anisotropy.
-The differences are show in Fig. \ref{fig:tfa-confocal-ellipsoids-H0-oblique}c.
+are different from each other due to the shape anisotropy.
+The differences are shown in Fig. \ref{fig:tfa-confocal-ellipsoids-H0-oblique}c.
 These results confirm numerically what was pointed out by
 \cite{clark2014}: confocal ellipsoids with
 properly scaled isotropic susceptibilities, no remanence and
@@ -1624,7 +1624,7 @@ of their axes.
 
 
 We simulated an ellipsoidal body similar to the Warrego orebody,
-which was the resource on which the well-known Warrego mine was
+which was the resource on which the well-known Warrego mine 
 developed in Tennant Creek, Australia. After nearly a decade as
 one of the most important gold and copper mines in Australia, the
 Warrego mine was closed in late 1989.
@@ -1670,9 +1670,6 @@ susceptibility (Fig. \ref{fig:tfa-differences-warrego}a) are very large.
 The peak-to-peak amplitude is $\approx 40$ \unit{nT}
 and represents $\approx 8 \%$ of the peak-to-peak amplitude of
 the total-field anomaly shown in Fig. \ref{fig:tfa-warrego}.
-%This result reinforces that the use of the approximated magnetization
-%$\breve{\mathbf{M}}$ (Eq. \ref{eq:M-approx}) may negatively impact
-%the magnetic modelling of bodies with high isotropic susceptibility.
 
 Figure \ref{fig:tfa-differences-warrego}b shows the differences calculated
 by using $\chi_{1} = 0.1$ \unit{SI}.
@@ -1687,7 +1684,7 @@ $\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 0.7 \%$
 The peak-to-peak amplitude of the differences in the total-field anomaly
 (Fig. \ref{fig:tfa-differences-warrego}b) is $\approx 0.2$ \unit{nT},
 which represents $\approx 0.6 \%$ of the peak-to-peak amplitude of the
-total-field anomaly calculates by using the true magnetization $\mathbf{M}$
+total-field anomaly calculated by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
 
 Finally, Fig. \ref{fig:tfa-differences-warrego}c shows the differences
@@ -1706,9 +1703,9 @@ $\| \delta \mathbf{M} \| \, \| \mathbf{M} \|^{-1} \approx 0.8 \%$
 The peak-to-peak amplitude of the differences in the total-field anomaly
 (Fig. \ref{fig:tfa-differences-warrego}c) is $\approx 0.3$ \unit{nT},
 which represents $\approx 0.7 \%$ of the peak-to-peak amplitude of the
-total-field anomaly calculates by using the true magnetization $\mathbf{M}$
+total-field anomaly calculated by using the true magnetization $\mathbf{M}$
 (Eqs. \ref{eq:M-K-isotropic} and \ref{eq:M-K-isotropic-inverse-Lambda}).
-In this case, the use an isotropic susceptibility greater than the usual
+In this case, the use of an isotropic susceptibility greater than the usual
 limit $0.1$ \unit{SI} does not mislead the magnetic modelling
 dramatically. On the contrary, it shows small discrepancies in the
 magnetic modelling and validates Eq. \ref{eq:chi-max}.
@@ -1756,7 +1753,7 @@ community, either for research or for teaching.
 
 The current version of our code is freely distributed under the
 BSD 3-clause licence and it is available for download at 
-Zenodo:  \url{http://doi.org/10.5281/zenodo.825261} \citep{tomazella2017}. The latest
+Zenodo:  \url{http://doi.org/10.5281/zenodo.825261} \citep{takahashi2017}. The latest
 development version of our code can be freely downloaded from
 a repository on GitHub (\url{https://github.com/pinga-lab/magnetic-ellipsoid}).
 Instructions for running the current version of our code
@@ -1791,14 +1788,14 @@ position vector $\tilde{\mathbf{r}}$ (Eq. \ref{eq:coord_transformation}),
 $r_{j}$, $j = 1, 2, 3$, are the elements of the position vector
 $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}),
 $v_{jk}$, $j = 1, 2, 3$, are the elements of the matrix
-$\mathbf{V}$ (Eq. \ref{eq:A}),
+$\mathbf{V}$ (Eq. \ref{eq:A})
 and $c_{k}$ is a constant defined by the coordinates
 $x_{c}$, $y_{c}$, and $z_{c}$ of the centre of the ellipsoidal body.
 
 By considering the functions $f(\mathbf{r})$
 (Eq. \ref{eq:f}) and $\tilde{f}(\tilde{\mathbf{r}})$
 evaluated at the same point, but on different coordinate
-systems, we have:
+systems, we have
 \begin{equation*}
 \frac{\partial f(\mathbf{r})}{\partial r_{j}} =
 \frac{\partial \tilde{f}(\tilde{\mathbf{r}})}{\partial \tilde{r}_{1}} \,
@@ -1822,7 +1819,7 @@ v_{j3} \, \frac{\partial \tilde{f}(\tilde{\mathbf{r}})}{\partial \tilde{r}_{3}} 
 Now, by deriving $\frac{\partial f(\mathbf{r})}{\partial r_{j}}$
 (Eq. \ref{eq:df_drj}) with respect to the $i$th element
 $r_{i}$ of the position vector $\mathbf{r}$ (Eq. \ref{eq:ellipsoid_surface}),
-we obtain:
+we obtain
 \begin{equation}
 \begin{split}
 \frac{\partial^{2} f(\mathbf{r})}{\partial r_{i} \, \partial r_{j}} &=
@@ -1866,7 +1863,7 @@ v_{i1} \\ v_{i2} \\ v_{i3}
 \label{eq:d2f-dridrj}
 \end{equation}
 where $\tilde{\mathbf{F}}(\tilde{\mathbf{r}})$ is a $3 \times 3$
-matrix whose $ij$-th element is
+matrix whose $ij$th element is
 $\frac{\partial^{2} \tilde{f}(\tilde{\mathbf{r}})}
 {\partial \tilde{r}_{i} \, \partial \tilde{r}_{j}}$.
 From Eq. \ref{eq:d2f-dridrj}, we obtain
@@ -1876,19 +1873,19 @@ From Eq. \ref{eq:d2f-dridrj}, we obtain
 \label{eq:F-V-F-tilde-VT}
 \end{equation}
 where $\mathbf{F}(\mathbf{r})$ is a $3 \times 3$
-matrix whose $ij$-th element is
+matrix whose $ij$th element is
 $\frac{\partial^{2} f(\mathbf{r})}
 {\partial r_{i} \, \partial r_{j}}$ and
 $\mathbf{V}$ (Eq. \ref{eq:A}) is defined according
-to the ellipsoid type. As one may noticed,
+to the ellipsoid type. Notice that
 the matrices $\mathbf{F}(\mathbf{r})$ and
 $\tilde{\mathbf{F}}(\tilde{\mathbf{r}})$ represent the Hessians
 of the functions $f(\mathbf{r})$ (Eq. \ref{eq:f})
 and $\tilde{f}(\tilde{\mathbf{r}})$, respectively.
-Besides, the depolarization tensor $\mathbf{N}(\mathbf{r})$
+Also, the depolarization tensor $\mathbf{N}(\mathbf{r})$
 (Eq. \ref{eq:H-M-uniform}) can be
 rewritten by using the matrix $\mathbf{F}(\mathbf{r})$
-as follows
+as follows:
 \begin{equation}
 \mathbf{N}(\mathbf{r}) = \frac{1}{4 \pi} \mathbf{F}(\mathbf{r}) \: .
 \label{eq:N-F}
@@ -1919,14 +1916,14 @@ and oblate ellipsoids.
 \subsection{Parameter $\lambda$ defining triaxial ellipsoids} %% Appendix A1, A2, etc.
 
 Let us consider an ellipsoid with semi-axes $a$, $b$, $c$ oriented along
-the $\tilde{x}$-, $\tilde{y}$-, and $\tilde{z}$-axis, respectively,
+the $\tilde{x}$, $\tilde{y}$, and $\tilde{z}$ axis, respectively,
 of its local coordinate system (Fig. \ref{fig:orientation-angles}b), where $a > b > c > 0$.
 This ellipsoid is defined by the following equation:
 \begin{equation}
 \frac{\tilde{x}^{2}}{a^{2}} + \frac{\tilde{y}^{2}}{b^{2}} + \frac{\tilde{z}^{2}}{c^{2}} = 1 \: .
 \label{eq:reference-triaxial-ell}
 \end{equation}
-A quadric surface (e.g., ellipsoid, hyperboloid of one sheet or
+A quadric surface (e.g. ellipsoid, hyperboloid of one sheet or
 hyperboloid of two sheets) which is confocal with the ellipsoid
 defined in Eq. \ref{eq:reference-triaxial-ell} can be
 described as follows:
@@ -1946,10 +1943,10 @@ we may use \ref{eq:quadric-confocal-triaxial-ell} for determining a set of
 points $(x, y, z)$ lying on the surface of an ellipsoid which is confocal
 with that one defined in Eq. \ref{eq:reference-triaxial-ell}.
 Now, consider the problem of determining the ellipsoid which is confocal
-with that one defined in \ref{eq:reference-triaxial-ell} and pass through
+with that defined in \ref{eq:reference-triaxial-ell} and pass through
 a particular point $(\tilde{x}, \tilde{y}, \tilde{z})$.
 This problem consists in determining the real number $u$ that,
-given $a$, $b$, $c$, $\tilde{x}$, $\tilde{y}$, and $\tilde{z}$,
+given $a$, $b$, $c$, $\tilde{x}$, $\tilde{y}$ and $\tilde{z}$,
 satisfies Eq. \ref{eq:quadric-confocal-triaxial-ell} and
 the condition expressed by Eq. \ref{eq:condition-triaxial-ell}.
 By rearranging Eq. \ref{eq:quadric-confocal-triaxial-ell},
@@ -1959,7 +1956,7 @@ p(u) = (a^{2} + u)(b^{2} + u)(c^{2} + u) - (b^{2} + u)(c^{2} + u) \, \tilde{x}^{
 - (a^{2} + u)(c^{2} + u) \, \tilde{y}^{2} - (a^{2} + u)(b^{2} + u) \, \tilde{z}^{2} \: .
 \label{eq:cubic-equation-triaxial-ell}
 \end{equation}
-This cubic equation shows that:
+This cubic equation shows that
 \begin{equation}
 u = \begin{cases}
 d \to \infty \: &, \quad p(u) > 0 \\
@@ -2033,10 +2030,10 @@ R = \frac{9 \, p_{1} \, p_{2} - 27 \, p_{0} - 2 \, p_{2}^{3}}{54} \: .
 \subsection{Parameter $\lambda$ defining prolate and oblate ellipsoids} %% Appendix A1, A2, etc.
 
 Let us now consider a prolate ellipsoid with semi-axes $a$, $b$,
-$c$ oriented along the $\tilde{x}$-, $\tilde{y}$-, and
-$\tilde{z}$-axis, respectively, of its local coordinate system
+$c$ oriented along the $\tilde{x}$, $\tilde{y}$, and
+$\tilde{z}$ axis, respectively, of its local coordinate system
 (Fig. \ref{fig:orientation-angles}b), where $a > b = c > 0$.
-In this case, the Eq. defining the surface of the ellipsoid
+In this case, the equation defining the surface of the ellipsoid
 is obtained by substituting $c = b$ in Eq. \ref{eq:reference-triaxial-ell}.
 Consequently, the equation defining the respective confocal quadric
 surface is given by
@@ -2045,17 +2042,17 @@ surface is given by
 \label{eq:quadric-confocal-prolate-ell}
 \end{equation}
 and the new condition that must be fulfilled by the variable
-$u$ so that Eq. \ref{eq:quadric-confocal-prolate-ell}
-represent an ellipsoid is
+$u$ for Eq. \ref{eq:quadric-confocal-prolate-ell}
+to represent an ellipsoid is
 \begin{equation}
 u + b^{2} > 0 \: .
 \label{eq:condition-prolate-ell}
 \end{equation}
 
 Similarly to the case of a triaxial ellipsoid presented
-in the previous subsection, we are interested in
+in the previous section, we are interested in
 determining the real number $u$ that,
-given $a$, $b$, $\tilde{x}$, $\tilde{y}$, and $\tilde{z}$,
+given $a$, $b$, $\tilde{x}$, $\tilde{y}$ and $\tilde{z}$,
 satisfies Eq. \ref{eq:quadric-confocal-prolate-ell} and
 the condition expressed by Eq. \ref{eq:condition-prolate-ell}.
 From Eq. \ref{eq:quadric-confocal-prolate-ell},
@@ -2126,9 +2123,9 @@ calculated by using Eq. \ref{eq:lambda-prolate-ell}.
 
 The magnetic modelling of triaxial, prolate or oblate ellipsoids
 requires not only the parameter lambda defined by Eqs.
-\ref{eq:lambda-triaxial-ell} and \ref{eq:lambda-prolate-ell},
+\ref{eq:lambda-triaxial-ell} and \ref{eq:lambda-prolate-ell}
 but also its derivatives with respect to the spatial coordinates
-$\tilde{x}$, $\tilde{y}$, and $\tilde{z}$.
+$\tilde{x}$, $\tilde{y}$ and $\tilde{z}$.
 Fortunately, the spatial derivatives of the parameter $\lambda$
 can be calculated in a very similar way for all ellipsoid types.
 
@@ -2144,7 +2141,7 @@ the spatial derivatives of $\lambda$ are given by
 \end{equation}
 where
 $\tilde{r}_{1} = \tilde{x}$, $\tilde{r}_{2} = \tilde{y}$, $\tilde{r}_{3} = \tilde{z}$,
-$e_{1} = a$, $e_{2} = b$, and $e_{3} = c$.
+$e_{1} = a$, $e_{2} = b$ and $e_{3} = c$.
 This equation can be determined directly from equation
 \ref{eq:quadric-confocal-triaxial-ell}.
 The spatial derivatives of $\lambda$ in the case of
@@ -2157,7 +2154,7 @@ with $b = c$.
 
 \begin{acknowledgements}
 
-D. T. Tomazella thanks the brazilian research founding agency
+D. Takahashi thanks the brazilian research founding agency
 Conselho Nacional de
 Desenvolvimento Cient\'{i}fico e Tecnol\'{o}gico (CNPq)
 for providing financial support in the form of a scholarship.
@@ -2226,18 +2223,18 @@ financial support in the form of a grant (445752/2014-9).
 \caption{Schematic representation of the coordinate systems used to
 represent an ellipsoidal body.
 (a) Main coordinate system with axes $x$, $y$, and $z$ pointing to
-North, East, ans down, respectively.
-The dark gray plane contains the centre $(x_{c}, y_{c}, z_{c})$
+north, east, ans down, respectively.
+The dark grey plane contains the centre $(x_{c}, y_{c}, z_{c})$
 (white circle) and two unit vectors, $\mathbf{u}$ and $\mathbf{w}$, defining two
 semi-axes of the ellipsoidal body. For triaxial and prolate ellipsoids,
 $\mathbf{u}$ and $\mathbf{w}$ define, respectively,
 the semi-axes $a$ and $b$. For oblate ellipsoids, $\mathbf{u}$ and
 $\mathbf{w}$ define the semi-axes $b$ and $c$, respectively.
 The strike direction is defined by the intersection of the
-dark gray plane and the horizontal plane (represented in light gray),
-which contains the $x$ and $y$ axes. The angle $\varepsilon$
-between the $x$-axis and the strike direction is called \textit{strike}.
-The angle $\zeta$ between the horizontal plane and the dark gray plane
+dark grey plane and the horizontal plane (represented in light grey),
+which contains the $x$ axis and $y$ axis. The angle $\varepsilon$
+between the $x$ axis and the strike direction is called \textit{strike}.
+The angle $\zeta$ between the horizontal plane and the dark grey plane
 is called \textit{dip}. The angle $\eta$ between the strike direction
 and the line containing the unit vector $\mathbf{u}$
 is called \textit{rake}. The projection of this line on the
@@ -2245,8 +2242,8 @@ horizontal plane (not shown) is called \textit{dip direction}
 \citep{pollard2005, allmendinger2012}. (b) Local coordinate system
 with origin at the ellipsoid centre $(x_{c}, y_{c}, z_{c})$
 (black dot) and axes defined by unit vectors $\mathbf{v}_{1}$,
-$\mathbf{v}_{2}$, and $\mathbf{v}_{3}$. These unit vectors
-define the semi-axes $a$, $b$, and $c$ of triaxial, prolate,
+$\mathbf{v}_{2}$ and $\mathbf{v}_{3}$. These unit vectors
+define the semi-axes $a$, $b$ and $c$ of triaxial, prolate
 and oblate ellipsoids in the same way.
 For triaxial and prolate ellipsoids,
 the unit vectors $\mathbf{u}$ and $\mathbf{w}$ shown in (a) coincide
@@ -2265,7 +2262,7 @@ $\tilde{n}^{\dagger}_{11}$ (in red),
 $\tilde{n}^{\dagger}_{22}$ (in green), and
 $\tilde{n}^{\dagger}_{33}$ (in blue)
 produced by 100 triaxial ellipsoids with semi-axes
-$a = a_{0} + u \; b_{0}$, $b = b_{0} + u \; b_{0}$, and
+$a = a_{0} + u \; b_{0}$, $b = b_{0} + u \; b_{0}$ and
 $c = c_{0} + u \; b_{0}$, where $0 \leq u \leq 10$ and
 $b_{0} = 700$ \unit{m}.
 The demagnetizing factors were calculated
@@ -2289,7 +2286,7 @@ $b_{0} = 1000$ \unit{m}.
 The demagnetizing factors were calculated
 by using Eqs. \ref{eq:n-tilde-dagger-11-oblate} and
 \ref{eq:n-tilde-dagger-22-oblate}.
-The horizontal black line represent the value $1/3$.}
+The horizontal black line represents the value $1/3$.}
 \label{fig:demag-factors}
 \end{figure}
 
@@ -2302,7 +2299,7 @@ defined in Tab. \ref{tab:parameters-confocal-ellipsoids}.
 The synthetic data produced by these confocal ellipsoids
 were calculated on a regular grid of $200 \times 200$ points
 at the constant vertical coordinate $z = 0$ \unit{m}.
-These data were calculated with an uniform inducing field
+These data were calculated with a uniform inducing field
 parallel to the semi-axis $a$ of the confocal ellipsoids.}
 \label{fig:tfa-confocal-ellipsoids-H0-parallel}
 \end{figure}
@@ -2310,15 +2307,15 @@ parallel to the semi-axis $a$ of the confocal ellipsoids.}
 %f
 \begin{figure}[t]
 \includegraphics[width=8.3cm]{figures/f04.pdf}
-\caption{Total-field anomalies (in \unit{nT}) produced by the (a) Ellipsoid 1
+\caption{Total-field anomalies (in \unit{nT}) produced by (a) Ellipsoid 1
 and (b) Ellipsoid 2, both defined in Tab. \ref{tab:parameters-confocal-ellipsoids}.
 The synthetic data produced by these confocal ellipsoids
 were calculated on a regular grid of $200 \times 200$ points
 at the constant vertical coordinate $z = 0$ \unit{m}.
-These data were calculated with an uniform inducing field
+These data were calculated with a uniform inducing field
 which is oblique to the semi-axes of the confocal ellipsoids.
 (c) Difference between the total-field anomalies shown in
-b and a.}
+(b) and (a).}
 \label{fig:tfa-confocal-ellipsoids-H0-oblique}
 \end{figure}
 
@@ -2415,7 +2412,7 @@ Isotropic susceptibility $\chi$ & $1.2$ & $\approx 0.014$ & \unit{SI} \\
 %t
 \begin{table}[t]
 \caption{Parameters defining a synthetic orebody. This model is
-based on the that presented by \citet{farrar1979} to simulate
+based on that presented by \citet{farrar1979} to simulate
 the Warrego orebody, Tennant Creek field, Australia.}
 %\begin{tabular}{column = lcr}
 \begin{tabular}{lcr}
@@ -2432,9 +2429,9 @@ Orientation angle $\varepsilon$ $^{\ast}$ & $-34.0$ & $^{\circ}$ \\
 Orientation angle $\zeta$ $^{\ast}$ & $66.1$ & $^{\circ}$ \\
 Orientation angle $\eta$ $^{\ast}$ & $45.0$ & $^{\circ}$ \\
 Isotropic susceptibility $\chi$ & $1.69$ & \unit{SI} \\
-$x$-component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 32610 & \unit{nT} \\
-$y$-component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 0 & \unit{nT} \\
-$z$-component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 39450 & \unit{nT} \\
+$x$ component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 32610 & \unit{nT} \\
+$y$ component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 0 & \unit{nT} \\
+$z$ component of the inducing field $\mathbf{B}_{0}$ $^{\dagger}$ & 39450 & \unit{nT} \\
 \bottomhline
 \end{tabular}
 \belowtable{$^{\ast}$ Defined in Fig. \ref{fig:orientation-angles}a \newline

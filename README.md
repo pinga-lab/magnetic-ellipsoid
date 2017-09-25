@@ -1,7 +1,7 @@
 # Ellipsoids (v1.0): 3D Magnetic modelling of ellipsoidal bodies
 
 by
-[Diego Takahashi Tomazella](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup> and
+[Diego Takahashi](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup> and
 [Vanderlei C. Oliveira Jr.](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
 
 <sup>1</sup>[Observatório Nacional](http://www.on.br/index.php/pt-br/)

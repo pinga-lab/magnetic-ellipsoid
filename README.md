@@ -1,4 +1,4 @@
-# Ellipsoids (v1.0): 3D Magnetic modelling of ellipsoidal bodies
+# Ellipsoids (v1.0): 3D magnetic modelling of ellipsoidal bodies
 
 by
 [Diego Takahashi](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup> and
@@ -26,7 +26,7 @@ consider that the self-demagnetization can be neglected for the case in
 which the geological body has an isotropic susceptibility lower than or
 equal to 0.1 SI. This limiting value, however, seems to be determined
 empirically and there has been no discussion about how this value was
-determined. Besides, the geoscientific community lacks an easy-to-use
+determined. In addition, the geoscientific community lacks an easy-to-use
 tool to simulate the magnetic field produced by uniformly magnetized
 ellipsoids. Here, we present an integrated review of the magnetic
 modelling of arbitrarily oriented triaxial, prolate and oblate
@@ -39,8 +39,8 @@ self-demagnetization must be taken into consideration. Tests with
 synthetic data validate our approach. Finally, we provide a set
 of routines to model the magnetic field produced
 by ellipsoids. The routines are written in Python language as
-part of the [Fatiando a Terra](http://www.fatiando.org/index.html),
-which is an open-source library for modelling and inversion in geophysics.
+part of the [Fatiando a Terra](http://www.fatiando.org/), which is an open-source library
+for modelling and inversion in geophysics.
 
 ![](manuscript/figures/f07.png)
 
